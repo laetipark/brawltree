@@ -5,14 +5,14 @@ Use this file for Codex work inside `service/`.
 ## Read Order
 
 1. If available, read `../AGENTS.md` for workspace-level rules.
-2. Read `../.aiassistant/README.md` for workspace routing.
+2. Read `../.aiassistant/rules/README.md` for workspace routing.
 3. Read this file.
 4. Read `docs/README.md`.
 5. Read `docs/rules/project.md` for merged service and frontend development rules.
 6. Read `docs/rules/api.md` for API/DTO/response work.
 7. Read `docs/rules/database.md` for entity/query/schema assumptions.
 8. Read `docs/rules/testing.md` when changing behavior.
-9. For legacy assistant compatibility, read `.aiassistant/ai-assistant.md`.
+9. For legacy assistant compatibility, read `.aiassistant/rules/README.md`.
 
 ## Scope
 

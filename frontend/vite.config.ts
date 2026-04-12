@@ -10,13 +10,6 @@ export default defineConfig(({ mode }) => {
   const apiProxyTarget = env.VITE_API_PROXY_TARGET ?? 'http://localhost:3000';
 
   return {
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler' // or "modern"
-        }
-      }
-    },
     resolve: {
       tsconfigPaths: true,
       alias: [
@@ -66,7 +59,7 @@ export default defineConfig(({ mode }) => {
       react(),
       svgrPlugin(),
       prerender({
-        routes: ['/', '/brawlian', '/brawler', '/events', '/maps', '/crew'],
+        routes: ['/brawlian', '/brawler', '/events', '/maps', '/crew'],
         renderer: '@prerenderer/renderer-puppeteer',
         server: {
           host: 'localhost',

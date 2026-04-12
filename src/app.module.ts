@@ -22,7 +22,7 @@ import { NewsModule } from './features/news/news.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'frontend', 'dist'),
-      exclude: ['/api*', '/cdn*', '/youtube*', '/inbox*']
+      exclude: ['/api{/*path}', '/cdn{/*path}', '/youtube{/*path}', '/inbox{/*path}']
     }),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfig

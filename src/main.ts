@@ -38,8 +38,8 @@ async function bootstrap() {
     origin: [
       'https://brawltree.me',
       'https://www.brawltree.me',
-      'http://localhost:3323',
-      'http://127.0.0.1:3323',
+      'http://localhost:3322',
+      'http://127.0.0.1:3322',
       'http://localhost:5173',
       'http://127.0.0.1:5173'
     ],

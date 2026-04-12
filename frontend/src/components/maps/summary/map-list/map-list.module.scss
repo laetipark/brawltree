@@ -1,0 +1,37 @@
+.mapListWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: stretch;
+  padding: 0;
+  gap: 10px;
+  scroll-margin-top: 78px;
+}
+
+.modeTitle {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 20px);
+  padding: 12px;
+  background-color: #7F669D;
+  border-radius: 4px;
+  font-family: "Main Medium", serif;
+  font-size: 20px;
+  gap: 8px;
+
+  & > img {
+    width: 24px;
+  }
+}
+
+.modeList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .mapListWrapper {
+    scroll-margin-top: 84px;
+  }
+}

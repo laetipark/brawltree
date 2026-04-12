@@ -1,0 +1,109 @@
+.newsPage {
+  --news-ink: #223649;
+  --news-soft-ink: #49657c;
+  --news-line: #a7c3d4;
+  --news-shadow: 0 12px 24px rgba(80, 110, 140, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 10px 18px;
+  gap: 12px;
+  color: var(--news-ink);
+}
+
+.newsHero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 18px;
+  border: 1px solid var(--news-line);
+  padding: 14px 14px 12px;
+  background: linear-gradient(150deg, #eef7ff 0%, #deeeff 58%, #d8ede1 100%);
+  box-shadow: var(--news-shadow);
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: -36px;
+    bottom: -56px;
+    width: 176px;
+    height: 176px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(107, 163, 193, 0.28) 0%, rgba(107, 163, 193, 0) 70%);
+    pointer-events: none;
+  }
+
+  & > h1 {
+    margin: 0;
+    font-family: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: clamp(22px, 6.4vw, 30px);
+    line-height: 1.2;
+  }
+
+  & > p {
+    margin: 0;
+    max-width: 640px;
+    color: var(--news-soft-ink);
+    font-size: clamp(13px, 3.6vw, 15px);
+    line-height: 1.45;
+  }
+}
+
+.newsKicker {
+  margin: 0;
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(128, 163, 186, 0.65);
+  background: rgba(255, 255, 255, 0.8);
+  color: #2f5670;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  font-family: "N Medium", "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+}
+
+.newsFeedCard {
+  border-radius: 18px;
+  border: 1px solid var(--news-line);
+  background: linear-gradient(152deg, #edf7ff 0%, #e2f1ff 57%, #d9ecdf 100%);
+  box-shadow: var(--news-shadow);
+  padding: 10px;
+}
+
+@media (min-width: 576px) {
+  .newsPage {
+    width: 556px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .newsPage {
+    width: 748px;
+    padding-top: 14px;
+  }
+
+  .newsHero {
+    padding: 16px 18px 14px;
+  }
+
+  .newsFeedCard {
+    padding: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .newsPage {
+    width: 940px;
+  }
+
+  .newsHero > p {
+    max-width: 720px;
+  }
+}

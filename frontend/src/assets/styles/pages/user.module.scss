@@ -1,0 +1,57 @@
+.userPage {
+  --user-font-title: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  --user-font-body: "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  --user-font-number: "N Medium", "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  --user-ink: #233348;
+  --user-soft-ink: #4f657b;
+  --user-line: #b6cdd8;
+  --user-line-strong: #90b3c0;
+  --user-card: #f8fcff;
+  --user-card-soft: #ebf6ff;
+  --user-card-muted: #e3f0ff;
+  --user-mint: #d6ead0;
+  --user-mint-soft: #e7f3e2;
+  --user-sage: #c0d8c0;
+  --user-leaf: #9ebea8;
+  --user-cream: #f6f2db;
+  --user-win-bg: #d8ecdf;
+  --user-draw-bg: #dee6f2;
+  --user-loss-bg: #f1dce3;
+  --user-win: #6f9b88;
+  --user-draw: #748dba;
+  --user-loss: #c27f90;
+  --user-chart-grid: #c7dce5;
+  --user-chart-fill: #96b8c5;
+  --user-shadow: 0 12px 26px rgba(84, 112, 140, 0.18);
+  --user-radius-lg: 18px;
+  --user-radius-md: 12px;
+  --user-radius-sm: 8px;
+
+  color: var(--user-ink);
+  font-family: var(--user-font-body);
+  line-height: 1.35;
+  gap: 8px;
+}
+
+.userWrapper {
+  border-radius: var(--user-radius-lg, 18px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: calc(100% - 20px);
+  padding: 14px;
+  box-sizing: border-box;
+  gap: 10px;
+  border: 1px solid var(--user-line, #b6cdd8);
+  background: linear-gradient(145deg, var(--user-card, #f8fcff) 0%, var(--user-mint-soft, #e7f3e2) 100%);
+  box-shadow: var(--user-shadow, 0 12px 26px rgba(84, 112, 140, 0.18));
+}
+
+@media (min-width: 576px) {
+  .userWrapper {
+    width: 100%;
+  }
+}

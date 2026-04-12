@@ -1,0 +1,229 @@
+.brawlerStatsWrapper {
+  border: 1px solid var(--brawler-line, #cddbe0);
+  border-radius: var(--brawler-radius-lg, 18px);
+  overflow: hidden;
+  background-color: var(--brawler-card, #fffdf8);
+  box-shadow: var(--brawler-shadow, 0 10px 24px rgba(109, 130, 155, 0.14));
+}
+
+.brawlerTitle {
+  --rarity-accent: #2f3d4c;
+  --rarity-badge-bg: rgba(255, 255, 255, 0.72);
+
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  align-items: center;
+  min-height: 56px;
+  height: auto;
+  padding: 12px;
+  gap: 10px;
+  background: linear-gradient(115deg, #e9f4ff 0%, #f7efff 95%);
+  border-bottom: 1px solid var(--brawler-line, #cddbe0);
+
+  & > img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    object-position: center center;
+    align-self: center;
+    border-radius: 14px;
+    border: 1px solid rgba(171, 188, 202, 0.52);
+    box-shadow: 0 5px 10px rgba(114, 139, 164, 0.2);
+  }
+
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 6px;
+    min-width: 0;
+  }
+
+  & h3 {
+    width: 100%;
+    margin: 0;
+    font-family: var(--brawler-font-title, "Main Bold", sans-serif);
+    font-size: clamp(20px, 2.2vw, 24px);
+    font-weight: 400;
+    color: var(--brawler-ink, #2f3d4c);
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.defaultTone {
+  --rarity-accent: #2f3d4c;
+  --rarity-badge-bg: rgba(255, 255, 255, 0.72);
+  background: linear-gradient(115deg, #e9f4ff 0%, #f7efff 95%);
+}
+
+.trophyRoadTone {
+  --rarity-accent: #2C74B3;
+  --rarity-badge-bg: #EAF8FF;
+  background: linear-gradient(115deg, #CDFCF6 0%, #EAF8FF 95%);
+}
+
+.rareTone {
+  --rarity-accent: #1E5128;
+  --rarity-badge-bg: #EFFBEF;
+  background: linear-gradient(115deg, #C3EDC0 0%, #EFFBEF 95%);
+}
+
+.superRareTone {
+  --rarity-accent: #144272;
+  --rarity-badge-bg: #E7F2FF;
+  background: linear-gradient(115deg, #BCCEF8 0%, #E7F2FF 95%);
+}
+
+.epicTone {
+  --rarity-accent: #511845;
+  --rarity-badge-bg: #F1E9FF;
+  background: linear-gradient(115deg, #B2A4FF 0%, #F1E9FF 95%);
+}
+
+.mythicTone {
+  --rarity-accent: #C70039;
+  --rarity-badge-bg: #FFEAF0;
+  background: linear-gradient(115deg, #FFB4B4 0%, #FFEAF0 95%);
+}
+
+.legendaryTone {
+  --rarity-accent: #FF5733;
+  --rarity-badge-bg: #ffe7de;
+  background: linear-gradient(115deg, #ffd3c3 0%, #ffe7de 95%);
+}
+
+.rarityBadge,
+.roleBadge {
+  font-size: 13px;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  border: 1px solid rgba(170, 193, 206, 0.52);
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.rarityBadge {
+  color: var(--rarity-accent);
+  border-color: currentColor;
+  background: var(--rarity-badge-bg);
+  font-weight: 700;
+}
+
+.metaDivider {
+  color: var(--brawler-soft-ink, #637587);
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.roleBadge {
+  color: var(--brawler-soft-ink, #637587);
+}
+
+.brawlerItemsBox {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  align-items: start;
+  gap: 12px;
+  padding: 10px 12px 12px;
+  background: linear-gradient(180deg, var(--brawler-card-soft, #f7fbff) 0%, #f9fdff 100%);
+  border-top: 1px solid var(--brawler-line, #cddbe0);
+}
+
+.brawlerItemsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.brawlerItemsGroup {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: 34px;
+}
+
+.brawlerItemButton {
+  display: flex;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+
+  & > img {
+    border-color: rgba(161, 183, 196, 0.52);
+  }
+}
+
+.brawlerItemButtonActive {
+  & > img {
+    border-color: #6c96b2;
+    box-shadow: 0 0 0 2px rgba(120, 161, 189, 0.28), 0 8px 14px rgba(99, 129, 154, 0.24);
+    transform: translateY(-1px);
+  }
+}
+
+.brawlerItemPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 132px;
+  padding: 10px;
+  border: 1px solid rgba(166, 189, 203, 0.7);
+  border-radius: 12px;
+  background: linear-gradient(150deg, #fffefb 0%, #edf7ff 100%);
+}
+
+.brawlerItemPanelHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(162, 186, 199, 0.52);
+  padding-bottom: 8px;
+
+  & > img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid rgba(166, 188, 202, 0.62);
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  & h4 {
+    margin: 0;
+    color: var(--brawler-ink, #2f3d4c);
+    font-size: 14px;
+    font-family: var(--brawler-font-title, "Main Bold", sans-serif);
+  }
+
+  & span {
+    color: var(--brawler-soft-ink, #637587);
+    font-size: 12px;
+  }
+}
+
+.brawlerItemPanelBody {
+  color: var(--brawler-ink, #2f3d4c);
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.brawlerItemEmpty {
+  color: var(--brawler-soft-ink, #637587);
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .brawlerItemsBox {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

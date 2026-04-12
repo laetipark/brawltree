@@ -1,0 +1,181 @@
+.searchUserContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  gap: 12px;
+  border: 1px solid var(--main-line, #b9cfd9);
+  border-radius: var(--main-radius-lg, 18px);
+  background: linear-gradient(145deg, #edf7ff 0%, #dcedff 52%, #d3ebdf 100%);
+  box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
+
+  & > h2 {
+    margin: 0;
+    border-bottom: 1px solid var(--main-line-strong, #8eb3c0);
+    padding-bottom: 8px;
+    color: var(--main-ink, #233348);
+    font-family: var(--main-font-title, "Main Bold", sans-serif);
+    font-size: clamp(20px, 2.4vw, 24px);
+    text-decoration: none;
+  }
+
+}
+
+.searchForm {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+  isolation: isolate;
+  z-index: 20;
+  width: 100%;
+  min-height: 42px;
+}
+
+.recentSearch {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--main-line, #b9cfd9);
+  border-radius: var(--main-radius-md, 12px);
+  background: linear-gradient(160deg, #e8f3ff 0%, #e2f1ff 56%, #dff2e8 100%);
+  overflow: hidden;
+}
+
+.recentSearchTitle {
+  margin: 0;
+  width: 100%;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--main-line, #b9cfd9);
+  text-align: center;
+  font-size: 15px;
+  color: var(--main-soft-ink, #4e637a);
+}
+
+.clearSearch {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid rgba(142, 179, 192, 0.5);
+  background: rgba(255, 255, 255, 0.6);
+
+  & > div {
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--main-soft-ink, #4e637a);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--main-ink, #233348);
+    }
+  }
+}
+
+.findTagPopup {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(360px, 100%);
+  padding: 10px;
+  border: 1px solid #6f9fb7;
+  border-radius: 13px;
+  background: linear-gradient(152deg, #f4faff 0%, #dfeeff 56%, #d3eadd 100%);
+  box-shadow: 0 14px 28px rgba(70, 98, 124, 0.26);
+  z-index: 40;
+  animation: fadeInTagHelp 0.2s ease-out;
+}
+
+.howToFindTag {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  object-fit: contain;
+}
+
+@keyframes fadeInTagHelp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -6px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+.findTagOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: rgba(19, 41, 60, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.findTagPopupMobile {
+  width: min(420px, 100%);
+  max-height: min(84svh, 640px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  overflow-y: auto;
+  border-radius: 14px;
+  background: linear-gradient(152deg, #f4faff 0%, #dfeeff 56%, #d3eadd 100%);
+  box-shadow: 0 18px 34px rgba(49, 74, 98, 0.35);
+  animation: fadeInTagHelpMobile 0.2s ease-out;
+}
+
+.findTagCloseButton {
+  width: 100%;
+  border: 1px solid rgba(102, 142, 166, 0.78);
+  border-radius: 10px;
+  padding: 8px;
+  background: linear-gradient(140deg, #e6f2ff 0%, #d4e7fb 100%);
+  color: #20476a;
+  font-family: var(--main-font-title, "Main Bold", sans-serif);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
+  .searchUserContainer {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .findTagPopup {
+    display: none;
+  }
+
+  .findTagPopupMobile {
+    padding: 10px;
+  }
+
+  .howToFindTag {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@keyframes fadeInTagHelpMobile {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}

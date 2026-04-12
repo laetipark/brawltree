@@ -1,0 +1,88 @@
+.resultFieldWrapper {
+  display: flex;
+  position: absolute;
+  top: calc(100% + 8px);
+  width: 100%;
+  max-height: min(320px, 56vh);
+  border: 1px solid var(--main-line-strong, #8eb3c0);
+  border-radius: var(--main-radius-md, 12px);
+  background: linear-gradient(160deg, #f8fcff 0%, #e6f2ff 56%, #deefe8 100%);
+  box-shadow: 0 12px 24px rgba(87, 114, 139, 0.2);
+  overflow-y: auto;
+  font-size: 14px;
+  z-index: 34;
+
+  & > ul {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+  }
+
+  & > ul > li {
+    padding: 2px 0;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #a8c6cf;
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(217, 232, 239, 0.65);
+    border-radius: 6px;
+  }
+}
+
+.addAccount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid rgba(166, 193, 206, 0.58);
+  border-radius: 10px;
+  background: linear-gradient(138deg, #d8ebff 0%, #cfe6ff 56%, #c8e6dc 100%);
+  font-family: var(--main-font-body, "Main Medium", sans-serif);
+  font-size: 14px;
+  color: var(--main-ink, #233348);
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(138deg, #cde4ff 0%, #c3dcf8 56%, #bedfce 100%);
+    transform: translateY(-1px);
+  }
+
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  & > div > img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  & > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 575px) {
+  .resultFieldWrapper {
+    top: calc(100% + 6px);
+    max-height: min(300px, 48vh);
+    font-size: 13px;
+  }
+}

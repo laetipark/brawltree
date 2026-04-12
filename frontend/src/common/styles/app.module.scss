@@ -1,0 +1,90 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  gap: 14px;
+  padding: 8px 0 14px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 576px) {
+  .app {
+    align-items: normal;
+    width: 556px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .app {
+    width: 748px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app {
+    width: 1004px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .app {
+    width: 1260px;
+  }
+}
+
+.bold {
+  font-weight: 800;
+}
+
+.trophyRoadColor {
+  color: #2C74B3;
+}
+
+.rareColor {
+  color: #1E5128;
+}
+
+.superRareColor {
+  color: #144272;
+}
+
+.epicColor {
+  color: #511845;
+}
+
+.mythicColor {
+  color: #C70039;
+}
+
+.legendaryColor {
+  color: #FF5733;
+}
+
+.trophyRoadBackground {
+  background-color: #CDFCF6;
+}
+
+.rareBackground {
+  background-color: #C3EDC0;
+}
+
+.superRareBackground {
+  background-color: #BCCEF8;
+}
+
+.epicBackground {
+  background-color: #B2A4FF;
+}
+
+.mythicBackground {
+  background-color: #FFB4B4;
+}
+
+.legendaryBackground {
+  background-color: #FFD3C3;
+}
+

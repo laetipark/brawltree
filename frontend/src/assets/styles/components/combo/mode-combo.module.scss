@@ -1,0 +1,95 @@
+.typeMenuWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  position: relative;
+  z-index: 30;
+}
+
+.typeMenuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 8px;
+  background: linear-gradient(145deg, var(--user-mint-soft, #e7f3e2) 0%, var(--user-card-soft, #ebf6ff) 100%);
+  border-top: 1px solid var(--user-line-strong, #90b3c0);
+  border-left: 1px solid var(--user-line-strong, #90b3c0);
+  border-right: 1px solid var(--user-line-strong, #90b3c0);
+  border-bottom: none;
+  border-radius: var(--user-radius-sm, 8px) var(--user-radius-sm, 8px) 0 0;
+  font-family: "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  color: var(--user-ink, #233348);
+  gap: 4px;
+  transition: none;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--user-sage, #c0d8c0);
+  }
+
+  & > img {
+    height: 20px;
+    object-fit: contain;
+    object-position: center;
+    align-self: center;
+  }
+}
+
+.typeMenuList {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  width: 100%;
+  height: 0;
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 0;
+  z-index: 40;
+}
+
+@media (min-width: 576px) {
+  .typeMenuList {
+    width: 160px;
+  }
+}
+
+.typeButton {
+  display: none;
+}
+
+.typeButton + label {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 8px 0 8px 8px;
+  border-bottom: 1px solid var(--user-line-strong, #90b3c0);
+  border-left: 1px solid var(--user-line-strong, #90b3c0);
+  border-right: 1px solid var(--user-line-strong, #90b3c0);
+  background: linear-gradient(145deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 100%);
+  font-family: "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  color: var(--user-ink, #233348);
+  gap: 4px;
+  transition: none;
+  cursor: pointer;
+}
+
+.typeButton:first-child + label {
+  border-top: 1px solid var(--user-line-strong, #90b3c0);
+}
+
+.typeButton + label > img {
+  width: 40px;
+  height: 20px;
+  object-fit: contain;
+  object-position: center;
+  align-self: center;
+}
+
+.typeButton:checked + label,
+.typeButton + label:hover {
+  background: var(--user-mint, #d6ead0);
+}

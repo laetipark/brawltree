@@ -1,0 +1,57 @@
+.tableHorizontalBodyContainer {
+  display: table-row-group;
+
+  & > div {
+    display: table-row;
+
+    & > div,
+    & > h3 {
+      display: table-cell;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--user-line, #b6cdd8);
+      background: rgba(248, 252, 255, 0.88);
+      color: var(--user-ink, #233348);
+      vertical-align: middle;
+      margin: 0;
+      line-height: 1.15;
+    }
+
+    & > div {
+      width: 54%;
+      font-size: 19px;
+      font-weight: 700;
+
+      & > img {
+        height: 20px;
+        margin-right: 4px;
+        object-fit: contain;
+      }
+    }
+
+    & > h3 {
+      width: 46%;
+      border-right: 1px solid var(--user-line, #b6cdd8);
+      background: rgba(214, 234, 208, 0.34);
+      color: var(--user-soft-ink, #4f657b);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    &:nth-child(even) {
+      & > h3 {
+        background: rgba(214, 234, 208, 0.22);
+      }
+
+      & > div {
+        background: rgba(244, 249, 255, 0.9);
+      }
+    }
+
+    &:last-child {
+      & > h3,
+      & > div {
+        border-bottom: 0;
+      }
+    }
+  }
+}

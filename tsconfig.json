@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2019",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "paths": {
+      "~/common/*": [
+        "./src/common/*"
+      ],
+      "~/configs/*": [
+        "./src/configs/*"
+      ],
+      "~/database/*": [
+        "./src/database/*"
+      ],
+      "~/crew/*": [
+        "./src/features/crew/*"
+      ],
+      "~/brawlers/*": [
+        "./src/features/brawlers/*"
+      ],
+      "~/maps/*": [
+        "./src/features/maps/*"
+      ],
+      "~/seasons/*": [
+        "./src/features/seasons/*"
+      ],
+      "~/users/*": [
+        "./src/features/users/*"
+      ],
+      "~/utils/*": [
+        "./src/utils/*"
+      ]
+    }
+  }
+}

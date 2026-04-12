@@ -1,0 +1,91 @@
+.brawlersSummaryContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  gap: 10px;
+  border: 1px solid var(--main-line, #b9cfd9);
+  border-radius: var(--main-radius-lg, 18px);
+  background: linear-gradient(142deg, #edf7ff 0%, #e0ebff 52%, #d6e9ff 100%);
+  box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
+
+  & > h2 {
+    margin: 0;
+    border-bottom: 1px solid var(--main-line-strong, #8eb3c0);
+    padding-bottom: 8px;
+    font-family: var(--main-font-title, "Main Bold", sans-serif);
+    font-size: clamp(20px, 2.4vw, 24px);
+
+    & > a {
+      color: var(--main-ink, #233348);
+      text-decoration: none;
+    }
+  }
+}
+
+.brawlerSummaryContent {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid rgba(172, 196, 209, 0.58);
+    border-radius: var(--main-radius-md, 12px);
+    padding: 10px;
+    background: linear-gradient(155deg, #edf7ff 0%, #effff4 100%);
+
+    & > div:first-child {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      font-family: var(--main-font-title, "Main Bold", sans-serif);
+      color: var(--main-ink, #233348);
+      border-bottom: 1px dashed rgba(127, 160, 178, 0.6);
+      padding-bottom: 6px;
+    }
+
+    & > div:last-child {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(173, 197, 209, 0.58);
+      background: linear-gradient(150deg, var(--main-card-soft, #eaf5ff) 0%, #ecfff2 100%);
+      align-content: start;
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  .brawlerSummaryContent {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    & > div > div:last-child {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .brawlersSummaryContainer {
+    padding: 10px;
+    gap: 9px;
+  }
+}
+
+@media (min-width: 768px) {
+  .brawlerSummaryContent {
+    gap: 10px;
+
+    & > div > div:last-child {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+  }
+}

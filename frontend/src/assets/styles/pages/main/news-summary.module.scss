@@ -1,0 +1,118 @@
+.brawlNewsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  gap: 10px;
+  border: 1px solid var(--main-line, #b9cfd9);
+  border-radius: var(--main-radius-lg, 18px);
+  background: linear-gradient(145deg, #edf7ff 0%, #dfedff 56%, #d6e9df 100%);
+  box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
+}
+
+@media (min-width: 576px) {
+  .brawlNewsBox {
+    padding: 0;
+  }
+}
+
+.brawlNewsTitle {
+  margin: 0;
+  border-bottom: 1px solid var(--main-line-strong, #8eb3c0);
+  padding-bottom: 8px;
+  color: var(--main-ink, #233348);
+  font-family: var(--main-font-title, "Main Bold", sans-serif);
+  font-size: clamp(20px, 2.4vw, 24px);
+}
+
+.brawlNewsBox {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.youtubeColumn,
+.newsColumn {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.youtubeColumn {
+  gap: 8px;
+}
+
+.newsColumn {
+  overflow: hidden;
+}
+
+.newsColumn > div {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  padding: 0;
+}
+
+@media (max-width: 575px) {
+  .youtubeStack {
+    padding: 7px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brawlNewsBox {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    justify-content: space-between;
+    gap: 10px;
+    align-items: start;
+  }
+
+  .youtubeStack {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .newsColumn > div {
+    height: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .newsColumn > div {
+    height: 100%;
+  }
+}
+
+.youtubeStack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--main-radius-md, 12px);
+  background: linear-gradient(165deg, rgba(237, 247, 255, 0.82) 0%, rgba(225, 242, 255, 0.78) 58%, rgba(221, 240, 230, 0.76) 100%);
+  box-sizing: border-box;
+}
+
+.youtubeCard {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(141, 176, 194, 0.62);
+  background: linear-gradient(150deg, #d9eaff 0%, #cbe2f7 100%);
+
+  & > :global(div) {
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}

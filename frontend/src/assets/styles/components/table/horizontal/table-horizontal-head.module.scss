@@ -1,0 +1,12 @@
+.tableHorizontalHeadContainer {
+  display: table-caption;
+  margin: 0;
+  padding: 11px 12px;
+  border-radius: var(--user-radius-md, 12px) var(--user-radius-md, 12px) 0 0;
+  border-bottom: 1px solid var(--user-line-strong, #90b3c0);
+  background: var(--user-mint-soft, #e7f3e2);
+  text-align: center;
+  color: var(--user-ink, #233348);
+  font-size: 20px;
+  font-weight: 700;
+}

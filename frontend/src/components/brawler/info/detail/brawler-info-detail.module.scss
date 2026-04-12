@@ -1,0 +1,105 @@
+.brawlerInfoDetailWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, var(--brawler-card, #fffdf8) 0%, var(--brawler-card-soft, #f7fbff) 100%);
+  gap: 10px;
+
+  & > div:first-child {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      gap: 4px;
+      border: 1px solid var(--brawler-line, #cddbe0);
+      border-radius: var(--brawler-radius-md, 12px);
+      background: linear-gradient(145deg, var(--brawler-mint, #e6f5ec) 0%, #f2fbf6 100%);
+    }
+  }
+
+  & > div:last-child {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      gap: 6px;
+      border: 1px solid var(--brawler-line, #cddbe0);
+      border-radius: var(--brawler-radius-md, 12px);
+      background: linear-gradient(165deg, var(--brawler-sky, #e8f4ff) 0%, var(--brawler-lavender, #ece8ff) 100%);
+
+      & > .statRow {
+        padding-bottom: 4px;
+        border-bottom: 1px dashed rgba(76, 101, 122, 0.18);
+
+        &:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+        }
+      }
+    }
+  }
+
+}
+
+.attackName {
+  font-family: var(--brawler-font-title, "Main Bold", sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--brawler-ink, #2f3d4c);
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid rgba(102, 124, 146, 0.32);
+}
+
+.statRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.statLabel {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--brawler-soft-ink, #637587);
+  font-weight: 600;
+
+  &::after {
+    content: ":";
+    color: rgba(78, 103, 126, 0.9);
+  }
+}
+
+.statValue {
+  color: var(--brawler-ink, #2f3d4c);
+  font-family: var(--brawler-font-number, "N Medium", sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .brawlerInfoDetailWrapper {
+    padding: 10px;
+
+    & > div:first-child,
+    & > div:last-child {
+      grid-template-columns: 100%;
+    }
+  }
+}

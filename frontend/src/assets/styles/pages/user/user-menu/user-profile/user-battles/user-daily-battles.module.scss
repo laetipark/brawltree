@@ -1,0 +1,132 @@
+.userDailyStatsBox {
+  border-radius: var(--user-radius-md, 12px);
+  display: grid;
+  grid-template-columns: 100%;
+  justify-content: center;
+  background: linear-gradient(145deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 100%);
+
+  & > div:first-child {
+    border-bottom: 1px solid var(--user-line, #b6cdd8);
+  }
+
+  & > div text {
+    font-family: "Main Medium", "JP Medium", "CN Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+      "Droid Sans", "Helvetica Neue", sans-serif !important;
+  }
+}
+
+.userDailyStatsGraphBox {
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  & > h3 {
+    padding-top: 8px;
+  }
+}
+
+.selectedDate {
+  font-size: 14px;
+  color: var(--user-soft-ink, #4f657b);
+}
+
+.cutoffLegend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1;
+  color: #4f657b;
+}
+
+.rankedCutoff {
+  color: #3d6f9f;
+}
+
+.trophyCutoff {
+  color: #a77745;
+}
+
+.dailyCalendarChartFrame {
+  width: 100%;
+  max-width: 460px;
+  min-width: 0;
+  height: auto;
+  aspect-ratio: 16 / 11;
+  min-height: 236px;
+  max-height: 360px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 4px 4px 2px;
+
+  & > div {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 430px) {
+  .dailyCalendarChartFrame {
+    aspect-ratio: 16 / 12;
+    min-height: 220px;
+    max-height: 300px;
+  }
+}
+
+@media (min-width: 576px) {
+  .userDailyStatsBox {
+    justify-content: center;
+    gap: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .userDailyStatsBox {
+    grid-template-columns: minmax(300px, 42%) minmax(0, 1fr);
+
+    & > div:first-child {
+      border-right: 1px solid var(--user-line, #b6cdd8);
+      border-bottom: none;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .dailyCalendarChartFrame {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .userDailyStatsBox {
+    grid-template-columns: minmax(340px, 44%) minmax(0, 1fr);
+  }
+
+  .dailyCalendarChartFrame {
+    width: min(100%, 460px);
+  }
+}
+
+.userDailyBrawlerStatBox {
+  border-radius: var(--user-radius-md, 12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & > h3 {
+    padding-top: 8px;
+  }
+
+  & > div:last-child {
+    height: 240px;
+  }
+}

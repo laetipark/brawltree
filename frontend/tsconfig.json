@@ -1,0 +1,70 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "esnext",
+    "noEmitOnError": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "types": [
+      "vite/client",
+      "vite-plugin-svgr/client"
+    ],
+    "allowJs": true,
+    "outDir": "./dist",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "incremental": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "~/assets/*": [
+        "./src/assets/*"
+      ],
+      "~/common/*": [
+        "./src/common/*"
+      ],
+      "~/config/*": [
+        "./src/config/*"
+      ],
+      "~/components/*": [
+        "./src/components/*"
+      ],
+      "~/context/*": [
+        "./src/context/*"
+      ],
+      "~/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "~/interfaces/*": [
+        "./src/interfaces/*"
+      ],
+      "~/locales/*": [
+        "./src/locales/*"
+      ],
+      "~/pages/*": [
+        "./src/pages/*"
+      ],
+      "~/services/*": [
+        "./src/services/*"
+      ],
+      "~/utils/*": [
+        "./src/utils/*"
+      ],
+      "~/public/*": [
+        "./public/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
+}

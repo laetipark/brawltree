@@ -1,0 +1,30 @@
+.mapInputWrapper {
+  display: flex;
+  width: 100%;
+}
+
+.mapInput {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(131, 165, 186, 0.75);
+  background: linear-gradient(145deg, #fbfeff 0%, #eef7ff 100%);
+  color: #23425a;
+  font-family: "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: clamp(14px, 3.8vw, 18px);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+  &::placeholder {
+    color: rgba(70, 98, 122, 0.8);
+  }
+
+  &:focus {
+    border-color: rgba(74, 118, 147, 0.94);
+    box-shadow: 0 0 0 3px rgba(132, 170, 193, 0.25);
+    background: #ffffff;
+  }
+}

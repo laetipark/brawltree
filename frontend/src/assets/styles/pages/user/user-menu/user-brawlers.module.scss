@@ -1,0 +1,48 @@
+.brawlersContainer {
+  border-radius: var(--user-radius-lg, 18px);
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--user-line, #b6cdd8);
+  background: linear-gradient(150deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 50%, var(--user-mint-soft, #e7f3e2) 100%);
+  box-shadow: var(--user-shadow, 0 12px 26px rgba(84, 112, 140, 0.18));
+}
+
+@media screen and (min-width: 576px) {
+  .brawlersContainer {
+    width: 100%;
+
+    & > div:first-child {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}
+
+.ownedBrawlersContent {
+  border-radius: var(--user-radius-md, 12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+@media screen and (min-width: 768px) {
+  .ownedBrawlersContent {
+    display: grid;
+    grid-template-columns: 49% 49%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .ownedBrawlersContent {
+    grid-template-columns: 33% 33% 33%;
+  }
+}

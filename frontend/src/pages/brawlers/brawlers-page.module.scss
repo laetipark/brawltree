@@ -1,0 +1,81 @@
+.app {
+  --brawler-font-title: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --brawler-font-body: "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --brawler-font-number: "N Medium", "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --brawler-ink: #233348;
+  --brawler-soft-ink: #4e637a;
+  --brawler-line: #b9cfd9;
+  --brawler-line-strong: #8eb3c0;
+  --brawler-card: #fffef8;
+  --brawler-card-soft: #f3faff;
+  --brawler-card-muted: #edf6ff;
+  --brawler-mint: #dbf2e4;
+  --brawler-sky: #dff0ff;
+  --brawler-lavender: #e6e4ff;
+  --brawler-peach: #ffe7db;
+  --brawler-rose: #f8deee;
+  --brawler-shadow: 0 10px 24px rgba(90, 117, 148, 0.16);
+  --brawler-radius-lg: 18px;
+  --brawler-radius-md: 12px;
+
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 12px 10px;
+  gap: 12px;
+  color: var(--brawler-ink);
+  font-family: var(--brawler-font-body);
+  line-height: 1.3;
+
+  & > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (min-width: 576px) {
+  .app {
+    width: 556px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .app {
+    width: 748px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app {
+    width: 940px;
+  }
+}
+
+.table {
+  display: table;
+  width: 100%;
+}
+
+.body {
+  display: table-row-group;
+}
+
+.filter {
+  display: grid;
+  grid-template-columns: 100%;
+  gap: 8px;
+}
+
+@media (min-width: 576px) {
+  .filter {
+    display: grid;
+    grid-template-columns: 59% 39%;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

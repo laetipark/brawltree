@@ -1,0 +1,78 @@
+.brawlerStatsWrapper {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 49% 49%;
+  margin: 0 10px;
+  padding: 8px;
+  gap: 8px;
+}
+
+@media (min-width: 576px) {
+  .brawlerStatsWrapper {
+    width: 536px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .brawlerStatsWrapper {
+    grid-template-columns: 32% 32% 32%;
+    width: 728px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brawlerStatsWrapper {
+    width: 924px;
+    margin: 0 auto;
+  }
+}
+
+.brawlerStatsItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  border: 1px solid #73A9AD;
+  background-color: #F4F7C5;
+  text-decoration: none;
+  color: black;
+  gap: 4px;
+  cursor: pointer;
+
+  transition: background-color 0.2s ease-in;
+}
+
+.brawlerTitle {
+  display: flex;
+  align-items: center;
+  width: calc(100% - 16px);
+  padding: 8px;
+  background-color: #90C8AC;
+  font-family: "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  gap: 8px;
+}
+
+.brawlerStatsItem:hover {
+  background-color: rgba(144, 200, 172, 0.5);
+}
+
+.brawlerTitle > img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.brawlerContent {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.brawlerContent > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

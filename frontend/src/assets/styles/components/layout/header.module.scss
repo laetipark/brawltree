@@ -1,0 +1,161 @@
+/* header-title */
+.headerMenuContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 320px;
+  height: 60px;
+  padding: 4px 0 4px 0;
+  background-color: #343A40;
+  color: white;
+
+  & > a {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    text-decoration-line: none;
+    color: white;
+
+    & > div {
+      font-family: 'Logo Font', serif;
+      font-weight: normal;
+
+      font-size: 18px;
+    }
+  }
+}
+
+.menuLogo {
+  width: 40px;
+}
+
+@media (min-width: 768px) {
+  .headerMenuContainer > div {
+    max-width: 748px;
+  }
+
+  .headerMenuContainer > a > div {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .headerMenuContainer > div {
+    max-width: 924px;
+  }
+}
+
+.menuLogo {
+  padding: 12px;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.menuToggle {
+  display: flex;
+  padding: 12px;
+
+  & > svg {
+    cursor: pointer;
+  }
+}
+
+.headerSkeleton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 24px 0 0;
+}
+
+.skeletonText {
+  display: block;
+  width: 72px;
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4a5056 0%, #5a6168 50%, #4a5056 100%);
+  background-size: 200% 100%;
+  animation: headerSkeletonPulse 1.2s ease-in-out infinite;
+}
+
+@media (min-width: 768px) {
+  .menuToggle {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .headerSkeleton {
+    padding: 0 12px 0 0;
+  }
+
+  .skeletonText {
+    width: 56px;
+    height: 14px;
+  }
+
+  .headerSkeleton > .skeletonText:nth-child(n + 2) {
+    display: none;
+  }
+}
+
+/* 메뉴 목록 */
+.headerMenuContent {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  font-family: "Main Bold", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  column-gap: 2vw;
+  padding: 0 24px 0 0;
+  overflow: hidden;
+  transition: min-height 0.3s ease;
+
+  & > li {
+    padding-left: 0;
+    font-size: 22px;
+
+    & > a {
+      color: white;
+      text-decoration-line: none;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .headerMenuContent {
+    width: calc(100% - 16px);
+    max-width: 748px;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #343A40;
+    padding: 0 8px 0 8px;
+    row-gap: 4px;
+    z-index: 9;
+
+    & > li {
+      padding: 8px 0 8px 12px;
+      font-size: 18px;
+    }
+  }
+}
+
+.hidden {
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+}
+
+@keyframes headerSkeletonPulse {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}

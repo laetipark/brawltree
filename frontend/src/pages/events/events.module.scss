@@ -1,0 +1,124 @@
+.eventsPage {
+  --events-ink: #22384a;
+  --events-soft-ink: #4b667f;
+  --events-line: #9fbccc;
+  --events-line-strong: #769ab2;
+  --events-card: #eef7ff;
+  --events-card-soft: #dff0ff;
+  --events-mint: #d6ecdf;
+  --events-shadow: 0 12px 24px rgba(85, 114, 143, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 10px 18px;
+  gap: 12px;
+  color: var(--events-ink);
+}
+
+.eventsHero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 18px;
+  border: 1px solid var(--events-line);
+  padding: 14px 14px 12px;
+  background: linear-gradient(146deg, #edf7ff 0%, #dcefff 58%, #d6ecdf 100%);
+  box-shadow: var(--events-shadow);
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: auto -28px -48px auto;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(116, 171, 202, 0.3) 0%, rgba(116, 171, 202, 0) 68%);
+    pointer-events: none;
+  }
+
+  & > h1 {
+    margin: 0;
+    font-family: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    font-size: clamp(22px, 6.4vw, 30px);
+    line-height: 1.2;
+  }
+
+  & > p {
+    margin: 0;
+    max-width: 640px;
+    color: var(--events-soft-ink);
+    font-size: clamp(13px, 3.6vw, 15px);
+    line-height: 1.45;
+  }
+}
+
+.eventsKicker {
+  margin: 0;
+  width: fit-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(127, 162, 185, 0.65);
+  font-family: "N Medium", "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+  color: #2e556f;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.modeBadge {
+  width: fit-content;
+  margin-top: 2px;
+  padding: 6px 11px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #ffffff 0%, #eff6ff 100%);
+  border: 1px solid rgba(128, 163, 186, 0.65);
+  font-family: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
+  font-size: 13px;
+  color: #224561;
+}
+
+.eventsContentCard {
+  border-radius: 18px;
+  border: 1px solid var(--events-line);
+  background: linear-gradient(152deg, var(--events-card) 0%, var(--events-card-soft) 56%, var(--events-mint) 100%);
+  box-shadow: var(--events-shadow);
+  padding: 10px;
+}
+
+@media (min-width: 576px) {
+  .eventsPage {
+    width: 556px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .eventsPage {
+    width: 748px;
+    padding-top: 14px;
+  }
+
+  .eventsHero {
+    padding: 16px 18px 14px;
+  }
+
+  .eventsContentCard {
+    padding: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .eventsPage {
+    width: 940px;
+  }
+
+  .eventsHero > p {
+    max-width: 720px;
+  }
+}

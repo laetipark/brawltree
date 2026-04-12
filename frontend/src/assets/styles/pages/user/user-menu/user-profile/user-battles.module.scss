@@ -1,0 +1,44 @@
+.battlesContent {
+  border-radius: var(--user-radius-md, 12px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--user-ink, #233348);
+}
+
+.battleStatsGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(145deg, var(--user-cream, #f6f2db) 0%, var(--user-card-soft, #ebf6ff) 100%);
+  border: 1px solid var(--user-line, #b6cdd8);
+  border-radius: var(--user-radius-md, 12px);
+  overflow: visible;
+  position: relative;
+  z-index: 120;
+}
+
+.battleStatsMenus {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(145deg, var(--user-mint, #d6ead0) 0%, var(--user-card-soft, #ebf6ff) 100%);
+  padding: 6px 6px 0;
+  gap: 6px;
+  position: relative;
+  z-index: 130;
+}
+
+@media (min-width: 576px) {
+  .battleStatsMenus {
+    grid-template-columns: 160px 160px;
+    justify-content: normal;
+    padding: 6px 0 0 6px;
+  }
+}
+
+.breakLine {
+  justify-content: center;
+  color: var(--user-soft-ink, #4f657b);
+}

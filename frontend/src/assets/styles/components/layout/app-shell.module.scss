@@ -1,0 +1,22 @@
+.appShell {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+}
+
+.appMain {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+}
+
+.appLoading {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+}

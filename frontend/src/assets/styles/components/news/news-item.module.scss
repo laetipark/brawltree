@@ -1,0 +1,64 @@
+.newsItemBox {
+  display: flex;
+  width: calc(100% - 20px);
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px;
+  border: 2px solid #609966;
+  border-radius: 4px;
+  background-color: #EDF1D6;
+  overflow-y: scroll;
+
+  & h1 {
+    padding-bottom: 8px;
+    border-bottom: 2px solid #609966;
+  }
+
+  & img {
+    max-width: 100%;
+    object-fit: contain;
+  }
+
+  & ul {
+    padding-left: 12px !important;
+    list-style: square;
+  }
+
+  & li {
+    margin-left: 12px;
+
+    & ul {
+      padding: 0 !important;
+    }
+  }
+
+  li::marker {
+    font-size: 20px;
+  }
+}
+
+.newsTextBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.newsFeatureBox {
+  display: grid;
+  grid-template-columns: 20% 78%;
+  align-items: flex-start;
+  gap: 8px;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 4px;
+
+    & > div {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+}

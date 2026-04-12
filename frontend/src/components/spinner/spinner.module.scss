@@ -1,0 +1,48 @@
+.spinnerWrapper {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 10px;
+  background: transparent;
+}
+
+.spinnerWrapperFill {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: clamp(260px, calc(100vh - 136px), 760px);
+  min-height: clamp(260px, calc(100dvh - 136px), 760px);
+  height: auto;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  row-gap: 12px;
+}
+
+.spinnerImage {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  image-rendering: auto;
+  animation: spinLogo 1.2s linear infinite;
+}
+
+.spinnerLabel {
+  color: #2f4a66;
+  font-family: "Main Bold", "JP Bold", "CN Bold", "N Bold", sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  text-shadow: none;
+}
+
+@keyframes spinLogo {
+  100% {
+    transform: rotate(360deg);
+  }
+}

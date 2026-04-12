@@ -1,0 +1,160 @@
+.searchItemWrapper {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  align-items: flex-start;
+  padding: 8px;
+  border: 1px solid rgba(171, 197, 209, 0.52);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--main-ink, #233348);
+  text-decoration: none;
+  gap: 8px;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background: linear-gradient(145deg, #f5feff 0%, var(--main-mint, #dbf2e4) 100%);
+    border-color: var(--main-line-strong, #8eb3c0);
+    transform: translateY(-1px);
+  }
+
+  & > img {
+    min-width: 48px;
+    max-width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 10px;
+    border: 1px solid rgba(160, 186, 199, 0.5);
+    background: linear-gradient(150deg, #f5fcff 0%, #fffef9 100%);
+  }
+
+  & > div {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.searchItemTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  height: 20px;
+  align-items: center;
+  color: var(--main-ink, #233348);
+
+  & > span {
+    display: block;
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  & > img {
+    flex: 0 0 auto;
+    width: 16px;
+    object-fit: contain;
+    cursor: pointer;
+    opacity: 0.68;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.searchItemContent {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.searchItemTag {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px;
+  border-radius: 6px;
+  background: linear-gradient(140deg, var(--main-mint, #dbf2e4) 0%, #effbee 100%);
+  border: 1px solid rgba(139, 180, 159, 0.62);
+  font-size: 12px;
+  color: #2d5b3f;
+}
+
+.searchItemCrewName {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 4px;
+  border-radius: 6px;
+  background: linear-gradient(140deg, var(--main-sky, #dff0ff) 0%, #edf8ff 100%);
+  border: 1px solid rgba(137, 173, 191, 0.58);
+  font-size: 12px;
+  zoom: 0.8;
+  color: #2f5d7a;
+}
+
+.searchItemTrophy {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 84px;
+  padding: 2px 4px;
+  border: 1px solid rgba(136, 125, 176, 0.66);
+  border-radius: 6px;
+  background: linear-gradient(140deg, #efe6ff 0%, #f7edff 100%);
+  color: #4f4a76;
+  gap: 4px;
+}
+
+.searchItemRanked {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 20px;
+  padding: 2px 4px;
+  border: 1px solid rgba(191, 134, 134, 0.7);
+  border-radius: 6px;
+  background: linear-gradient(140deg, #ffe9dd 0%, #fff2e7 100%);
+  color: #7a4f38;
+  gap: 2px;
+}
+
+.searchItemTrophy > img,
+.searchItemRanked > img {
+  width: 16px;
+  object-fit: contain;
+}
+
+@media (max-width: 575px) {
+  .searchItemWrapper {
+    padding: 7px;
+    gap: 7px;
+
+    & > img {
+      min-width: 44px;
+      max-width: 44px;
+      height: 44px;
+    }
+  }
+
+  .searchItemTitle > span {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,163 @@
+.mapMenu {
+  display: flex;
+  flex-direction: column;
+  background-color: #C4DFAA;
+  border-radius: 4px;
+
+  & > div {
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      border-bottom: 1px solid rgba(97, 130, 100, 0.8);
+    }
+  }
+}
+
+@media (min-width: 576px) {
+  .mapMenu {
+    width: 536px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .mapMenu {
+    grid-template-columns: 32% 32% 32%;
+    width: 728px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mapMenu {
+    width: 924px;
+    margin: 0 auto;
+  }
+}
+
+.mapTitle {
+  display: flex;
+  justify-content: center;
+  padding: 12px 4px;
+  font-family: "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  text-align: center;
+  width: 80px;
+}
+
+.mapTypeGroup {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  gap: 8px;
+  width: 100%;
+  list-style: none;
+  border-left: 1px solid rgba(97, 130, 100, 0.8);
+
+  & > li {
+    display: flex;
+
+    & > input {
+      display: none;
+    }
+
+    & > label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      background-color: #F5F0BB;
+      border: 2px solid #73A9AD;
+      border-radius: 4px;
+      padding: 4px;
+      gap: 4px;
+      font-family: "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    & > input:disabled + label {
+      border-color: #B7C4CF;
+      background-color: #B7C4CF;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .mapTypeGroup {
+    display: grid;
+    grid-template-columns: 160px 160px 160px;
+    width: 0;
+  }
+}
+
+.mapTypeGroup > li > input:hover:not([disabled]) + label {
+  border-color: #EB6383;
+}
+
+.mapTypeGroup > li > input:checked + label {
+  background-color: #90C8AC;
+}
+
+.mapGradeGroup {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  padding: 8px 12px;
+  gap: 8px;
+  width: 100%;
+  border-left: 1px solid rgba(97, 130, 100, 0.8);
+}
+
+.mapGradeGroup > li {
+  display: flex;
+  width: 100%;
+  gap: 4px;
+}
+
+.mapGradeGroup > li > input {
+  display: none;
+}
+
+.mapGradeGroup > li > label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: #F4F7C5;
+  border: 2px solid #73A9AD;
+  border-radius: 4px;
+  padding: 4px;
+  gap: 4px;
+  font-family: "Main Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  transition: border 0.3s;
+}
+
+.mapGradeGroup > li > input:checked + label {
+  background-color: #90C8AC;
+}
+
+.mapMenuItemImage {
+  height: 14px;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (min-width: 768px) {
+  .mapGradeGroup {
+    display: grid;
+    grid-template-columns: 120px 120px 120px 120px;
+    width: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mapGradeGroup {
+    display: grid;
+    grid-template-columns: 116px 116px 116px 116px 116px 116px;
+    width: 0;
+  }
+}

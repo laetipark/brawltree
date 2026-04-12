@@ -1,0 +1,36 @@
+.userInfoContainer {
+  border-radius: var(--user-radius-md, 12px);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid var(--user-line, #b6cdd8);
+  background: linear-gradient(140deg, var(--user-card-soft, #ebf6ff) 0%, var(--user-mint, #d6ead0) 100%);
+
+  & > img {
+    width: 80px;
+  }
+
+  & .realName {
+    margin: 0;
+    font-size: 24px;
+    color: var(--user-ink, #233348);
+
+    & .userTag {
+      color: var(--user-soft-ink, #4f657b);
+      font-size: 16px;
+      font-family: "Main Medium", "JP Medium", "CN Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+        "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    }
+  }
+
+  & .crewName {
+    display: flex;
+    min-height: 18px;
+    font-size: 16px;
+    gap: 2px;
+    color: var(--user-soft-ink, #4f657b);
+  }
+}

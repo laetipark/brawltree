@@ -1,0 +1,24 @@
+.userProfileContainer {
+  border-radius: var(--user-radius-lg, 18px);
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--user-line, #b6cdd8);
+  background: linear-gradient(150deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 55%, var(--user-mint-soft, #e7f3e2) 100%);
+  box-shadow: var(--user-shadow, 0 12px 26px rgba(84, 112, 140, 0.18));
+}
+
+@media (max-width: 576px) {
+  .userProfileContainer {
+    width: calc(100% - 20px);
+  }
+}
+
+@media (min-width: 576px) {
+  .userProfileContainer {
+    width: 100%;
+  }
+}

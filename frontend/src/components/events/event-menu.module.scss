@@ -1,0 +1,74 @@
+.menuWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+.menuList {
+  width: 100%;
+
+  & > ul {
+    display: grid;
+    grid-template-columns: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    gap: 7px;
+
+    & > li {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+.menuList > ul > li > input {
+  display: none;
+}
+
+.menuList > ul > li > label {
+  display: block;
+  cursor: pointer;
+}
+
+.menuList > ul > li > label > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  border-radius: 11px;
+  border: 1px solid rgba(125, 159, 182, 0.72);
+  background: linear-gradient(145deg, #f8fcff 0%, #e7f4ff 55%, #ddf1e6 100%);
+  color: #264962;
+  font-family: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: clamp(16px, 4.6vw, 20px);
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menuList > ul > li > input:hover + label > div {
+  border-color: rgba(89, 129, 155, 0.8);
+  background: linear-gradient(145deg, #f2faff 0%, #dff0ff 55%, #d2eadf 100%);
+}
+
+.menuList > ul > li > input:checked + label > div {
+  border-color: rgba(69, 106, 133, 0.9);
+  background: linear-gradient(145deg, #2e6287 0%, #3a7698 62%, #448876 100%);
+  color: #f2f8ff;
+  box-shadow: 0 8px 16px rgba(52, 90, 118, 0.24);
+}
+
+.eventPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .menuList > ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+}

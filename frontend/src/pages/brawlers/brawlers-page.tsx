@@ -8,71 +8,121 @@ import { PageSeo } from '~/components/seo/page-seo';
 
 import { BrawlerType } from '~/common/types/brawlers.type';
 import { BrawlerService } from '~/services/brawler.service';
+import { toBrawlerDisplayName, toBrawlerRouteName } from '~/utils/brawler-route';
 
 import styles from './brawlers-page.module.scss';
 
-const toDisplayName = (value?: string) => {
-  return (value || 'shelly')
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (character) => character.toUpperCase());
+/**
+ * 라우트 또는 API 응답이 비어 있을 때 보여줄 기본 브롤러입니다.
+ */
+const DEFAULT_BRAWLER: BrawlerType = {
+  id: '16000000',
+  name: 'SHELLY',
+  rarity: 'Trophy Road',
+  role: 'Damage Dealer',
+  gender: 'Female'
 };
 
+/**
+ * 브롤러 상세 페이지의 개요, 상세 정보, 통계 섹션을 조립합니다.
+ *
+ * 라우트 이름을 정규화해 선택 브롤러를 맞추고, 개요 API와 상세 API 실패를
+ * 분리해 일부 데이터 장애가 전체 페이지를 막지 않도록 합니다.
+ */
 export const Brawlers = () => {
   const { name } = useParams();
-  const [brawlers, setBrawlers] = useState([]);
-  const [brawler, setBrawler] = useState<BrawlerType>({
-    id: '16000000',
-    name: 'SHELLY',
-    rarity: 'Trophy Road',
-    role: 'Damage Dealer',
-    gender: 'Female'
-  });
+  const [brawlers, setBrawlers] = useState<BrawlerType[]>([]);
+  const [brawler, setBrawler] = useState<BrawlerType>(DEFAULT_BRAWLER);
 
   const [brawlerStats, setBrawlerStats] = useState([]);
   const [brawlerMaps, setBrawlerMaps] = useState([]);
 
   const [brawlerSkills, setBrawlerSkills] = useState({});
-  const [brawlerItems, setBrawlerItems] = useState({});
+  const [brawlerItems, setBrawlerItems] = useState([]);
+  const [overviewLoadFailed, setOverviewLoadFailed] = useState(false);
+  const [detailLoadFailed, setDetailLoadFailed] = useState(false);
 
   useEffect(() => {
-    BrawlerService.getBrawlers().then((data) => {
-      setBrawlers(data.brawlers);
-      setBrawlerStats(data.stats);
-      setBrawlerMaps(data.maps);
-    });
+    let isCancelled = false;
+
+    // 목록/맵/전체 통계는 페이지 진입 시 한 번만 받아 선택 UI와 요약 카드에 공유한다.
+    BrawlerService.getBrawlers()
+      .then((data) => {
+        if (isCancelled) {
+          return;
+        }
+
+        setOverviewLoadFailed(false);
+        setBrawlers(data.brawlers);
+        setBrawlerStats(data.stats);
+        setBrawlerMaps(data.maps);
+      })
+      .catch((error) => {
+        if (isCancelled) {
+          return;
+        }
+
+        console.error('Failed to load brawler overview:', error);
+        setOverviewLoadFailed(true);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
 
   useEffect(() => {
-    BrawlerService.getBrawler(brawler.id).then((data) => {
-      setBrawlerSkills(data.info);
-      setBrawlerItems(data.items);
-    });
+    let isCancelled = false;
+
+    // 선택된 브롤러가 바뀔 때만 스킬/아이템 상세 정보를 별도로 갱신한다.
+    BrawlerService.getBrawler(brawler.id)
+      .then((data) => {
+        if (isCancelled) {
+          return;
+        }
+
+        setDetailLoadFailed(false);
+        setBrawlerSkills(data.info);
+        setBrawlerItems(data.items);
+      })
+      .catch((error) => {
+        if (isCancelled) {
+          return;
+        }
+
+        console.error(`Failed to load brawler detail: ${brawler.id}`, error);
+        setDetailLoadFailed(true);
+        setBrawlerSkills({});
+        setBrawlerItems([]);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
   }, [brawler.id]);
 
   useEffect(() => {
-    const brawlerByName = brawlers.find((brawler) => brawler.name.toLowerCase().replaceAll(' ', '') === name);
-    setBrawler(
-      brawlerByName || {
-        id: '16000000',
-        name: 'SHELLY',
-        rarity: 'Trophy Road',
-        role: 'Damage Dealer',
-        gender: 'Female'
-      }
-    );
+    // URL 친화 이름과 API 원본 이름을 같은 규칙으로 비교해 직접 진입 라우트를 지원한다.
+    const brawlerByName = brawlers.find((currentBrawler) => {
+      return toBrawlerRouteName(currentBrawler.name) === toBrawlerRouteName(name);
+    });
+
+    setBrawler(brawlerByName || DEFAULT_BRAWLER);
   }, [name, brawlers]);
 
-  const brawlerName = toDisplayName(name);
+  const brawlerName = toBrawlerDisplayName(brawler.name || name);
 
   return (
     <React.Fragment>
-      <PageSeo
-        page="brawler"
-        title={`${brawlerName} Stats and Build`}
-        description={`Check ${brawlerName} performance, best maps, and item combinations.`}
-      />
-      {brawlers.length > 0 ? (
+      <PageSeo page="brawler" title={`${brawlerName} Stats and Build`} description={`Check ${brawlerName} performance, best maps, and item combinations.`} />
+      {overviewLoadFailed && brawlers.length === 0 ? (
+        <div className={styles.statusCard}>
+          <h2>Failed to load brawler data.</h2>
+          <p>Please try again in a moment.</p>
+        </div>
+      ) : brawlers.length > 0 ? (
         <div className={styles.app}>
+          {detailLoadFailed && <div className={styles.statusBanner}>Some detail data for this brawler could not be loaded.</div>}
           <BrawlerSelection brawlers={brawlers} brawler={brawler} setBrawler={setBrawler} />
           <div>
             <BrawlerInfo brawler={brawler} skills={brawlerSkills} items={brawlerItems} />

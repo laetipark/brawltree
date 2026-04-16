@@ -1,11 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+import {
+  formatLogFields,
+  getErrorCode,
+  getErrorMessage,
+  getErrorStatus
+} from '~/utils/logging';
 import { AppConfigService } from '~/utils/services/app-config.service';
 import { URLService } from '~/utils/services/url.service';
 
 @Injectable()
 export class NewsService {
+  private readonly logger = new Logger(NewsService.name);
+
   constructor(
     private readonly configService: AppConfigService,
     private readonly httpService: HttpService,
@@ -66,7 +74,15 @@ export class NewsService {
         };
       });
     } catch (error) {
-      Logger.error(error, 'getNews');
+      this.logger.warn(
+        formatLogFields({
+          event: 'news.fetch.error',
+          target: region,
+          status: getErrorStatus(error),
+          code: getErrorCode(error),
+          error: getErrorMessage(error)
+        })
+      );
     }
 
     return null;
@@ -101,7 +117,16 @@ export class NewsService {
         details: newsItem.details
       };
     } catch (error) {
-      Logger.error(error, 'getNews');
+      this.logger.warn(
+        formatLogFields({
+          event: 'news.item.fetch.error',
+          target: title,
+          region,
+          status: getErrorStatus(error),
+          code: getErrorCode(error),
+          error: getErrorMessage(error)
+        })
+      );
     }
 
     return null;

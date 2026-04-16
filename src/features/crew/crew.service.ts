@@ -10,6 +10,10 @@ import { UserBrawlerBattles } from '~/users/entities/user-brawlers.entity';
 import { SelectUserFriendDto } from '~/crew/dto/select-user-friend.dto';
 import { SelectUserSeasonDto } from '~/crew/dto/select-user-season.dto';
 
+type MemberFriendsUpdatedAtRow = {
+  friendsUpdatedAt: Date | null;
+};
+
 @Injectable()
 export class CrewService {
   constructor(
@@ -208,17 +212,19 @@ export class CrewService {
         });
       });
 
-    const { friendsUpdatedAt } = await this.userFriends
+    const updatedRow = await this.userFriends
       .createQueryBuilder('uFriend')
       .select('MAX(uFriend.updatedAt)', 'friendsUpdatedAt')
       .where('uFriend.userID = :id', {
         id: `#${id}`
       })
-      .groupBy('uFriend.userID')
-      .getRawOne();
+      .getRawOne<MemberFriendsUpdatedAtRow>();
 
     return {
-      friendList: { friends, friendsUpdatedAt }
+      friendList: {
+        friends,
+        friendsUpdatedAt: updatedRow?.friendsUpdatedAt ?? null
+      }
     };
   }
 }

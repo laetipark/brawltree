@@ -51,15 +51,29 @@ const TOOLTIP_ANCHOR_GAP = 8;
 const TOOLTIP_PREFERRED_HEIGHT = 360;
 const MOBILE_TOOLTIP_QUERY = '(max-width: 1024px), (hover: none) and (pointer: coarse)';
 
+/**
+ * API에서 문자열 또는 숫자로 들어오는 비율 값을 안전한 숫자로 변환합니다.
+ */
 const toRateNumber = (value: number | string | undefined) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+/**
+ * 화면에 표시할 비율 값을 소수점 둘째 자리 기준으로 반올림합니다.
+ */
 const formatRate = (value: number | string | undefined) => {
   return Math.round(toRateNumber(value) * 100) / 100;
 };
 
+/**
+ * 맵과 매치 타입 조합을 툴팁 상태 키로 정규화합니다.
+ */
+const getMapTooltipKey = (mapID: string | number, matchType: string | number | undefined) => `${mapID}_${matchType ?? '0'}`;
+
+/**
+ * 브롤러별 픽률/승률과 맵별 성능 필터 UI를 렌더링합니다.
+ */
 export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
   const locales = useContext(CdnContext);
   const statsLocale = locales.brawler?.stats || {};
@@ -256,12 +270,15 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
       return;
     }
 
-    const hasActiveMap = filteredBrawlerMaps.some(({ mapID, matchType }) => `${mapID}_${matchType ?? '0'}` === activeMapTooltip.key);
+    const hasActiveMap = filteredBrawlerMaps.some(({ mapID, matchType }) => getMapTooltipKey(mapID, matchType) === activeMapTooltip.key);
     if (!hasActiveMap) {
       setActiveMapTooltip(null);
     }
   }, [filteredBrawlerMaps, activeMapTooltip]);
 
+  /**
+   * 앵커 위치와 뷰포트 경계를 기준으로 툴팁 배치 방향과 보정값을 계산합니다.
+   */
   const resolveTooltipLayout = (mapKey: string): Omit<ActiveMapTooltip, 'key'> => {
     if (typeof window === 'undefined') {
       return { placement: 'bottom', offsetX: 0, maxHeight: 360 };
@@ -283,9 +300,7 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     const anchorRect = anchor.getBoundingClientRect();
     const anchorParent = anchor.closest(`.${styles.statsSummaryMapButton}`) as HTMLElement | null;
     const anchorParentStyles = anchorParent ? window.getComputedStyle(anchorParent) : null;
-    const parentHorizontalPadding = anchorParentStyles
-      ? Math.max(Number.parseFloat(anchorParentStyles.paddingLeft) || 0, Number.parseFloat(anchorParentStyles.paddingRight) || 0)
-      : 0;
+    const parentHorizontalPadding = anchorParentStyles ? Math.max(Number.parseFloat(anchorParentStyles.paddingLeft) || 0, Number.parseFloat(anchorParentStyles.paddingRight) || 0) : 0;
     const safePaddingX = Math.max(TOOLTIP_SAFE_PADDING_X, parentHorizontalPadding);
 
     const footerElement = document.querySelector('footer');
@@ -295,10 +310,10 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     const spaceBelow = lowerBoundary - anchorRect.bottom - TOOLTIP_ANCHOR_GAP;
     const spaceAbove = anchorRect.top - upperBoundary - TOOLTIP_ANCHOR_GAP;
 
+    // 푸터와 화면 끝을 침범하지 않도록 위/아래 중 더 안정적인 방향을 선택한다.
     const safeSpaceBelow = Math.max(120, spaceBelow);
     const safeSpaceAbove = Math.max(120, spaceAbove);
-    const placement: TooltipPlacement =
-      safeSpaceBelow < TOOLTIP_PREFERRED_HEIGHT && safeSpaceAbove > safeSpaceBelow ? 'top' : 'bottom';
+    const placement: TooltipPlacement = safeSpaceBelow < TOOLTIP_PREFERRED_HEIGHT && safeSpaceAbove > safeSpaceBelow ? 'top' : 'bottom';
     const maxHeight = Math.max(160, placement === 'top' ? safeSpaceAbove : safeSpaceBelow);
 
     const tooltipWidth = Math.min(TOOLTIP_MAX_WIDTH, window.innerWidth - safePaddingX * 2);
@@ -309,6 +324,7 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
 
     let offsetX = 0;
 
+    // 오른쪽 정렬 기본값을 유지하되 좁은 화면에서는 안전 패딩 안으로 밀어 넣는다.
     if (defaultLeft < minLeft) {
       offsetX += minLeft - defaultLeft;
     }
@@ -360,6 +376,9 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     };
   }, [activeMapTooltip?.key]);
 
+  /**
+   * 세 필터 메뉴 중 하나만 열리도록 모드 메뉴 상태를 토글합니다.
+   */
   const handleToggleModeMenu = () => {
     const nextOpen = !modeMenuOpen;
     setModeMenuOpen(nextOpen);
@@ -369,6 +388,9 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     }
   };
 
+  /**
+   * 세 필터 메뉴 중 하나만 열리도록 매치 타입 메뉴 상태를 토글합니다.
+   */
   const handleToggleMatchTypeMenu = () => {
     const nextOpen = !matchTypeMenuOpen;
     setMatchTypeMenuOpen(nextOpen);
@@ -378,6 +400,9 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     }
   };
 
+  /**
+   * 세 필터 메뉴 중 하나만 열리도록 정렬 메뉴 상태를 토글합니다.
+   */
   const handleToggleSortMenu = () => {
     const nextOpen = !sortMenuOpen;
     setSortMenuOpen(nextOpen);
@@ -387,9 +412,10 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     }
   };
 
-  const toggleMapInfoTooltip = (event: React.MouseEvent<HTMLDivElement>, mapKey: string) => {
-    event.preventDefault();
-    event.stopPropagation();
+  /**
+   * 같은 맵 키는 닫고, 다른 맵 키는 현재 레이아웃으로 새 툴팁을 엽니다.
+   */
+  const toggleActiveMapTooltip = (mapKey: string) => {
     setActiveMapTooltip((prev) => {
       if (prev?.key === mapKey) {
         return null;
@@ -405,23 +431,23 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
     });
   };
 
+  /**
+   * 포인터 입력으로 맵 상세 툴팁을 토글합니다.
+   */
+  const toggleMapInfoTooltip = (event: React.MouseEvent<HTMLDivElement>, mapKey: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleActiveMapTooltip(mapKey);
+  };
+
+  /**
+   * 키보드 입력으로 맵 상세 툴팁을 토글하거나 닫습니다.
+   */
   const onMapInfoKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, mapKey: string) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
-      setActiveMapTooltip((prev) => {
-        if (prev?.key === mapKey) {
-          return null;
-        }
-
-        const nextLayout = resolveTooltipLayout(mapKey);
-        return {
-          key: mapKey,
-          placement: nextLayout.placement,
-          offsetX: nextLayout.offsetX,
-          maxHeight: nextLayout.maxHeight
-        };
-      });
+      toggleActiveMapTooltip(mapKey);
       return;
     }
 
@@ -435,7 +461,7 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
       return null;
     }
 
-    return filteredBrawlerMaps.find(({ mapID, matchType }) => `${mapID}_${matchType ?? '0'}` === activeMapTooltip.key) || null;
+    return filteredBrawlerMaps.find(({ mapID, matchType }) => getMapTooltipKey(mapID, matchType) === activeMapTooltip.key) || null;
   }, [filteredBrawlerMaps, activeMapTooltip]);
 
   return (
@@ -571,17 +597,13 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
       <div className={styles.statsSummaryWrapper}>
         {filteredBrawlerMaps.length === 0 && <div className={styles.statsSummaryEmpty}>{statsFilterLocale.empty || 'No map stats found for this filter.'}</div>}
         {filteredBrawlerMaps.map(({ mapID, mapName, mode, pickRate, victoryRate, matchType }) => {
-          const mapKey = `${mapID}_${matchType ?? '0'}`;
+          const mapKey = getMapTooltipKey(mapID, matchType);
           const isMapToolTipVisible = activeMapTooltip?.key === mapKey;
           const isTooltipTop = isMapToolTipVisible && activeMapTooltip?.placement === 'top';
           const mapNameText = locales.map['map'][`${mapID}`] || mapName;
 
           return (
-            <a
-              key={mapKey}
-              className={`${styles.statsSummaryMapButton} ${isMapToolTipVisible ? styles.statsSummaryMapButtonActive : ''}`}
-              href={`../maps/${mapID}`}
-            >
+            <a key={mapKey} className={`${styles.statsSummaryMapButton} ${isMapToolTipVisible ? styles.statsSummaryMapButtonActive : ''}`} href={`../maps/${mapID}`}>
               <img src={`${config.assets}/modes/icon/${mode}.webp`} alt={mode} />
               <span className={styles.statsMapName}>{mapNameText}</span>
               <div

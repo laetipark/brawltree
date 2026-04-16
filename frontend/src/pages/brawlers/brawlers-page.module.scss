@@ -37,6 +37,39 @@
   }
 }
 
+.statusCard,
+.statusBanner {
+  width: min(940px, calc(100% - 20px));
+  margin: 12px auto;
+  padding: 16px 18px;
+  border: 2px solid var(--brawler-line-strong);
+  border-radius: var(--brawler-radius-lg);
+  background: linear-gradient(135deg, rgba(243, 250, 255, 0.96), rgba(255, 247, 237, 0.98));
+  box-shadow: var(--brawler-shadow);
+  color: var(--brawler-ink);
+}
+
+.statusCard {
+  h2 {
+    margin: 0 0 8px;
+    font-family: var(--brawler-font-title);
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--brawler-soft-ink);
+  }
+}
+
+.statusBanner {
+  margin: 0;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(255, 231, 219, 0.98), rgba(248, 222, 238, 0.96));
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 @media (min-width: 576px) {
   .app {
     width: 556px;

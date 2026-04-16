@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { CdnContext } from '~/context/cdn.context';
 import { isRRMatch } from '~/utils/korean-pattern';
+import { toBrawlerRouteName } from '~/utils/brawler-route';
 
 import config from '~/common/config/config';
 
@@ -59,7 +60,7 @@ export const BrawlerSelection = ({ brawlers, brawler, setBrawler }) => {
                 checked={radio === nextBrawler.id}
                 onChange={() => {
                   setBrawler(nextBrawler);
-                  navigate(`../brawler/${nextBrawler.name.toLowerCase().replaceAll(' ', '')}`);
+                  navigate(`../brawler/${toBrawlerRouteName(nextBrawler.name)}`);
                 }}
               />
               <label htmlFor={nextBrawler.id} className={styles.brawlerImage}>

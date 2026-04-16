@@ -6,6 +6,7 @@ import { EventSummaryContainer } from '~/components/maps/event-summary';
 import { NewsSummaryContainer } from '~/pages/main/news-summary';
 
 import { SearchItemType } from '~/common/types/main.type';
+import { BrawlerSummaryItemType } from '~/common/types/brawlers.type';
 
 import { EventService } from '~/services/event.service';
 import { BrawlerService } from '~/services/brawler.service';
@@ -22,8 +23,12 @@ export const MainWrapper = () => {
   const [searchHistory, setSearchHistory] = useState(() => JSON.parse(localStorage.getItem('searchHistory') || '[]'));
   const [trophyEvents, setTrophyEvents] = useState([]);
   const [rankedEvents, setRankedEvents] = useState([]);
-  const [brawlersTrophy, setBrawlersTrophy] = useState([]);
-  const [brawlersRanked, setBrawlersRanked] = useState([]);
+  const [brawlersTrophy, setBrawlersTrophy] = useState<
+    BrawlerSummaryItemType[]
+  >([]);
+  const [brawlersRanked, setBrawlersRanked] = useState<
+    BrawlerSummaryItemType[]
+  >([]);
 
   useEffect(() => {
     localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
@@ -35,10 +40,29 @@ export const MainWrapper = () => {
   }, []);
 
   useEffect(() => {
-    BrawlerService.getBrawlerSummary().then((data) => {
-      setBrawlersTrophy(data.brawlersTrophy);
-      setBrawlersRanked(data.brawlersRanked);
-    });
+    let isSubscribed = true;
+
+    BrawlerService.getBrawlerSummary()
+      .then((data) => {
+        if (!isSubscribed) {
+          return;
+        }
+
+        setBrawlersTrophy(data.brawlersTrophy);
+        setBrawlersRanked(data.brawlersRanked);
+      })
+      .catch(() => {
+        if (!isSubscribed) {
+          return;
+        }
+
+        setBrawlersTrophy([]);
+        setBrawlersRanked([]);
+      });
+
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
 
   /** Function related to recent search */

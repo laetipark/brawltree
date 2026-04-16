@@ -16,7 +16,7 @@ const typeNumber = {
 };
 
 export const TypeComboBox = ({ type, setMatchType }) => {
-  const dropDownRef = useRef();
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [checked, setChecked] = useWindowClick(dropDownRef, false);
   const locales = useContext(CdnContext);
 

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { CdnContext } from '~/context/cdn.context';
 
 import config from '~/common/config/config';
+import { toBrawlerRouteName } from '~/utils/brawler-route';
 
 import styles from './brawler-summary-item.module.scss';
 
@@ -9,7 +10,7 @@ export const BrawlerSummaryItem = ({ brawlerID, brawlerName, pickRate, victoryRa
   const locales = useContext(CdnContext);
 
   return (
-    <a className={styles.brawlerSummaryItemWrapper} href={`./brawler/${brawlerName.toLowerCase()}`}>
+    <a className={styles.brawlerSummaryItemWrapper} href={`./brawler/${toBrawlerRouteName(brawlerName)}`}>
       <div className={styles.brawlerSummaryItemName}>
         <img src={`${config.assets}/brawlers/pins/${brawlerID}.webp`} alt={brawlerID} />
         <h3>{locales.brawler['brawler'][`${brawlerName}`]}</h3>

@@ -110,17 +110,17 @@ export class BrawlersService {
   }
 
   async getBrawlerMaps() {
-    const modes = (
+    const excludedModes = (
       await this.gameModes
         .createQueryBuilder('modes')
         .select('modes.modeName', 'modeName')
-        .where('modes.modeType NOT IN (:type)', {
-          type: [3, 2]
+        .where('modes.modeType NOT IN (:...modeTypes)', {
+          modeTypes: [3, 2]
         })
         .getRawMany()
     ).map((m) => m.modeName);
 
-    return await this.brawlerStats
+    const query = this.brawlerStats
       .createQueryBuilder('bs')
       .select('bs.mapID', 'mapID')
       .addSelect('bs.brawlerID', 'brawlerID')
@@ -138,12 +138,17 @@ export class BrawlersService {
       .addSelect('m.name', 'mapName')
       .leftJoin('bs.brawler', 'b')
       .innerJoin(GameMaps, 'm', 'bs.mapID = m.id')
-      .where('m.mode NOT IN (:modes)', {
-        modes: modes
-      })
-      .andWhere('bs.matchType IN (:...matchTypes)', {
+      .where('bs.matchType IN (:...matchTypes)', {
         matchTypes: [0, 2]
-      })
+      });
+
+    if (excludedModes.length > 0) {
+      query.andWhere('m.mode NOT IN (:...modes)', {
+        modes: excludedModes
+      });
+    }
+
+    return await query
       .groupBy('bs.brawlerID')
       .addGroupBy('bs.mapID')
       .addGroupBy('bs.matchType')

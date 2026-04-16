@@ -1,8 +1,7 @@
-import { IntervalFunc } from '~/common/interfaces/interval_function';
 import { useEffect, useRef } from 'react';
 
 export const useInterval = (callback: () => void, delay: number) => {
-  const savedCallback: IntervalFunc = useRef();
+  const savedCallback = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     savedCallback.current = callback;
@@ -10,7 +9,7 @@ export const useInterval = (callback: () => void, delay: number) => {
 
   useEffect(() => {
     const tick = () => {
-      savedCallback.current();
+      savedCallback.current?.();
     };
 
     if (delay !== null) {

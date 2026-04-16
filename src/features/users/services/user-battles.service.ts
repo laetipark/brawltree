@@ -16,7 +16,10 @@ import {
   SelectUserSummaryBattlesDto
 } from '~/users/dto/select-user-battles.dto';
 import { ModesService } from '~/maps/services/modes.service';
-import { UserBattleQueryCache, resolveBattleQueryCacheTtlMs } from './user-battles/user-battle-cache';
+import {
+  UserBattleQueryCache,
+  resolveBattleQueryCacheTtlMs
+} from './user-battles/user-battle-cache';
 import {
   normalizeBattleRequest,
   resolveBattleQueryFilter
@@ -45,10 +48,21 @@ import {
   UserDailyBattlesResult
 } from './user-battles/user-battle.types';
 
-type BattleRepository = Repository<UserBattlesNormal> | Repository<UserBattlesRanked>;
+type BattleRepository =
+  | Repository<UserBattlesNormal>
+  | Repository<UserBattlesRanked>;
 
+/**
+ * 사용자 배틀 통계와 로그 조회 API의 쿼리 조립을 담당합니다.
+ *
+ * 시즌 필터, 타입별 테이블 선택, 응답 매핑, 짧은 TTL 캐시를 한 곳에서 맞춰
+ * 프론트엔드가 기대하는 `/brawlian/:id/battles/*` 응답 형식을 유지합니다.
+ */
 @Injectable()
 export class UserBattlesService {
+  /**
+   * 같은 사용자/필터 조합의 반복 조회를 흡수하는 프로세스 로컬 쿼리 캐시입니다.
+   */
   private readonly queryCache = new UserBattleQueryCache(
     resolveBattleQueryCacheTtlMs(process.env.USER_BATTLES_QUERY_CACHE_TTL_MS)
   );
@@ -65,6 +79,9 @@ export class UserBattlesService {
     private readonly configService: AppConfigService
   ) {}
 
+  /**
+   * 일별 배틀 수, 트로피 변화량, 브롤러별 일별 통계를 조회합니다.
+   */
   async selectUserDailyBattles(
     id: string,
     type: string,
@@ -83,10 +100,7 @@ export class UserBattlesService {
     }
 
     const seasonWindow = getSeasonWindow(request.type, this.seasonsService);
-    const queryFilter = await resolveBattleQueryFilter(request, {
-      getTypeList: () => this.configService.getTypeList(),
-      selectModeList: () => this.modesService.selectModeList()
-    });
+    const queryFilter = await this.resolveQueryFilter(request);
 
     const [summaryBattles, dailyBrawlers] = await Promise.all([
       this.loadDailyBattleSummaries(id, queryFilter, seasonWindow),
@@ -103,6 +117,9 @@ export class UserBattlesService {
     return result;
   }
 
+  /**
+   * 최근 전투 목록과 상세 로그를 같은 필터/시즌 기준으로 조회합니다.
+   */
   async selectUserBattleLogs(
     id: string,
     type: string,
@@ -123,10 +140,7 @@ export class UserBattlesService {
     }
 
     const seasonWindow = getSeasonWindow(request.type, this.seasonsService);
-    const queryFilter = await resolveBattleQueryFilter(request, {
-      getTypeList: () => this.configService.getTypeList(),
-      selectModeList: () => this.modesService.selectModeList()
-    });
+    const queryFilter = await this.resolveQueryFilter(request);
 
     const recentUserBattles = await this.loadRecentUserBattles(
       id,
@@ -151,6 +165,9 @@ export class UserBattlesService {
     return result;
   }
 
+  /**
+   * 사용자가 플레이한 트로피/랭크 모드 목록을 조회합니다.
+   */
   async selectUserBattleModes(id: string): Promise<UserBattleModesResult> {
     const cacheKey = this.queryCache.buildKey('user-battle-modes', id);
     const cached = this.queryCache.get<UserBattleModesResult>(cacheKey);
@@ -189,6 +206,21 @@ export class UserBattlesService {
     return result;
   }
 
+  /**
+   * 요청 타입과 모드 값을 DB 쿼리에 사용할 구체 필터로 변환합니다.
+   */
+  private async resolveQueryFilter(
+    request: ReturnType<typeof normalizeBattleRequest>
+  ): Promise<BattleQueryFilter> {
+    return resolveBattleQueryFilter(request, {
+      getTypeList: () => this.configService.getTypeList(),
+      selectModeList: () => this.modesService.selectModeList()
+    });
+  }
+
+  /**
+   * 캘린더 상단 요약 그래프에 필요한 일별 집계를 조회합니다.
+   */
   private async loadDailyBattleSummaries(
     id: string,
     queryFilter: BattleQueryFilter,
@@ -204,40 +236,46 @@ export class UserBattlesService {
     );
 
     // 날짜별 전투 수와 트로피 변화량은 같은 조건으로 집계해야 캘린더가 정확히 맞물린다.
+    const dailyBattleCountQuery = this.createBattleQueryBuilder(
+      queryFilter.type,
+      'uBattle'
+    )
+      .select('DATE_FORMAT(uBattle.battleTime, "%Y-%m-%d")', 'day')
+      .addSelect('COUNT(uBattle.battleTime)', 'value')
+      .innerJoin(GameMaps, 'map', 'uBattle.mapID = map.id')
+      .where('uBattle.userID = :id AND uBattle.playerID = :id', {
+        id: `#${id}`
+      })
+      .andWhere('uBattle.matchType IN (:...type)', {
+        type: queryFilter.matchType
+      });
+    this.applyMatchModeFilter(dailyBattleCountQuery, queryFilter.matchMode);
+
+    const dailyTrophyChangeQuery = this.createBattleQueryBuilder(
+      queryFilter.type,
+      'uBattle'
+    )
+      .select('DATE_FORMAT(uBattle.battleTime, "%Y-%m-%d")', 'day')
+      .addSelect(
+        'SUM(CASE WHEN uBattle.matchType NOT IN (4, 5) THEN uBattle.trophyChange ELSE 0 END)',
+        'value'
+      )
+      .innerJoin(GameMaps, 'map', 'uBattle.mapID = map.id')
+      .where('uBattle.userID = :id AND uBattle.playerID = :id', {
+        id: `#${id}`
+      })
+      .andWhere('uBattle.matchType IN (:...type)', {
+        type: queryFilter.matchType
+      });
+    this.applyMatchModeFilter(dailyTrophyChangeQuery, queryFilter.matchMode);
+
     const [dailyBattleCountSummary, dailyTrophyChangeSummary] =
       await Promise.all([
-        this.createBattleQueryBuilder(queryFilter.type, 'uBattle')
-          .select('DATE_FORMAT(uBattle.battleTime, "%Y-%m-%d")', 'day')
-          .addSelect('COUNT(uBattle.battleTime)', 'value')
-          .innerJoin(GameMaps, 'map', 'uBattle.mapID = map.id')
-          .where('uBattle.userID = :id AND uBattle.playerID = :id', {
-            id: `#${id}`
-          })
-          .andWhere('uBattle.matchType IN (:...type)', {
-            type: queryFilter.matchType
-          })
-          .andWhere('map.mode IN (:...mode)', {
-            mode: queryFilter.matchMode
-          })
+        dailyBattleCountQuery
           .andWhere(battleSeasonWhereClause, seasonWhereParams)
           .groupBy('DATE_FORMAT(uBattle.battleTime, "%Y-%m-%d")')
           .getRawMany<BattleSummaryRawRow>(),
-        this.createBattleQueryBuilder(queryFilter.type, 'uBattle')
-          .select('DATE_FORMAT(uBattle.battleTime, "%Y-%m-%d")', 'day')
-          .addSelect(
-            'SUM(CASE WHEN uBattle.matchType NOT IN (4, 5) THEN uBattle.trophyChange ELSE 0 END)',
-            'value'
-          )
-          .innerJoin(GameMaps, 'map', 'uBattle.mapID = map.id')
-          .where('uBattle.userID = :id AND uBattle.playerID = :id', {
-            id: `#${id}`
-          })
-          .andWhere('uBattle.matchType IN (:...type)', {
-            type: queryFilter.matchType
-          })
-          .andWhere('map.mode IN (:...mode)', {
-            mode: queryFilter.matchMode
-          })
+        dailyTrophyChangeQuery
           .andWhere(battleSeasonWhereClause, seasonWhereParams)
           .groupBy('DATE_FORMAT(uBattle.battleTime, "%Y-%m-%d")')
           .getRawMany<BattleSummaryRawRow>()
@@ -249,6 +287,9 @@ export class UserBattlesService {
     ]);
   }
 
+  /**
+   * 날짜별 브롤러 픽/승패 집계를 조회합니다.
+   */
   private async loadDailyBrawlerGroups(
     id: string,
     queryFilter: BattleQueryFilter,
@@ -275,15 +316,14 @@ export class UserBattlesService {
       })
       .andWhere('uBattles.matchType IN (:...type)', {
         type: queryFilter.matchType
-      })
-      .andWhere('map.mode IN (:...mode)', {
-        mode: queryFilter.matchMode
-      })
+      });
+    this.applyMatchModeFilter(dailyStatsQuery, queryFilter.matchMode);
+    dailyStatsQuery
       .andWhere(battlesSeasonWhereClause, seasonWhereParams)
       .groupBy('DATE(uBattles.battleTime)');
 
     // 일별 총 전투 수를 서브쿼리로 고정해둬야 픽률 계산이 브롤러별 집계와 어긋나지 않는다.
-    const dailyBrawlerStats = await this.createBattleQueryBuilder(
+    const dailyBrawlerStatsQuery = this.createBattleQueryBuilder(
       queryFilter.type,
       'uBattles'
     )
@@ -312,10 +352,10 @@ export class UserBattlesService {
       })
       .andWhere('uBattles.matchType IN (:...type)', {
         type: queryFilter.matchType
-      })
-      .andWhere('map.mode IN (:...mode)', {
-        mode: queryFilter.matchMode
-      })
+      });
+    this.applyMatchModeFilter(dailyBrawlerStatsQuery, queryFilter.matchMode);
+
+    const dailyBrawlerStats = await dailyBrawlerStatsQuery
       .andWhere(battlesSeasonWhereClause, seasonWhereParams)
       .groupBy('DATE(uBattles.battleTime)')
       .addGroupBy('uBattles.brawlerID')
@@ -328,6 +368,9 @@ export class UserBattlesService {
     return buildDailyBrawlerGroups(dailyBrawlerStats);
   }
 
+  /**
+   * 로그 상단에 노출할 최근 전투 카드 목록을 조회합니다.
+   */
   private async loadRecentUserBattles(
     id: string,
     queryFilter: BattleQueryFilter,
@@ -343,7 +386,10 @@ export class UserBattlesService {
     );
     const limit = 30 * queryFilter.stack;
 
-    return this.createBattleQueryBuilder(queryFilter.type, 'uBattle')
+    const recentBattlesQuery = this.createBattleQueryBuilder(
+      queryFilter.type,
+      'uBattle'
+    )
       .select('uBattle.battleTime', 'battleTime')
       .addSelect('uBattle.duration', 'duration')
       .addSelect('uBattle.brawlerID', 'brawlerID')
@@ -361,16 +407,19 @@ export class UserBattlesService {
       })
       .andWhere('uBattle.matchType IN (:...type)', {
         type: queryFilter.matchType
-      })
-      .andWhere('map.mode IN (:...mode)', {
-        mode: queryFilter.matchMode
-      })
+      });
+    this.applyMatchModeFilter(recentBattlesQuery, queryFilter.matchMode);
+
+    return recentBattlesQuery
       .andWhere(battleSeasonWhereClause, seasonWhereParams)
       .orderBy('uBattle.battleTime', 'DESC')
       .limit(limit)
       .getRawMany<SelectRecentUserBattlesDto>();
   }
 
+  /**
+   * 배틀 단위 상세 로그의 원시 JSON 집계 행을 조회합니다.
+   */
   private async loadDetailedBattleLogs(
     id: string,
     queryFilter: BattleQueryFilter,
@@ -387,7 +436,10 @@ export class UserBattlesService {
     const limit = 30 * queryFilter.stack;
 
     // 배틀 단위로 플레이어 목록을 JSON으로 묶어야 기존 로그 응답 키를 그대로 유지할 수 있다.
-    return this.createBattleQueryBuilder(queryFilter.type, 'uBattle')
+    const battleLogsQuery = this.createBattleQueryBuilder(
+      queryFilter.type,
+      'uBattle'
+    )
       .select('uBattle.userID', 'userID')
       .addSelect(
         'JSON_OBJECT(' +
@@ -420,10 +472,10 @@ export class UserBattlesService {
       })
       .andWhere('uBattle.matchType IN (:...type)', {
         type: queryFilter.matchType
-      })
-      .andWhere('map.mode IN (:...mode)', {
-        mode: queryFilter.matchMode
-      })
+      });
+    this.applyMatchModeFilter(battleLogsQuery, queryFilter.matchMode);
+
+    return battleLogsQuery
       .andWhere(battleSeasonWhereClause, seasonWhereParams)
       .groupBy('uBattle.userID')
       .addGroupBy('uBattle.battleTime')
@@ -437,27 +489,54 @@ export class UserBattlesService {
       .getRawMany<UserBattleLogRawRow>();
   }
 
+  /**
+   * 타입 필터에 맞는 전투 테이블 쿼리 빌더를 생성합니다.
+   */
   private createBattleQueryBuilder(
     type: string,
     alias: string
   ): SelectQueryBuilder<UserBattlesNormal | UserBattlesRanked> {
     if (type === '7') {
+      // 전체 타입은 일반/랭크 테이블을 동일 별칭으로 합쳐 후속 매퍼가 단일 테이블처럼 처리하게 한다.
       return this.userBattlesNormal.manager
         .createQueryBuilder()
-        .from(`(${this.getUnionBattleSubQuery()})`, alias) as SelectQueryBuilder<
-        UserBattlesNormal | UserBattlesRanked
-      >;
+        .from(
+          `(${this.getUnionBattleSubQuery()})`,
+          alias
+        ) as SelectQueryBuilder<UserBattlesNormal | UserBattlesRanked>;
     }
 
     return this.getBattleRepositoryByType(type).createQueryBuilder(alias);
   }
 
+  /**
+   * 요청 타입에 따라 일반 또는 랭크 배틀 저장소를 선택합니다.
+   */
   private getBattleRepositoryByType(type: string): BattleRepository {
     return type === '2' || type === '3'
       ? this.userBattlesRanked
       : this.userBattlesNormal;
   }
 
+  /**
+   * 구체 모드 필터가 있을 때만 지도 모드 조건을 추가합니다.
+   */
+  private applyMatchModeFilter(
+    queryBuilder: SelectQueryBuilder<UserBattlesNormal | UserBattlesRanked>,
+    matchMode: string[]
+  ): void {
+    if (matchMode.length === 0) {
+      return;
+    }
+
+    queryBuilder.andWhere('map.mode IN (:...mode)', {
+      mode: matchMode
+    });
+  }
+
+  /**
+   * 일반/랭크 배틀 테이블을 같은 컬럼 별칭으로 합치는 UNION 서브쿼리를 만듭니다.
+   */
   private getUnionBattleSubQuery(): string {
     const selectClause = `
       user_id AS userID,

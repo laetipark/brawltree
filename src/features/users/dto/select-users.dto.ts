@@ -39,6 +39,9 @@ export class SelectUserDto {
   @IsBoolean()
   isCrew!: boolean;
 
+  @IsBoolean()
+  isVerified!: boolean;
+
   @IsDateString()
   updatedAt!: Date;
 

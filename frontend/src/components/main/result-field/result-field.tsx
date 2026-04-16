@@ -14,7 +14,7 @@ export const ResultField = ({ inputValue, onChangeInputValue, setToggle }) => {
   const context = useContext(SearchContext);
   const { onAddSearchHistory } = context;
   const { isLoading, data } = useSearchItems(inputValue);
-  const dropDownRef = useRef();
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [checked, setChecked] = useWindowClick(dropDownRef, false);
 
   useEffect(() => {

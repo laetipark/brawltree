@@ -18,7 +18,7 @@ export class CrewController {
   async selectMember(@Param('id') id: string): Promise<{
     friendList: {
       friends: SelectUserFriendDto[];
-      friendsUpdatedAt: Date;
+      friendsUpdatedAt: Date | null;
     };
     seasonList: SelectUserSeasonDto[];
   }> {

@@ -50,6 +50,7 @@ export const createEmptyUser = (id: string): UsersType => ({
   crew: null,
   crewName: null,
   isCrew: false,
+  isVerified: false,
   updatedAt: new Date(0)
 });
 

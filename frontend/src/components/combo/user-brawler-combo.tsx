@@ -11,7 +11,7 @@ import styles from '~/assets/styles/components/combo/user-brawler-combo.module.s
 const userBrawlerOrder = ['brawlerID', 'brawlerName', 'rarity', 'brawlerPower', 'currentTrophies', 'highestTrophies'];
 
 export const UserBrawlerComboBox = ({ order, setBrawlerOrder, orderDirection, setBrawlerOrderDirection }) => {
-  const dropDownRef = useRef();
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [checked, setChecked] = useWindowClick(dropDownRef, false);
   const locales = useContext(CdnContext);
 

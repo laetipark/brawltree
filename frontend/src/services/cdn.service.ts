@@ -2,8 +2,14 @@ import axios from 'axios';
 import { SupportedLanguage } from '~/common/i18n/language';
 import koBrawlerLocale from '~/assets/database/locales/ko/brawler.json';
 import enBrawlerLocale from '~/assets/database/locales/en/brawler.json';
+import { getDefaultCdnLocale } from '~/common/i18n/default-cdn-bundle';
+import type { CdnBundle, CdnLocale } from '~/context/cdn.context';
 
-const getCdnLocale = (language: SupportedLanguage, name: string, time: number) => axios.get(`/cdn/database/locales/${language}/${name}.json?time=${time}`).then((result) => result.data);
+type CdnNamespace = keyof CdnBundle;
+
+const shouldFetchRemoteLocales = import.meta.env.VITE_CDN_REMOTE_LOCALES === 'true';
+
+const fetchCdnLocale = (language: SupportedLanguage, name: CdnNamespace, time: number) => axios.get(`/cdn/database/locales/${language}/${name}.json?time=${time}`).then((result) => result.data);
 
 const isObject = (value: unknown): value is Record<string, any> => {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -27,21 +33,37 @@ const getLocalBrawlerLocale = (language: SupportedLanguage) => {
   return language === 'en' ? enBrawlerLocale : koBrawlerLocale;
 };
 
+const getLocalCdnLocale = (language: SupportedLanguage, name: CdnNamespace): CdnLocale => {
+  const fallbackLocale = getDefaultCdnLocale(language, name);
+
+  if (name === 'brawler') {
+    return mergeLocale(fallbackLocale, getLocalBrawlerLocale(language)) as CdnLocale;
+  }
+
+  return fallbackLocale;
+};
+
+const getCdnLocale = async (language: SupportedLanguage, name: CdnNamespace, time: number) => {
+  const fallbackLocale = getLocalCdnLocale(language, name);
+
+  if (!shouldFetchRemoteLocales) {
+    return fallbackLocale;
+  }
+
+  try {
+    const cdnLocale = await fetchCdnLocale(language, name, time);
+    return mergeLocale(fallbackLocale, cdnLocale);
+  } catch (error) {
+    return fallbackLocale;
+  }
+};
+
 export class CdnService {
   static getApplicationCdn = (language: SupportedLanguage, time: number) => getCdnLocale(language, 'application', time);
 
   static getBattleCdn = (language: SupportedLanguage, time: number) => getCdnLocale(language, 'battle', time);
 
-  static getBrawlerCdn = async (language: SupportedLanguage, time: number) => {
-    const fallbackLocale = getLocalBrawlerLocale(language);
-
-    try {
-      const cdnLocale = await getCdnLocale(language, 'brawler', time);
-      return mergeLocale(fallbackLocale, cdnLocale);
-    } catch (error) {
-      return fallbackLocale;
-    }
-  };
+  static getBrawlerCdn = (language: SupportedLanguage, time: number) => getCdnLocale(language, 'brawler', time);
 
   static getMainCdn = (language: SupportedLanguage, time: number) => getCdnLocale(language, 'main', time);
 

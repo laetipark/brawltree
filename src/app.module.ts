@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
@@ -12,6 +13,7 @@ import AppConfig from './configs/app.config';
 import DatabaseConfig from './configs/database.config';
 import { RankingsModule } from './features/rankings/rankings.module';
 import { NewsModule } from './features/news/news.module';
+import { HttpErrorLoggingInterceptor } from '~/utils/logging';
 
 @Module({
   imports: [
@@ -36,6 +38,11 @@ import { NewsModule } from './features/news/news.module';
     UtilsModule
   ],
   controllers: [],
-  providers: []
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpErrorLoggingInterceptor
+    }
+  ]
 })
 export class AppModule {}

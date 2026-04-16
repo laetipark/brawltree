@@ -40,6 +40,12 @@ export class Users extends SoftDeleteEntity {
   isCrew: boolean;
 
   @Column({
+    name: 'is_verified',
+    default: false
+  })
+  isVerified: boolean;
+
+  @Column({
     name: 'is_cron_item',
     default: false
   })

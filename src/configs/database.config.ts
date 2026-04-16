@@ -1,4 +1,8 @@
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import {
+  createServiceTypeOrmLogger,
+  getSqlSlowMs
+} from '~/utils/logging';
 
 export default class DatabaseConfig implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
@@ -12,7 +16,9 @@ export default class DatabaseConfig implements TypeOrmOptionsFactory {
       timezone: process.env.DATABASE_TIMEZONE || '+09:00',
       entities: ['dist/**/**/*.entity.{ts,js}'],
       synchronize: false,
-      logging: true
+      logging: true,
+      logger: createServiceTypeOrmLogger(),
+      maxQueryExecutionTime: getSqlSlowMs()
     };
   }
 }

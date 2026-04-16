@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './services/users.service';
 import { UserProfileService } from './services/user-profile.service';
@@ -34,6 +34,17 @@ describe('UsersController', () => {
     jest.clearAllMocks();
   });
 
+  it('normalizes bracketed user ID query params before delegating to the service', async () => {
+    usersService.selectUsersByUserIDs.mockResolvedValue([]);
+
+    await expect(
+      controller.selectUsersByUserIDs({ 'userIDs[]': '#9LYJVL9C8' })
+    ).resolves.toEqual([]);
+    expect(usersService.selectUsersByUserIDs).toHaveBeenCalledWith([
+      '#9LYJVL9C8'
+    ]);
+  });
+
   it('keeps battle log response keys stable while delegating to the service', async () => {
     userBattlesService.selectUserBattleLogs.mockResolvedValue({
       recentUserBattles: [],
@@ -60,11 +71,25 @@ describe('UsersController', () => {
     usersService.selectUser.mockResolvedValue(null);
     usersService.updateUserFromCrawler.mockResolvedValue({
       insert: false,
-      update: false
+      update: false,
+      unavailable: false
     });
 
     await expect(controller.selectUser('MISSING')).rejects.toBeInstanceOf(
       NotFoundException
+    );
+  });
+
+  it('throws service unavailable when the user is missing and crawler is unreachable', async () => {
+    usersService.selectUser.mockResolvedValue(null);
+    usersService.updateUserFromCrawler.mockResolvedValue({
+      insert: false,
+      update: false,
+      unavailable: true
+    });
+
+    await expect(controller.selectUser('MISSING')).rejects.toBeInstanceOf(
+      ServiceUnavailableException
     );
   });
 });

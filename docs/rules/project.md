@@ -31,10 +31,15 @@ Use this as the merged backend and embedded frontend rule source.
 
 ## Comment Policy
 
-- Comments should be sparse and useful.
-- Use Korean comments for non-obvious code only: complex SQL intent, aggregation invariants, retry/load sequencing, or cross-context coordination.
-- Do not restate what a function or assignment already says.
-- Prefer clearer names and smaller helpers over explanatory comments.
+- Comments should be sparse and useful, but new or refactored TypeScript/TSX declaration surfaces must document intent when they are part of a durable module contract.
+- Use Korean JSDoc on class declarations, injectable services/controllers/entities/DTOs, class fields, and class methods when touching those declarations. The JSDoc should explain responsibility, contract, cache/DB assumptions, or side effects rather than restating the identifier.
+- Use Korean JSDoc on exported React components, hooks, and domain helpers when they coordinate API calls, route state, SEO, cache, or user-facing data mapping.
+- Use Korean line comments for non-obvious logic only: complex SQL intent, aggregation invariants, retry/load sequencing, cache/lock behavior, or cross-context coordination.
+- Do not add comments to imports, style-only code, or trivial assignments. Prefer clearer names and smaller helpers before explanatory comments.
+
+## Agent Communication
+
+- Codex should answer the user in Korean unless the user explicitly requests another language.
 
 ## Validation
 

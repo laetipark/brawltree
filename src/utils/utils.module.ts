@@ -4,6 +4,7 @@ import { BattleService } from './services/battle.service';
 import { HttpModule } from '@nestjs/axios';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { URLService } from '~/utils/services/url.service';
+import { AxiosLoggingService } from '~/utils/logging';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { URLService } from '~/utils/services/url.service';
       inject: [ConfigService]
     })
   ],
-  providers: [AppConfigService, BattleService, URLService],
+  providers: [AppConfigService, BattleService, URLService, AxiosLoggingService],
   exports: [HttpModule, AppConfigService, BattleService, URLService]
 })
 export class UtilsModule {}

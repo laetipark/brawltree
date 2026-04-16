@@ -15,7 +15,7 @@ export const ModeMenu = ({ mode, setMatchMode, type, modeTL, modePL }) => {
   const modeAll = Array.from(new Set([...(modeTL || []), ...(modePL || [])]));
   const modeList = type === '0' ? modeTL : type === '2' ? modePL : modeAll;
 
-  const dropDownRef = useRef();
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [checked, setChecked] = useWindowClick(dropDownRef, false);
 
   return (

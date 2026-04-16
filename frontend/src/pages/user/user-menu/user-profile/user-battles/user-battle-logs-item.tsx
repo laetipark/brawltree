@@ -135,7 +135,8 @@ export const UserBattleLogsItemBox = ({ battleInfo, battlePlayers }) => {
                           updatedAt: undefined,
                           crew: null,
                           crewName: null,
-                          isCrew: false
+                          isCrew: false,
+                          isVerified: false
                         });
                         setRetryUserInfoCount(0);
                       }}

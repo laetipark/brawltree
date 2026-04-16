@@ -10,7 +10,7 @@ import { faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import './calendar.css';
 
 const CalendarView = ({ date, beginDate, setDate }) => {
-  const dropDownRef = useRef();
+  const dropDownRef = useRef<HTMLDivElement>(null);
   const [checked, setChecked] = useWindowClick(dropDownRef, false);
 
   const arrowRotate = {

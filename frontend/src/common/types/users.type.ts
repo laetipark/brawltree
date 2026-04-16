@@ -4,6 +4,7 @@ export type UsersType = {
   profileIcon: string;
   lastBattledOn: Date | string;
   isCrew: boolean;
+  isVerified: boolean;
   crew: string | null;
   crewName: string | null;
   updatedAt: Date | string;
@@ -129,7 +130,7 @@ export type UserFriendType = {
 
 export type UserFriendListType = {
   friends: UserFriendType[];
-  friendsUpdatedAt: Date | string | undefined;
+  friendsUpdatedAt: Date | string | null | undefined;
 };
 
 export type UserSeasonGradeType = {

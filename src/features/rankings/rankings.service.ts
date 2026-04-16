@@ -1,10 +1,18 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+import {
+  formatLogFields,
+  getErrorCode,
+  getErrorMessage,
+  getErrorStatus
+} from '~/utils/logging';
 import { AppConfigService } from '~/utils/services/app-config.service';
 
 @Injectable()
 export class RankingsService {
+  private readonly logger = new Logger(RankingsService.name);
+
   constructor(
     private readonly configService: AppConfigService,
     private readonly httpService: HttpService
@@ -26,7 +34,15 @@ export class RankingsService {
 
       return res.data?.items || [];
     } catch (error) {
-      Logger.error(error, 'getRankingsFromAPI');
+      this.logger.warn(
+        formatLogFields({
+          event: 'rankings.fetch.error',
+          target: url,
+          status: getErrorStatus(error),
+          code: getErrorCode(error),
+          error: getErrorMessage(error)
+        })
+      );
     }
 
     return null;

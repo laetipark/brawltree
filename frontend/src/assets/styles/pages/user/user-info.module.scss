@@ -33,4 +33,30 @@
     gap: 2px;
     color: var(--user-soft-ink, #4f657b);
   }
+
+  & .statusBadge {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 6px;
+    margin-bottom: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-size: 12px;
+    line-height: 1;
+    font-family: "Main Medium", "JP Medium", "CN Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+      "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  }
+
+  & .crewBadge {
+    color: #174b67;
+    background: rgba(108, 192, 226, 0.2);
+    border-color: rgba(23, 75, 103, 0.2);
+  }
+
+  & .officialBadge {
+    color: #5c4a12;
+    background: rgba(236, 208, 109, 0.26);
+    border-color: rgba(92, 74, 18, 0.2);
+  }
 }

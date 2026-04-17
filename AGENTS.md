@@ -5,11 +5,9 @@ Use this file for agent work inside `service/`. Keep it short; detailed service 
 ## Read Order
 
 1. If available, read `../AGENTS.md` for workspace-level rules.
-2. Read `../.aiassistant/rules/README.md` for workspace routing.
-3. Read this file.
-4. Read `.aiassistant/rules/README.md` for service-local assistant routing.
-5. Read `docs/README.md`.
-6. Read only the detailed docs that match the task:
+2. Read this file.
+3. Read `docs/README.md`; it is the service work harness.
+4. Read only the detailed docs selected by that harness:
    - `docs/rules/project.md` for service and frontend development rules.
    - `docs/rules/api.md` for API, DTO, controller, or response work.
    - `docs/rules/database.md` for entity, query, schema, cache, or partition work.

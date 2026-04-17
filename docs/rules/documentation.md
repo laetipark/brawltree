@@ -6,7 +6,7 @@ Service docs should preserve durable project knowledge without turning entry fil
 
 ## Maintenance
 
-- Keep `AGENTS.md` and `.aiassistant/rules/README.md` short.
+- Keep `AGENTS.md` short and route durable workflow detail to `docs/README.md`.
 - Put reusable service knowledge in focused `docs/` pages.
 - Update docs when a workflow, command, API contract, schema assumption, or module boundary changes.
 - Put API, database, testing, and validation rules in their matching files.

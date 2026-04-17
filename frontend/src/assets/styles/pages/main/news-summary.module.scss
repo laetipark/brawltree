@@ -7,7 +7,7 @@
   gap: 10px;
   border: 1px solid var(--main-line, #b9cfd9);
   border-radius: var(--main-radius-lg, 18px);
-  background: linear-gradient(145deg, #edf7ff 0%, #dfedff 56%, #d6e9df 100%);
+  background: var(--theme-main-bg);
   box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
 }
 
@@ -92,7 +92,7 @@
   gap: 8px;
   padding: 8px;
   border-radius: var(--main-radius-md, 12px);
-  background: linear-gradient(165deg, rgba(237, 247, 255, 0.82) 0%, rgba(225, 242, 255, 0.78) 58%, rgba(221, 240, 230, 0.76) 100%);
+  background: var(--theme-surface-bg);
   box-sizing: border-box;
 }
 
@@ -103,7 +103,7 @@
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid rgba(141, 176, 194, 0.62);
-  background: linear-gradient(150deg, #d9eaff 0%, #cbe2f7 100%);
+  background: var(--theme-surface-bg);
 
   & > :global(div) {
     width: 100%;

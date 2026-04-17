@@ -8,7 +8,7 @@
   padding: 10px;
   border: 1px solid var(--brawler-line, #cddbe0);
   border-radius: var(--brawler-radius-lg, 18px);
-  background: linear-gradient(130deg, var(--brawler-rose, #fbe5f1) 0%, var(--brawler-lavender, #ece8ff) 100%);
+  background: var(--theme-brawlers-bg);
   box-shadow: var(--brawler-shadow, 0 10px 24px rgba(109, 130, 155, 0.14));
 
   & > div {
@@ -76,7 +76,7 @@
   padding: 8px 10px;
   border: 1px solid var(--brawler-line, #cddbe0);
   border-radius: var(--brawler-radius-md, 12px);
-  background: linear-gradient(140deg, rgba(245, 250, 255, 0.9) 0%, rgba(235, 246, 239, 0.88) 100%);
+  background: var(--theme-surface-bg);
 }
 
 .statsFilterCombo {
@@ -100,7 +100,7 @@
   padding: 8px 10px;
   border: 1px solid #91b5c5;
   border-radius: 10px;
-  background: linear-gradient(145deg, #edf7ff 0%, #dceeff 100%);
+  background: var(--theme-surface-bg);
   color: var(--brawler-ink, #2f3d4c);
   font-size: 13px;
   font-family: var(--brawler-font-body, "Main Medium", sans-serif);
@@ -108,7 +108,7 @@
   transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 
   &:hover {
-    background: linear-gradient(145deg, #e5f2ff 0%, #d0e5f7 100%);
+    background: var(--theme-brawlers-bg);
     border-color: #7ca3b7;
   }
 
@@ -224,7 +224,7 @@
   align-items: center;
   padding: 9px 10px;
   border-radius: var(--brawler-radius-md, 12px);
-  background: linear-gradient(135deg, var(--brawler-card-soft, #f7fbff) 0%, #f6fff8 100%);
+  background: var(--theme-surface-bg);
   border: 1px solid var(--brawler-line, #cddbe0);
   font-family: var(--brawler-font-body, "Main Medium", sans-serif);
   font-size: 13px;
@@ -234,7 +234,7 @@
   transition: background-color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 
   &:hover {
-    background: linear-gradient(135deg, #f5feff 0%, var(--brawler-mint, #e6f5ec) 100%);
+    background: var(--theme-brawlers-bg);
     border-color: #a7c6cf;
     transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(123, 146, 168, 0.16);
@@ -308,7 +308,7 @@
   top: 24px;
   width: min(248px, calc(100vw - 32px));
   max-height: var(--stats-map-tooltip-max-height, 360px);
-  background: linear-gradient(154deg, #f8fcff 0%, #dceeff 56%, #d5ebe2 100%);
+  background: var(--theme-surface-bg);
   border: 1px solid var(--brawler-line-strong, #8eb3c0);
   border-radius: 12px;
   box-shadow: 0 14px 28px rgba(74, 101, 126, 0.26);
@@ -396,7 +396,7 @@
   padding: 0;
   border: 1px solid rgba(102, 142, 166, 0.78);
   border-radius: 8px;
-  background: linear-gradient(140deg, #e6f2ff 0%, #d4e7fb 100%);
+  background: var(--theme-brawlers-bg);
   color: #20476a;
   font-family: var(--brawler-font-title, "Main Bold", sans-serif);
   font-size: 15px;
@@ -426,7 +426,7 @@
   padding: 12px;
   border: 1px solid var(--brawler-line-strong, #8eb3c0);
   border-radius: 14px;
-  background: linear-gradient(154deg, #f8fcff 0%, #dceeff 56%, #d5ebe2 100%);
+  background: var(--theme-surface-bg);
   box-shadow: 0 18px 34px rgba(49, 74, 98, 0.35);
   overflow-y: auto;
   scrollbar-width: none;

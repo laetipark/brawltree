@@ -17,9 +17,6 @@
       "~/common/*": [
         "./src/common/*"
       ],
-      "~/configs/*": [
-        "./src/configs/*"
-      ],
       "~/database/*": [
         "./src/database/*"
       ],

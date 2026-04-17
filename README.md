@@ -74,29 +74,16 @@
     - `service/.production.env.sample`
     - `service/frontend/.env.development.sample`
     - `service/frontend/.env.production.sample`
-- 백엔드 주요 환경 변수는 아래와 같습니다.
+- 백엔드 필수 환경 변수는 아래와 같습니다.
   ```dotenv
-  HOST_PORT=
   CRAWLER_HOST=
   DATABASE_HOST=
-  DATABASE_PORT=
   DATABASE_USERNAME=
   DATABASE_PASSWORD=
   DATABASE_NAME=
-  DATABASE_TIMEZONE=
-  USER_BATTLES_QUERY_CACHE_TTL_MS=
-  SERVICE_HTTP_LOG_MODE=error-slow
-  SERVICE_HTTP_SLOW_MS=3000
-  SERVICE_SQL_LOG_MODE=error-slow
-  SERVICE_SQL_SLOW_MS=3000
-  SERVICE_LOG_SQL_PARAMS=false
-  SERVICE_LOG_HTTP_BODY=false
   ```
-- 프론트엔드 주요 환경 변수는 아래와 같습니다.
+- 프론트엔드 필수 환경 변수는 아래와 같습니다.
   ```dotenv
-  VITE_PORT=
-  VITE_API_PROXY_TARGET=http://localhost:3000
-  VITE_CDN_REMOTE_LOCALES=
   VITE_YOUTUBE_API_KEY=
   ```
 - 의존성 설치

@@ -5,7 +5,7 @@
   width: 100%;
   box-sizing: border-box;
   height: 210px;
-  background: linear-gradient(145deg, var(--brawler-card, #fffdf8) 0%, var(--brawler-mint, #e6f5ec) 100%);
+  background: var(--theme-brawlers-bg);
   border: 1px solid var(--brawler-line, #cddbe0);
   border-radius: var(--brawler-radius-lg, 18px);
   box-shadow: var(--brawler-shadow, 0 10px 24px rgba(109, 130, 155, 0.14));
@@ -19,7 +19,7 @@
     box-sizing: border-box;
     padding: 10px 12px;
     border-bottom: 1px solid var(--brawler-line-strong, #adc7c8);
-    background: linear-gradient(90deg, var(--brawler-mint, #e6f5ec) 0%, var(--brawler-sky, #e8f4ff) 74%);
+    background: var(--theme-brawlers-bg);
     font-family: var(--brawler-font-title, "Main Medium", sans-serif);
     color: var(--brawler-ink, #2f3d4c);
     gap: 10px;
@@ -79,13 +79,13 @@
   }
 
   &:checked + label {
-    background: linear-gradient(160deg, var(--brawler-sky, #e8f4ff) 0%, var(--brawler-lavender, #ece8ff) 100%);
+    background: var(--theme-brawlers-bg);
     border-color: var(--brawler-line-strong, #adc7c8);
     box-shadow: 0 6px 12px rgba(120, 145, 170, 0.2);
   }
 
   &:hover + label {
-    background: linear-gradient(160deg, #f6fdff 0%, var(--brawler-card-muted, #f5f7ff) 100%);
+    background: var(--theme-surface-bg);
     border-color: #bdd2da;
     transform: translateY(-1px);
   }

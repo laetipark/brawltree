@@ -14,7 +14,7 @@
   transition: background-color 0.2s, border-color 0.2s, transform 0.2s;
 
   &:hover {
-    background: linear-gradient(145deg, #f5feff 0%, var(--main-mint, #dbf2e4) 100%);
+    background: var(--theme-main-bg);
     border-color: var(--main-line-strong, #8eb3c0);
     transform: translateY(-1px);
   }
@@ -26,7 +26,7 @@
     object-fit: contain;
     border-radius: 10px;
     border: 1px solid rgba(160, 186, 199, 0.5);
-    background: linear-gradient(150deg, #f5fcff 0%, #fffef9 100%);
+    background: var(--theme-surface-bg);
   }
 
   & > div {
@@ -87,7 +87,7 @@
   white-space: nowrap;
   padding: 4px;
   border-radius: 6px;
-  background: linear-gradient(140deg, var(--main-mint, #dbf2e4) 0%, #effbee 100%);
+  background: var(--theme-main-bg);
   border: 1px solid rgba(139, 180, 159, 0.62);
   font-size: 12px;
   color: #2d5b3f;
@@ -102,7 +102,7 @@
   white-space: nowrap;
   padding: 4px;
   border-radius: 6px;
-  background: linear-gradient(140deg, var(--main-sky, #dff0ff) 0%, #edf8ff 100%);
+  background: var(--theme-main-bg);
   border: 1px solid rgba(137, 173, 191, 0.58);
   font-size: 12px;
   zoom: 0.8;
@@ -117,7 +117,7 @@
   padding: 2px 4px;
   border: 1px solid rgba(136, 125, 176, 0.66);
   border-radius: 6px;
-  background: linear-gradient(140deg, #efe6ff 0%, #f7edff 100%);
+  background: var(--theme-surface-bg);
   color: #4f4a76;
   gap: 4px;
 }
@@ -131,7 +131,7 @@
   padding: 2px 4px;
   border: 1px solid rgba(191, 134, 134, 0.7);
   border-radius: 6px;
-  background: linear-gradient(140deg, #ffe9dd 0%, #fff2e7 100%);
+  background: var(--theme-surface-bg);
   color: #7a4f38;
   gap: 2px;
 }

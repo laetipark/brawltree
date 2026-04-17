@@ -1,18 +1,20 @@
-# Service Codex Rules
+# Service Agent Rules
 
-Use this file for Codex work inside `service/`.
+Use this file for agent work inside `service/`. Keep it short; detailed service rules live in `docs/`.
 
 ## Read Order
 
 1. If available, read `../AGENTS.md` for workspace-level rules.
 2. Read `../.aiassistant/rules/README.md` for workspace routing.
 3. Read this file.
-4. Read `docs/README.md`.
-5. Read `docs/rules/project.md` for merged service and frontend development rules.
-6. Read `docs/rules/api.md` for API/DTO/response work.
-7. Read `docs/rules/database.md` for entity/query/schema assumptions.
-8. Read `docs/rules/testing.md` when changing behavior.
-9. For legacy assistant compatibility, read `.aiassistant/rules/README.md`.
+4. Read `.aiassistant/rules/README.md` for service-local assistant routing.
+5. Read `docs/README.md`.
+6. Read only the detailed docs that match the task:
+   - `docs/rules/project.md` for service and frontend development rules.
+   - `docs/rules/api.md` for API, DTO, controller, or response work.
+   - `docs/rules/database.md` for entity, query, schema, cache, or partition work.
+   - `docs/rules/testing.md` and `docs/rules/validation.md` for behavior changes.
+   - `docs/rules/git.md` for commit-message work.
 
 ## Scope
 
@@ -20,6 +22,10 @@ Use this file for Codex work inside `service/`.
 - Primary source roots: `src/` for API runtime and `frontend/src/` for the embedded web client.
 - Service owns controllers, DTOs, validation, services, repositories, API contracts, and frontend route/service integration.
 - Service-specific detailed rules live in `docs/rules/project.md`.
+
+## Response Language
+
+- Answer the user in Korean for all user-facing responses, unless the user explicitly asks for another language.
 
 ## Implementation Rules
 
@@ -32,6 +38,7 @@ Use this file for Codex work inside `service/`.
 - Keep side effects in hooks or `useEffect`, not inline render branches.
 - Coordinate table, column, and partition assumptions with `crawler/`.
 - Never expose env values, tokens, or secrets in logs or responses.
+- Move reusable service rules into `docs/` instead of expanding this entry file.
 
 ## Validation
 

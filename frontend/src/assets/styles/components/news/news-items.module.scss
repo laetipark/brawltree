@@ -45,7 +45,7 @@
     background: rgba(255, 255, 255, 0.75);
 
     &:hover {
-      background: linear-gradient(150deg, #f8ffff 0%, #ecfaf1 100%);
+      background: var(--theme-news-bg);
       transform: translateY(-1px);
      }
 
@@ -105,7 +105,7 @@
     border: 1px solid rgba(151, 182, 197, 0.72);
     border-radius: 12px;
     box-shadow: 0 8px 18px rgba(89, 118, 144, 0.14);
-    background: linear-gradient(145deg, #f7fcff 0%, #edf8ff 56%, #e4f2ea 100%);
+    background: var(--theme-news-bg);
     padding: 10px;
 
     & > img {

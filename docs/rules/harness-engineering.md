@@ -1,27 +1,25 @@
-# Harness Engineering Rules
+# Service Harness Rules
 
-Use this workspace as an agent-readable system, not as a pile of ad hoc notes.
+Use these rules when changing service agent docs or workflows.
 
-## Core Principles
+## Principles
 
-- Keep entry files short and map-like.
-- Put durable decision rules in focused `docs/` files.
-- Read only the documents needed for the current task.
-- Update docs when a workflow, contract, or module boundary changes.
-- Prefer code patterns that an agent can inspect and verify locally.
+- Keep entry files map-like and short.
+- Use `docs/README.md` for routing and focused `docs/rules/*` files for durable rules.
+- Read only the docs needed for the current task.
+- Prefer locally inspectable code patterns over chat-only knowledge.
 
 ## Work Loop
 
-1. Read the nearest `AGENTS.md` and the relevant docs files.
-2. Inspect the current code before deciding the implementation shape.
-3. Make small scoped changes.
-4. Run the narrowest meaningful validation.
-5. Record durable lessons in docs rather than leaving them only in chat.
+1. Read the nearest entry file and relevant docs.
+2. Inspect code before choosing an implementation.
+3. Make scoped changes.
+4. Run the narrowest useful validation.
+5. Move repeated lessons into docs.
 
-## Agent-Friendly Repository Criteria
+## Repository Criteria
 
-- Module ownership must be explicit.
-- Runtime roles must be named and documented.
-- Dynamic operational values should remain in env/config, not hidden as unexplained constants.
-- Query, cache, and worker behavior should have clear key/role/TTL naming.
-- Errors and logs should expose enough local context to debug without leaking secrets.
+- Module ownership and runtime roles should be explicit.
+- Env/config should hold dynamic operational values.
+- Query, cache, and API behavior should have clear names and contracts.
+- Logs should help debug without leaking secrets.

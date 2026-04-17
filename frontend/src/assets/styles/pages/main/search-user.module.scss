@@ -8,7 +8,7 @@
   gap: 12px;
   border: 1px solid var(--main-line, #b9cfd9);
   border-radius: var(--main-radius-lg, 18px);
-  background: linear-gradient(145deg, #edf7ff 0%, #dcedff 52%, #d3ebdf 100%);
+  background: var(--theme-main-bg);
   box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
 
   & > h2 {
@@ -41,7 +41,7 @@
   z-index: 1;
   border: 1px solid var(--main-line, #b9cfd9);
   border-radius: var(--main-radius-md, 12px);
-  background: linear-gradient(160deg, #e8f3ff 0%, #e2f1ff 56%, #dff2e8 100%);
+  background: var(--theme-surface-bg);
   overflow: hidden;
 }
 
@@ -82,7 +82,7 @@
   padding: 10px;
   border: 1px solid #6f9fb7;
   border-radius: 13px;
-  background: linear-gradient(152deg, #f4faff 0%, #dfeeff 56%, #d3eadd 100%);
+  background: var(--theme-surface-bg);
   box-shadow: 0 14px 28px rgba(70, 98, 124, 0.26);
   z-index: 40;
   animation: fadeInTagHelp 0.2s ease-out;
@@ -130,7 +130,7 @@
   padding: 12px;
   overflow-y: auto;
   border-radius: 14px;
-  background: linear-gradient(152deg, #f4faff 0%, #dfeeff 56%, #d3eadd 100%);
+  background: var(--theme-surface-bg);
   box-shadow: 0 18px 34px rgba(49, 74, 98, 0.35);
   animation: fadeInTagHelpMobile 0.2s ease-out;
 }
@@ -140,7 +140,7 @@
   border: 1px solid rgba(102, 142, 166, 0.78);
   border-radius: 10px;
   padding: 8px;
-  background: linear-gradient(140deg, #e6f2ff 0%, #d4e7fb 100%);
+  background: var(--theme-main-bg);
   color: #20476a;
   font-family: var(--main-font-title, "Main Bold", sans-serif);
   font-size: 13px;

@@ -27,9 +27,6 @@
       "~/common/*": [
         "./src/common/*"
       ],
-      "~/config/*": [
-        "./src/config/*"
-      ],
       "~/components/*": [
         "./src/components/*"
       ],
@@ -39,12 +36,6 @@
       "~/hooks/*": [
         "./src/hooks/*"
       ],
-      "~/interfaces/*": [
-        "./src/interfaces/*"
-      ],
-      "~/locales/*": [
-        "./src/locales/*"
-      ],
       "~/pages/*": [
         "./src/pages/*"
       ],
@@ -53,9 +44,6 @@
       ],
       "~/utils/*": [
         "./src/utils/*"
-      ],
-      "~/public/*": [
-        "./public/*"
       ]
     }
   },

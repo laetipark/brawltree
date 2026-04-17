@@ -7,16 +7,10 @@ import { resolve } from 'path';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const port = Number.parseInt(env.VITE_PORT ?? '5173', 10);
-  const apiProxyTarget = env.VITE_API_PROXY_TARGET ?? 'http://localhost:3000';
 
   return {
     resolve: {
-      tsconfigPaths: true,
       alias: [
-        {
-          find: '~/src',
-          replacement: resolve(__dirname, 'src')
-        },
         {
           find: '~/assets',
           replacement: resolve(__dirname, 'src/assets')
@@ -26,24 +20,12 @@ export default defineConfig(({ mode }) => {
           replacement: resolve(__dirname, 'src/components')
         },
         {
-          find: '~/config',
-          replacement: resolve(__dirname, 'src/config')
-        },
-        {
           find: '~/context',
           replacement: resolve(__dirname, 'src/context')
         },
         {
           find: '~/hooks',
           replacement: resolve(__dirname, 'src/hooks')
-        },
-        {
-          find: '~/images',
-          replacement: resolve(__dirname, 'src/images')
-        },
-        {
-          find: '~/locales',
-          replacement: resolve(__dirname, 'src/locales')
         },
         {
           find: '~/pages',
@@ -82,7 +64,7 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/cdn/, '')
         },
         '/api': {
-          target: apiProxyTarget,
+          target: 'http://localhost:3000',
           changeOrigin: true
         },
         '/youtube': {

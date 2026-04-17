@@ -18,7 +18,7 @@
   --brawler-radius-lg: 18px;
   --brawler-radius-md: 12px;
 
-  background: transparent;
+  background: var(--theme-brawlers-bg);
   border: none;
   border-radius: 0;
   display: flex;
@@ -44,7 +44,7 @@
   padding: 16px 18px;
   border: 2px solid var(--brawler-line-strong);
   border-radius: var(--brawler-radius-lg);
-  background: linear-gradient(135deg, rgba(243, 250, 255, 0.96), rgba(255, 247, 237, 0.98));
+  background: var(--theme-brawlers-bg);
   box-shadow: var(--brawler-shadow);
   color: var(--brawler-ink);
 }
@@ -65,7 +65,7 @@
 .statusBanner {
   margin: 0;
   padding: 14px 16px;
-  background: linear-gradient(135deg, rgba(255, 231, 219, 0.98), rgba(248, 222, 238, 0.96));
+  background: var(--theme-brawlers-bg);
   font-size: 0.95rem;
   font-weight: 600;
 }

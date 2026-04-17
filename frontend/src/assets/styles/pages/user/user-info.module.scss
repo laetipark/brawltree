@@ -7,7 +7,7 @@
   box-sizing: border-box;
   padding: 10px 12px;
   border: 1px solid var(--user-line, #b6cdd8);
-  background: linear-gradient(140deg, var(--user-card-soft, #ebf6ff) 0%, var(--user-mint, #d6ead0) 100%);
+  background: var(--theme-user-bg);
 
   & > img {
     width: 80px;

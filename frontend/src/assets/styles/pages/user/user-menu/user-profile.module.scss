@@ -7,7 +7,7 @@
   gap: 10px;
   padding: 12px;
   border: 1px solid var(--user-line, #b6cdd8);
-  background: linear-gradient(150deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 55%, var(--user-mint-soft, #e7f3e2) 100%);
+  background: var(--theme-user-bg);
   box-shadow: var(--user-shadow, 0 12px 26px rgba(84, 112, 140, 0.18));
 }
 

@@ -14,7 +14,7 @@
     min-width: 0;
     padding: 8px 10px;
     border-radius: 10px;
-    background: linear-gradient(145deg, #f8fcff 0%, #e8f4ff 55%, #ddefe2 100%);
+    background: var(--theme-surface-bg);
     border: 1px solid rgba(124, 159, 182, 0.75);
     text-decoration-line: none;
     gap: 6px;
@@ -26,7 +26,7 @@
 
     &:hover {
       border-color: rgba(87, 126, 151, 0.88);
-      background: linear-gradient(145deg, #f1f9ff 0%, #deeeff 55%, #d2e8dd 100%);
+      background: var(--theme-maps-bg);
       transform: translateY(-1px);
     }
 

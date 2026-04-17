@@ -8,7 +8,7 @@
   border-right: none;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  background: linear-gradient(140deg, #d8ebff 0%, #c2e0ff 100%);
+  background: var(--theme-main-bg);
 }
 
 .searchInput {
@@ -55,7 +55,7 @@
   border-left: none;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-  background: linear-gradient(140deg, #5f90dc 0%, #3f73bd 100%);
+  background: #3f73bd;
   font-family: "Logo Font", serif;
   color: #f3f7ff;
   text-shadow: 0 1px 1px rgba(26, 49, 78, 0.3);
@@ -64,7 +64,7 @@
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(140deg, #5486d3 0%, #3669b3 100%);
+    background: #3669b3;
   }
 
   &:focus-visible {
@@ -83,7 +83,7 @@
   height: 28px;
   border: 1px solid #86acc8;
   border-radius: 999px;
-  background: linear-gradient(145deg, #f6fbff 0%, #d6e8fb 100%);
+  background: var(--theme-surface-bg);
   color: #25527a;
   font-family: var(--main-font-title, "Main Bold", sans-serif);
   font-size: 15px;
@@ -94,7 +94,7 @@
 
   &:hover {
     border-color: #6f9ec6;
-    background: linear-gradient(145deg, #ebf5ff 0%, #cbe2f9 100%);
+    background: var(--theme-main-bg);
   }
 
   &:focus-visible {
@@ -105,7 +105,7 @@
 
 .helpIconButtonActive {
   border-color: #5f8eb6;
-  background: linear-gradient(145deg, #d1e8ff 0%, #b7d5f4 100%);
+  background: var(--theme-main-bg);
   color: #184569;
 }
 

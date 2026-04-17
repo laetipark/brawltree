@@ -1,49 +1,34 @@
 # Service Project Rules
 
-Use this as the merged backend and embedded frontend rule source.
+Use this file for general `service/` implementation work. For API, database, testing, validation, docs, or Git rules, open the matching file in this directory.
 
 ## Ownership
 
-- `src/` owns Nest controllers, DTOs, services, repositories, entities, request validation, and `/api/*` response contracts.
-- `frontend/src/` owns route composition, UI state, presentation, hooks, contexts, and same-origin API usage.
-- `crawler/` owns ingestion, migrations, seeds, partitions, and write-side schema maintenance.
-- The integrated Nest runtime owns static frontend serving and proxy pass-through for `/cdn`, `/youtube`, and `/inbox`.
+- `src/` owns NestJS controllers, DTOs, services, repositories, entities, validation, and `/api/*` response contracts.
+- `frontend/src/` owns React routes, UI state, hooks, contexts, presentation, and same-origin API usage.
+- `crawler/` owns ingestion writes, migrations, seeds, partitions, and write-side schema maintenance.
+- The integrated Nest runtime serves the frontend and proxies `/cdn`, `/youtube`, and `/inbox`.
 
-## Implementation Defaults
+## Implementation
 
-- Preserve public route paths and response keys unless a task explicitly changes a contract.
-- Keep controllers thin: parse params/query/body, call services, return shaped objects, and throw Nest exceptions for invalid requests.
-- Keep query construction, cache handling, response assembly, and domain rules out of controllers.
+- Preserve public route paths and response keys unless the task explicitly changes a contract.
+- Keep controllers thin: parse input, call services, shape responses, and throw Nest exceptions.
+- Keep query construction, cache policy, response assembly, and domain rules in services or helpers.
 - Prefer feature-local helpers before adding broad shared abstractions.
-- Keep response types aligned with `frontend/src/services` in the same change.
-- Keep frontend API calls in `frontend/src/services` when a service exists.
-- Keep pages focused on composition and move loading/retry/derived state into hooks.
-- Keep side effects in hooks or `useEffect`, not inline render branches.
-- Reuse existing components and SCSS module patterns before adding new UI patterns.
+- Keep frontend API calls in `frontend/src/services` when a service layer exists.
+- Keep pages focused on composition; move loading, retry, derived state, and side effects into hooks.
+- Reuse existing component and SCSS module patterns before introducing new UI patterns.
 
-## Refactor Rules
+## Refactoring
 
-- Refactor behavior-preservingly by default.
-- Split large services by responsibility: input normalization, query setup, cache policy, raw-row mapping, and response assembly.
-- Split large page containers by responsibility: route params, data loading, menu state, SEO derivation, and context value assembly.
+- Preserve behavior by default.
+- Split large backend services by responsibility: normalization, query setup, cache policy, row mapping, and response assembly.
+- Split large frontend containers by responsibility: route params, data loading, menu state, SEO data, and context values.
 - Remove dead commented code when it does not preserve a public contract.
-- If a public contract would change, stop and make the migration explicit.
+- If a public contract changes, update backend and frontend consumers in the same task.
 
-## Comment Policy
+## Comments
 
-- Comments should be sparse and useful, but new or refactored TypeScript/TSX declaration surfaces must document intent when they are part of a durable module contract.
-- Use Korean JSDoc on class declarations, injectable services/controllers/entities/DTOs, class fields, and class methods when touching those declarations. The JSDoc should explain responsibility, contract, cache/DB assumptions, or side effects rather than restating the identifier.
-- Use Korean JSDoc on exported React components, hooks, and domain helpers when they coordinate API calls, route state, SEO, cache, or user-facing data mapping.
-- Use Korean line comments for non-obvious logic only: complex SQL intent, aggregation invariants, retry/load sequencing, cache/lock behavior, or cross-context coordination.
-- Do not add comments to imports, style-only code, or trivial assignments. Prefer clearer names and smaller helpers before explanatory comments.
-
-## Agent Communication
-
-- Codex should answer the user in Korean unless the user explicitly requests another language.
-
-## Validation
-
-- Default production check: `npm run build`.
-- Run `npm run test` when backend service/controller/query behavior changes.
-- Run `npm --prefix frontend run build` or the full production build when frontend behavior changes.
-- For docs-only changes, readable Markdown and file placement checks are enough.
+- Add comments only for durable contracts or non-obvious logic.
+- Use Korean JSDoc when touching exported declarations whose responsibility, side effect, cache, DB, or API contract is not obvious.
+- Do not comment imports, trivial assignments, or style-only code.

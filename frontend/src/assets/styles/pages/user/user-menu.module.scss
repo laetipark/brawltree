@@ -11,7 +11,7 @@
   border-radius: var(--user-radius-md, 12px);
   display: flex;
   border: 1px solid var(--user-line, #b6cdd8);
-  background: linear-gradient(145deg, var(--user-mint, #d6ead0) 0%, var(--user-card-soft, #ebf6ff) 100%);
+  background: var(--theme-user-bg);
   padding: 6px;
   box-sizing: border-box;
 
@@ -36,7 +36,7 @@
         }
 
         &:checked + label > div {
-          background: linear-gradient(145deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 100%);
+          background: var(--theme-surface-bg);
           border-color: var(--user-line-strong, #90b3c0);
           color: var(--user-ink, #233348);
           box-shadow: 0 6px 12px rgba(84, 112, 140, 0.16);

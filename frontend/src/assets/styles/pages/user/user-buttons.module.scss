@@ -17,7 +17,7 @@
   text-decoration: none;
   border: 1px solid var(--user-line-strong, #90b3c0);
   border-radius: var(--user-radius-sm, 8px);
-  background: linear-gradient(145deg, var(--user-card-soft, #ebf6ff) 0%, var(--user-mint-soft, #e7f3e2) 100%);
+  background: var(--theme-user-bg);
   padding: 8px;
   font-size: 14px;
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;

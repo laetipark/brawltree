@@ -2,26 +2,36 @@
 apply: always
 ---
 
-# Service AI Assistant Rules Entry
+# Service Assistant Harness
 
-Use this entry for service-only Codex work.
+Use this entry for service-only assistant work. It is a local router, not the full service manual.
 
 ## Path Convention
 
-Paths in this file are relative to the service repository root, `D:\BrawlTree\service`, unless they start with `..\`.
+Paths in this file are relative to the service repository root unless they start with `..\`.
 
 ## Read Order
 
-1. `AGENTS.md`
-2. `..\AGENTS.md`
-3. `..\.aiassistant\rules\README.md`
-4. `docs/README.md`
-5. `docs/rules/project.md`
-6. For API, DTO, controller, or response work, read `docs/rules/api.md`.
-7. For entity, query, schema, cache, or partition work, read `docs/rules/database.md`.
-8. For behavior changes, read `docs/rules/testing.md`.
-9. For commit-message requests, read `docs/rules/git.md`.
-10. For workspace or cross-repository commit-message requests, also read `..\docs\rules\git.md`.
+1. `..\AGENTS.md`
+2. `..\.aiassistant\rules\README.md`
+3. `AGENTS.md`
+4. This file.
+5. `docs/README.md`
+6. Open only the detailed docs needed for the task.
+
+## Task Routes
+
+- Any service implementation: `docs/rules/project.md`.
+- API, DTO, controller, or response work: `docs/rules/api.md`.
+- Entity, query, schema, cache, or partition work: `docs/rules/database.md`.
+- Behavior change or refactor: `docs/rules/testing.md` and `docs/rules/validation.md`.
+- Frontend UI, hooks, routing, or service-layer work: `docs/rules/project.md` and `docs/rules/api.md`.
+- Commit-message requests: `docs/rules/git.md`.
+- Workspace or cross-repository commit-message requests: also read `..\docs\rules\git.md`.
+
+## Response Language
+
+- Answer the user in Korean for all user-facing responses, unless the user explicitly asks for another language.
 
 ## Scope
 
@@ -32,3 +42,4 @@ Paths in this file are relative to the service repository root, `D:\BrawlTree\se
 - Keep API response contracts stable for frontend consumers.
 - Keep frontend API usage aligned with backend contracts.
 - If crawler schema assumptions are touched, coordinate with crawler rules.
+- Do not add detailed implementation policy to this file; promote durable detail to focused `docs/` pages.

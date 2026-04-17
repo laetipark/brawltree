@@ -40,7 +40,7 @@
   min-height: 40px;
   border-radius: 11px;
   border: 1px solid rgba(125, 159, 182, 0.72);
-  background: linear-gradient(145deg, #f8fcff 0%, #e7f4ff 55%, #ddf1e6 100%);
+  background: var(--theme-surface-bg);
   color: #264962;
   font-family: "Main Bold", "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: clamp(16px, 4.6vw, 20px);
@@ -49,12 +49,12 @@
 
 .menuList > ul > li > input:hover + label > div {
   border-color: rgba(89, 129, 155, 0.8);
-  background: linear-gradient(145deg, #f2faff 0%, #dff0ff 55%, #d2eadf 100%);
+  background: var(--theme-events-bg);
 }
 
 .menuList > ul > li > input:checked + label > div {
   border-color: rgba(69, 106, 133, 0.9);
-  background: linear-gradient(145deg, #2e6287 0%, #3a7698 62%, #448876 100%);
+  background: #3a7698;
   color: #f2f8ff;
   box-shadow: 0 8px 16px rgba(52, 90, 118, 0.24);
 }

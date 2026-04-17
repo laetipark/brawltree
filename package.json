@@ -92,7 +92,6 @@
     ],
     "moduleNameMapper": {
       "^~/common/(.*)$": "<rootDir>/common/$1",
-      "^~/configs/(.*)$": "<rootDir>/configs/$1",
       "^~/database/(.*)$": "<rootDir>/database/$1",
       "^~/crew/(.*)$": "<rootDir>/features/crew/$1",
       "^~/brawlers/(.*)$": "<rootDir>/features/brawlers/$1",

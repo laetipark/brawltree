@@ -11,7 +11,7 @@
   padding: 0 14px;
   border-radius: 12px;
   border: 1px solid rgba(131, 165, 186, 0.75);
-  background: linear-gradient(145deg, #fbfeff 0%, #eef7ff 100%);
+  background: var(--theme-surface-bg);
   color: #23425a;
   font-family: "Main Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: clamp(14px, 3.8vw, 18px);

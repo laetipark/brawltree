@@ -1,5 +1,25 @@
 @import url(fonts.css);
 
+:root {
+    --theme-brand: #DFF3E8;
+    --theme-blue: #E3F0FF;
+    --theme-pink: #F9E1EA;
+    --theme-mint: #E1F4F1;
+    --theme-leaf: #E8F2D7;
+    --theme-purple: #F0E6FF;
+    --theme-surface: #F8FCFF;
+    --theme-body-bg: #F3F7F2;
+    --theme-border: #AFC7BC;
+    --theme-main-bg: var(--theme-brand);
+    --theme-user-bg: var(--theme-blue);
+    --theme-news-bg: var(--theme-pink);
+    --theme-events-bg: var(--theme-mint);
+    --theme-maps-bg: var(--theme-leaf);
+    --theme-brawlers-bg: var(--theme-purple);
+    --theme-crew-bg: var(--theme-leaf);
+    --theme-surface-bg: var(--theme-surface);
+}
+
 html {
     width: 100%;
     height: 100%;
@@ -16,7 +36,7 @@ body {
     font-family: "Main Medium", "JP Medium", "CN Medium", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #dceadf;
+    background-color: var(--theme-body-bg);
 }
 
 ::-webkit-scrollbar {

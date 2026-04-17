@@ -6,6 +6,7 @@
   flex: 1;
   padding: 12px;
   gap: 12px;
+  background: var(--theme-crew-bg);
 }
 
 @media (min-width: 576px) {
@@ -44,7 +45,7 @@
   justify-content: space-between;
   border: 2px solid #609966;
   border-radius: 4px;
-  background-color: #EDF1D6;
+  background-color: var(--theme-crew-bg);
   padding: 4px;
   list-style: none;
 }

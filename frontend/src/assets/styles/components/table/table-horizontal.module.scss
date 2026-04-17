@@ -7,9 +7,7 @@
   border: 1px solid var(--user-line, #b6cdd8);
   border-top-color: rgba(144, 179, 192, 0.7);
   border-radius: 0 0 var(--user-radius-md, 12px) var(--user-radius-md, 12px);
-  background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.44) 0%, rgba(255, 255, 255, 0.1) 36%, rgba(255, 255, 255, 0) 100%),
-    linear-gradient(145deg, var(--user-card, #f8fcff) 0%, var(--user-card-soft, #ebf6ff) 65%, #e7f1fa 100%);
+  background: var(--theme-surface-bg);
   box-shadow:
     0 12px 24px rgba(84, 112, 140, 0.13),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);

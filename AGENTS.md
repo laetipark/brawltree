@@ -14,7 +14,6 @@ Use this file for agent work inside `service/`. Keep it short; detailed service 
    - `docs/rules/api.md` for API, DTO, controller, or response work.
    - `docs/rules/database.md` for entity, query, schema, cache, or partition work.
    - `docs/rules/testing.md` and `docs/rules/validation.md` for behavior changes.
-   - `docs/rules/git.md` for commit-message work.
 
 ## Scope
 

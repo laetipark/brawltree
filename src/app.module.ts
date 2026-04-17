@@ -13,6 +13,7 @@ import AppConfig from './configs/app.config';
 import DatabaseConfig from './configs/database.config';
 import { RankingsModule } from './features/rankings/rankings.module';
 import { NewsModule } from './features/news/news.module';
+import { SystemErrorLogsModule } from './features/system-error-logs';
 import { HttpErrorLoggingInterceptor } from '~/utils/logging';
 
 @Module({
@@ -35,6 +36,7 @@ import { HttpErrorLoggingInterceptor } from '~/utils/logging';
     CrewModule,
     RankingsModule,
     NewsModule,
+    SystemErrorLogsModule,
     UtilsModule
   ],
   controllers: [],

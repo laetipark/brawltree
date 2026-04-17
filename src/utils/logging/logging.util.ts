@@ -18,6 +18,18 @@ type LogMessageOptions = {
   maxLength?: number;
 };
 
+export type SystemErrorLogPayload = {
+  occurredAt: Date;
+  level: 'error';
+  contextKey?: string;
+  errorMessage?: string;
+  errorCode?: string;
+  errorStack?: string;
+  fields: LogFields;
+};
+
+export type SystemErrorLogSink = (payload: SystemErrorLogPayload) => Promise<void> | void;
+
 type ErrorLogger = {
   error: (message: unknown, stack?: string, context?: string) => void;
 };
@@ -26,6 +38,8 @@ const logContextStorage = new AsyncLocalStorage<LogContext>();
 const sensitiveKeyPattern =
   /^(authorization|api[_-]?key|database[_-]?password|password|token|secret|credential|access[_-]?key|private[_-]?key|secret[_-]?key|key)$/i;
 const defaultMaxValueLength = 500;
+let systemErrorLogSink: SystemErrorLogSink | undefined;
+let isSystemErrorLogSinkActive = false;
 
 export function createRunId(prefix = 'run'): string {
   return `${sanitizeRunIdPart(prefix)}-${Date.now().toString(36)}-${randomUUID().slice(0, 8)}`;
@@ -42,6 +56,12 @@ export function getLogContext(): LogContext {
 export function withLogContext<T>(context: LogContext, callback: () => T): T {
   const parent = getLogContext();
   return logContextStorage.run(mergeLogContext(parent, context), callback);
+}
+
+export function registerSystemErrorLogSink(
+  sink: SystemErrorLogSink | null | undefined
+): void {
+  systemErrorLogSink = sink || undefined;
 }
 
 export function formatLogFields(
@@ -227,14 +247,27 @@ export function logErrorWithContext(
     messageFields.previous = options.previous;
   }
 
+  const errorStack = options.stack ?? getErrorStack(error);
   logger.error(
     formatLogFields(messageFields, {
       context: options.context,
       maxLength: options.maxLength
     }),
-    options.stack ?? getErrorStack(error),
+    errorStack,
     errorContext
   );
+  writeSystemErrorLog({
+    occurredAt: new Date(),
+    level: 'error',
+    contextKey: errorContext,
+    errorMessage: getErrorMessage(error),
+    errorCode: getErrorCode(error),
+    errorStack,
+    fields: normalizeLogFields({
+      ...(options.context === false ? {} : options.context || getLogContext()),
+      ...messageFields
+    })
+  });
 }
 
 function mergeLogContext(parent: LogContext, context: LogContext): LogContext {
@@ -303,4 +336,17 @@ function sanitizeRunIdPart(value: string): string {
       .replace(/^-+|-+$/g, '')
       .slice(0, 32) || 'run'
   );
+}
+
+function writeSystemErrorLog(payload: SystemErrorLogPayload): void {
+  if (!systemErrorLogSink || isSystemErrorLogSinkActive) {
+    return;
+  }
+
+  isSystemErrorLogSinkActive = true;
+  Promise.resolve(systemErrorLogSink(payload))
+    .catch(() => undefined)
+    .finally(() => {
+      isSystemErrorLogSinkActive = false;
+    });
 }

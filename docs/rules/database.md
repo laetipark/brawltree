@@ -28,4 +28,4 @@
 
 - Frontend code must not depend on table implementation details.
 - Keep DB hosts, credentials, timezones, pool sizes, and role toggles in env/config.
-- Never commit real credentials, private hosts, private IPs, or tokens.
+- Never write real credentials, private hosts, private IPs, or tokens into docs, logs, code, or responses.

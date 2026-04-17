@@ -10,7 +10,6 @@ Use this directory as the canonical rule source for `service/` work.
 - Frontend UI, hooks, routing, or service-layer work: `rules/project.md` and `rules/api.md`
 - Behavior change or refactor: `rules/testing.md` and `rules/validation.md`
 - Docs or workflow changes: `rules/harness-engineering.md` and `rules/documentation.md`
-- Commit-message work: `rules/git.md`
 - Cross-module or schema-boundary work: `architecture/workspace.md` and `architecture/module-boundaries.md`
 
 ## Local Defaults

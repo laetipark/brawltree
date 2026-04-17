@@ -15,7 +15,6 @@
 
 ## Development Rules
 
-- Treat the entire `service/` tree, including `frontend/`, as one Git repository.
 - Keep API and frontend contract changes in the same task.
 - Preserve existing environment variable names unless a migration path is explicit.
 - Prefer existing local patterns over new abstractions.

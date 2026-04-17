@@ -1,6 +1,6 @@
 # Service Project Rules
 
-Use this file for general `service/` implementation work. For API, database, testing, validation, docs, or Git rules, open the matching file in this directory.
+Use this file for general `service/` implementation work. For API, database, testing, validation, or docs rules, open the matching file in this directory.
 
 ## Ownership
 

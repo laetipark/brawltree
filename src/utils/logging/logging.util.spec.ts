@@ -4,6 +4,7 @@ import {
   logErrorWithContext,
   normalizeSqlForLog,
   normalizeUrlForLog,
+  registerSystemErrorLogSink,
   withLogContext
 } from './logging.util';
 
@@ -82,5 +83,34 @@ describe('logging util', () => {
     expect(logger.error).toHaveBeenCalledTimes(1);
     expect(logger.error.mock.calls[0][0]).toContain(`previous=${previous}`);
     expect(logger.error.mock.calls[0][2]).toBe(errorContext);
+  });
+
+  it('forwards error logs to the registered system error sink without blocking logger output', async () => {
+    const logger = {
+      error: jest.fn()
+    };
+    const sink = jest.fn().mockRejectedValue(new Error('sink failed'));
+
+    registerSystemErrorLogSink(sink);
+    logErrorWithContext(logger, new Error('crawler failed'), createMethodLogKey('UsersService', 'updateUserFromCrawler'), {
+      event: 'crawler.refresh.error',
+      target: 'TEST'
+    });
+    await new Promise((resolve) => setImmediate(resolve));
+    registerSystemErrorLogSink(undefined);
+
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(sink).toHaveBeenCalledTimes(1);
+    expect(sink.mock.calls[0][0]).toEqual(
+      expect.objectContaining({
+        level: 'error',
+        contextKey: 'UsersService-updateUserFromCrawler',
+        errorMessage: 'crawler failed',
+        fields: expect.objectContaining({
+          event: 'crawler.refresh.error',
+          target: 'TEST'
+        })
+      })
+    );
   });
 });

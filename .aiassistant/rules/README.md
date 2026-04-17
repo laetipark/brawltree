@@ -26,15 +26,6 @@ Paths in this file are relative to the service repository root unless they start
 - Entity, query, schema, cache, or partition work: `docs/rules/database.md`.
 - Behavior change or refactor: `docs/rules/testing.md` and `docs/rules/validation.md`.
 - Frontend UI, hooks, routing, or service-layer work: `docs/rules/project.md` and `docs/rules/api.md`.
-- Commit-message requests: `docs/rules/git.md`.
-- Workspace or cross-repository commit-message requests: also read `..\docs\rules\git.md`.
-
-## Commit Message Output
-
-- For JetBrains AI Assistant commit-message generation, output the raw commit message only.
-- Use one Korean line in `type : content` format.
-- Keep `content` as natural Korean; do not summarize changes in English.
-- Do not use conventional-commit format such as `feat: ...`.
 
 ## Response Language
 
@@ -45,7 +36,7 @@ Paths in this file are relative to the service repository root unless they start
 - API source: `src/`.
 - Embedded frontend source: `frontend/src/`.
 - Stack: NestJS, TypeScript, TypeORM, MySQL, React, Vite, SCSS.
-- Use local `docs/` for service, API, database, testing, Git, validation, and documentation rules.
+- Use local `docs/` for service, API, database, testing, validation, and documentation rules.
 - Keep API response contracts stable for frontend consumers.
 - Keep frontend API usage aligned with backend contracts.
 - If crawler schema assumptions are touched, coordinate with crawler rules.

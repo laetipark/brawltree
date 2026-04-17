@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
+
 import {
   formatLogFields,
   getErrorCode,
@@ -9,6 +10,65 @@ import {
 } from '~/utils/logging';
 import { AppConfigService } from '~/utils/services/app-config.service';
 import { URLService } from '~/utils/services/url.service';
+
+type NewsCategory = 'release-notes' | 'news' | 'community' | 'esports';
+
+type NewsArticleCategory = {
+  title?: string;
+};
+
+type NewsArticle = {
+  id: string;
+  type: string;
+  categories?: NewsArticleCategory[];
+  title: string;
+  thumbnail: {
+    largeRetina: {
+      path: string;
+    };
+  };
+  postDate: string;
+  url?: string;
+  embed?: {
+    url?: string;
+  };
+  details?: unknown;
+};
+
+type NewsContentResponse = {
+  articles?: NewsArticle[];
+};
+
+type NewsListItem = {
+  id: string;
+  type: string;
+  category?: NewsCategory;
+  title: string;
+  thumbnailPath: string;
+  postDate: string;
+  url: string | null;
+};
+
+type NewsDetail = Pick<NewsArticle, 'title' | 'details'>;
+
+const resolveNewsCategory = (title?: string): NewsCategory | undefined => {
+  switch (title) {
+    case '새 소식':
+    case 'Release Notes':
+      return 'release-notes';
+    case '뉴스':
+    case 'News':
+      return 'news';
+    case '커뮤니티':
+    case 'Community':
+      return 'community';
+    case '이스포츠':
+    case 'Esports':
+      return 'esports';
+    default:
+      return undefined;
+  }
+};
 
 @Injectable()
 export class NewsService {
@@ -20,59 +80,11 @@ export class NewsService {
     private readonly urlService: URLService
   ) {}
 
-  /** 사용자 ID를 통한 사용자 정보 변경 및 결과 반환
-   * @param region
-   */
-  async getNews(region: string) {
+  /** 지역별 뉴스 목록을 CDN에서 조회해 프론트엔드 응답 형태로 변환합니다. */
+  async getNews(region: string): Promise<NewsListItem[] | null> {
     try {
-      const res = await firstValueFrom(
-        this.httpService.get(`/data/${region}/news/content.json`, {
-          baseURL: this.configService.getNewsUrl(),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-      );
-
-      const newsResponse = res.data.articles || [];
-      if (newsResponse.length < 1) {
-        return newsResponse;
-      }
-
-      return newsResponse.map((item: any) => {
-        let category: string;
-
-        if (item.categories?.length) {
-          switch (item.categories[0].title) {
-            case '새 소식':
-            case 'Release Notes':
-              category = 'release-notes';
-              break;
-            case '뉴스':
-            case 'News':
-              category = 'news';
-              break;
-            case '커뮤니티':
-            case 'Community':
-              category = 'community';
-              break;
-            case '이스포츠':
-            case 'Esports':
-              category = 'esports';
-              break;
-          }
-        }
-
-        return {
-          id: item.id,
-          type: item.type,
-          category: category,
-          title: item.title,
-          thumbnailPath: item.thumbnail.largeRetina.path,
-          postDate: item.postDate,
-          url: item.url || item.embed?.url || null
-        };
-      });
+      const articles = await this.fetchNewsArticles(region);
+      return articles.map((item) => this.toNewsListItem(item));
     } catch (error) {
       this.logger.warn(
         formatLogFields({
@@ -88,29 +100,16 @@ export class NewsService {
     return null;
   }
 
-  /** 사용자 ID를 통한 사용자 정보 변경 및 결과 반환
-   * @param region
-   * @param title
-   */
-  async getNewsItem(region: string, title: string) {
+  /** URL title 값과 일치하는 뉴스 상세 본문을 반환합니다. */
+  async getNewsItem(region: string, title: string): Promise<NewsDetail | null> {
     try {
-      const res = await firstValueFrom(
-        this.httpService.get(`/data/${region}/news/content.json`, {
-          baseURL: this.configService.getNewsUrl(),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+      const articles = await this.fetchNewsArticles(region);
+      const newsItem = articles.find(
+        (item) => this.urlService.transformString(item.title) === title
       );
-
-      const newsResponse = res.data.articles || [];
-      if (newsResponse.length < 1) {
-        return newsResponse;
+      if (!newsItem) {
+        return null;
       }
-
-      const newsItem = newsResponse.find(
-        (item: any) => this.urlService.transformString(item.title) === title
-      );
 
       return {
         title: newsItem.title,
@@ -130,5 +129,33 @@ export class NewsService {
     }
 
     return null;
+  }
+
+  private async fetchNewsArticles(region: string): Promise<NewsArticle[]> {
+    const response = await firstValueFrom(
+      this.httpService.get<NewsContentResponse>(
+        `/data/${region}/news/content.json`,
+        {
+          baseURL: this.configService.getNewsUrl(),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+    );
+
+    return response.data.articles || [];
+  }
+
+  private toNewsListItem(item: NewsArticle): NewsListItem {
+    return {
+      id: item.id,
+      type: item.type,
+      category: resolveNewsCategory(item.categories?.[0]?.title),
+      title: item.title,
+      thumbnailPath: item.thumbnail.largeRetina.path,
+      postDate: item.postDate,
+      url: item.url || item.embed?.url || null
+    };
   }
 }

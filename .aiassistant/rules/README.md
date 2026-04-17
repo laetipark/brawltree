@@ -29,6 +29,13 @@ Paths in this file are relative to the service repository root unless they start
 - Commit-message requests: `docs/rules/git.md`.
 - Workspace or cross-repository commit-message requests: also read `..\docs\rules\git.md`.
 
+## Commit Message Output
+
+- For JetBrains AI Assistant commit-message generation, output the raw commit message only.
+- Use one Korean line in `type : content` format.
+- Keep `content` as natural Korean; do not summarize changes in English.
+- Do not use conventional-commit format such as `feat: ...`.
+
 ## Response Language
 
 - Answer the user in Korean for all user-facing responses, unless the user explicitly asks for another language.

@@ -11,6 +11,7 @@ Use this file for general `service/` implementation work. For API, database, tes
 
 ## Implementation
 
+- Answer users in Korean for all user-facing work unless the user explicitly requests another language.
 - Preserve public route paths and response keys unless the task explicitly changes a contract.
 - Keep controllers thin: parse input, call services, shape responses, and throw Nest exceptions.
 - Keep query construction, cache policy, response assembly, and domain rules in services or helpers.

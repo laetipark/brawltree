@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GameMaps } from '~/maps/entities/maps.entity';
-import { GameMapRotation } from '~/maps/entities/map-rotation.entity';
 
 import { BattleStats } from '~/brawlers/entities/battle-stats.entity';
-import { BattleService } from '~/utils/services/battle.service';
 import { SelectMapDto, SelectMapStatsDto } from '~/maps/dto/select-map.dto';
+import { GameMapRotation } from '~/maps/entities/map-rotation.entity';
+import { GameMaps } from '~/maps/entities/maps.entity';
+import { BattleService } from '~/utils/services/battle.service';
+
+type MapNameRow = {
+  name: string;
+};
+
+type MapIdRow = {
+  id: string;
+};
 
 @Injectable()
 export class MapsService {
@@ -19,64 +26,51 @@ export class MapsService {
     private readonly battleService: BattleService
   ) {}
 
-  /** 맵 ID에 대한 맵 정보 반환
-   * @param name 맵 ID */
-  async selectMap(name: string): Promise<SelectMapDto> {
-    const findMap = (data: SelectMapDto[]) => {
-      const bothTrue = data.find(
-        (item) => item.isTrophyLeague && item.isPowerLeague
-      );
-      if (bothTrue) {
-        return bothTrue;
-      }
+  /** 맵 이름에 해당하는 대표 로테이션 맵 정보를 반환합니다. */
+  async selectMap(name: string): Promise<SelectMapDto | null> {
+    const maps = await this.maps
+      .createQueryBuilder('map')
+      .select('map.id', 'mapID')
+      .addSelect('map.name', 'mapName')
+      .addSelect('map.mode', 'mode')
+      .addSelect('mRotation.isTrophyLeague', 'isTrophyLeague')
+      .addSelect('mRotation.isPowerLeague', 'isPowerLeague')
+      .leftJoin(GameMapRotation, 'mRotation', 'mRotation.mapID = map.id')
+      .where('map.name = :name', {
+        name
+      })
+      .getRawMany<SelectMapDto>();
 
-      const eitherTrue = data.find(
-        (item) => item.isTrophyLeague || item.isPowerLeague
-      );
-      if (eitherTrue) {
-        return eitherTrue;
-      }
-
-      return data[0];
-    };
-
-    return findMap(
-      await this.maps
-        .createQueryBuilder('map')
-        .select('map.id', 'mapID')
-        .addSelect('map.name', 'mapName')
-        .addSelect('map.mode', 'mode')
-        .addSelect('mRotation.isTrophyLeague', 'isTrophyLeague')
-        .addSelect('mRotation.isPowerLeague', 'isPowerLeague')
-        .leftJoin(GameMapRotation, 'mRotation', 'mRotation.mapID = map.id')
-        .where('map.name = :name', {
-          name: name
-        })
-        .getRawMany()
-    );
+    return this.findPreferredRotationMap(maps);
   }
 
-  /** 맵 이름에 대한 전투 통계 반환
-   * @param name 맵 ID
-   * @param type 전투 타입
-   * @param limit
-   * @param grade 전투 등급 */
+  /** 맵 이름 또는 맵 ID 기준으로 같은 이름의 맵 전투 통계를 반환합니다. */
   async selectMapStats(
-    name: string,
+    mapIdentifier: string,
     type: string,
     grade: string[],
     limit?: number
   ): Promise<SelectMapStatsDto[]> {
     const matchGrade = this.battleService.setMatchGrade(type, grade);
-    const mapName =
-      (await this.maps
-        .createQueryBuilder('maps')
-        .select('maps.name', 'name')
-        .where('maps.name = :name', {
-          name: name
-        })
-        .limit(1)
-        .getRawOne()) || 'Name Unknown';
+    if (!matchGrade.length) {
+      return [];
+    }
+
+    const mapName = await this.maps
+      .createQueryBuilder('maps')
+      .select('maps.name', 'name')
+      .where('maps.name = :mapIdentifier', {
+        mapIdentifier
+      })
+      .orWhere('maps.id = :mapIdentifier', {
+        mapIdentifier
+      })
+      .limit(1)
+      .getRawOne<MapNameRow>();
+
+    if (!mapName) {
+      return [];
+    }
 
     const mapIDs = await this.maps
       .createQueryBuilder('maps')
@@ -84,8 +78,12 @@ export class MapsService {
       .where('maps.name = :name', {
         name: mapName.name
       })
-      .getRawMany()
+      .getRawMany<MapIdRow>()
       .then((maps) => maps.map((map) => map.id));
+
+    if (!mapIDs.length) {
+      return [];
+    }
 
     const query = this.battleStats
       .createQueryBuilder('battleStats')
@@ -100,13 +98,13 @@ export class MapsService {
       )
       .addSelect('brawler.name', 'brawlerName')
       .leftJoin('battleStats.brawler', 'brawler')
-      .where('battleStats.mapID IN (:ids)', {
+      .where('battleStats.mapID IN (:...ids)', {
         ids: mapIDs
       })
       .andWhere('battleStats.matchType = :type', {
-        type: type
+        type
       })
-      .andWhere('battleStats.matchGrade IN (:grade)', {
+      .andWhere('battleStats.matchGrade IN (:...grade)', {
         grade: matchGrade
       })
       .groupBy('battleStats.brawlerID')
@@ -118,13 +116,11 @@ export class MapsService {
       query.limit(limit);
     }
 
-    return await query.getRawMany();
+    return query.getRawMany<SelectMapStatsDto>();
   }
 
-  /**
-   * 모든 맵 목록 조회
-   */
-  async selectMaps() {
+  /** 모든 맵 목록을 모드별로 묶어 반환합니다. */
+  async selectMaps(): Promise<Record<string, SelectMapDto[]>> {
     const maps = await this.maps
       .createQueryBuilder('map')
       .select('MAX(map.id)', 'mapID')
@@ -132,7 +128,7 @@ export class MapsService {
       .addSelect('map.mode', 'mode')
       .groupBy('map.name')
       .addGroupBy('map.mode')
-      .getRawMany();
+      .getRawMany<SelectMapDto>();
 
     return maps.reduce((acc, map) => {
       const mode = map.mode;
@@ -146,13 +142,14 @@ export class MapsService {
       }
 
       return acc;
-    }, {});
+    }, {} as Record<string, SelectMapDto[]>);
   }
 
-  /** 맵 이름에 대한 맵 정보 반환
-   * @param name 맵 ID
-   * @param mode 모드 이름 */
-  async selectMapByName(name: string, mode?: string): Promise<SelectMapDto> {
+  /** 맵 이름과 선택 모드에 해당하는 맵 정보를 반환합니다. */
+  async selectMapByName(
+    name: string,
+    mode?: string
+  ): Promise<SelectMapDto | null> {
     const query = this.maps
       .createQueryBuilder('map')
       .select('map.id', 'mapID')
@@ -160,15 +157,30 @@ export class MapsService {
       .addSelect('map.mode', 'mode')
       .leftJoin(GameMapRotation, 'mRotation', 'mRotation.mapID = map.id')
       .where('map.name = :name', {
-        name: name
+        name
       });
 
     if (mode) {
       query.andWhere('map.mode = :mode', {
-        mode: mode
+        mode
       });
     }
 
-    return await query.getRawOne();
+    return query.getRawOne<SelectMapDto>();
+  }
+
+  private findPreferredRotationMap(maps: SelectMapDto[]): SelectMapDto | null {
+    const bothLeagueMap = maps.find(
+      (item) => item.isTrophyLeague && item.isPowerLeague
+    );
+    if (bothLeagueMap) {
+      return bothLeagueMap;
+    }
+
+    const rotationMap = maps.find(
+      (item) => item.isTrophyLeague || item.isPowerLeague
+    );
+
+    return rotationMap || maps[0] || null;
   }
 }

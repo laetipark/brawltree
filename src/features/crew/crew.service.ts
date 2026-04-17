@@ -3,15 +3,61 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
-import { UserFriends } from './entities/crew.entity';
-import { Users } from '~/users/entities/users.entity';
-import { UserProfile } from '~/users/entities/user-profile.entity';
-import { UserBrawlerBattles } from '~/users/entities/user-brawlers.entity';
 import { SelectUserFriendDto } from '~/crew/dto/select-user-friend.dto';
 import { SelectUserSeasonDto } from '~/crew/dto/select-user-season.dto';
+import { UserFriends } from '~/crew/entities/crew.entity';
+import { UserBrawlerBattles } from '~/users/entities/user-brawlers.entity';
+import { UserProfile } from '~/users/entities/user-profile.entity';
+import { Users } from '~/users/entities/users.entity';
+
+type CrewMemberRow = {
+  userID: string;
+  userName: string;
+  crew: string;
+  crewName: string | null;
+  profileIcon: string;
+  currentTrophies: number;
+  currentSoloRanked: number;
+  highestSoloRanked: number;
+};
 
 type MemberFriendsUpdatedAtRow = {
   friendsUpdatedAt: Date | null;
+};
+
+type SeasonModeGroup = {
+  mode: string;
+  items: SelectUserSeasonDto[];
+  matchCount: number;
+  victoriesCount: number;
+  defeatsCount: number;
+};
+
+type SeasonTotal = {
+  matchType: number;
+  matchCount: number;
+  victoriesCount: number;
+  defeatsCount: number;
+};
+
+type MemberSeasonSummary = SeasonTotal & {
+  victoryRate: number;
+  matchList: Record<string, SeasonModeGroup>;
+};
+
+type FriendTotal = {
+  friendID: string;
+  friendName: string;
+  profileIcon: string;
+  matchCount: number;
+  victoriesCount: number;
+  defeatsCount: number;
+  createdAt: Date;
+};
+
+type MemberFriendSummary = FriendTotal & {
+  victoryRate: number;
+  matchList: SelectUserFriendDto[];
 };
 
 @Injectable()
@@ -25,7 +71,7 @@ export class CrewService {
     private readonly uBrawlerBattles: Repository<UserBrawlerBattles>
   ) {}
 
-  async selectMemberTable() {
+  async selectMemberTable(): Promise<Record<string, CrewMemberRow[]>> {
     const members = await this.users
       .createQueryBuilder('user')
       .select('user.id', 'userID')
@@ -39,17 +85,17 @@ export class CrewService {
       .innerJoin('user.userProfile', 'uProfile')
       .where('user.crew IN ("Blossom", "Team", "Lucy")')
       .orderBy('uProfile.currentTrophies', 'DESC')
-      .getRawMany();
+      .getRawMany<CrewMemberRow>();
 
     return members.reduce((result, current) => {
       result[current.crew] = result[current.crew] || [];
       result[current.crew].push(current);
       return result;
-    }, {});
+    }, {} as Record<string, CrewMemberRow[]>);
   }
 
-  async selectMemberSeasons(id: string): Promise<SelectUserSeasonDto[]> {
-    return await this.uBrawlerBattles
+  async selectMemberSeasons(id: string): Promise<MemberSeasonSummary[]> {
+    const rows = await this.uBrawlerBattles
       .createQueryBuilder('uBrawlerBattles')
       .select('uBrawlerBattles.matchType', 'matchType')
       .addSelect('uBrawlerBattles.matchGrade', 'matchGrade')
@@ -67,74 +113,18 @@ export class CrewService {
       .groupBy('uBrawlerBattles.matchType')
       .addGroupBy('uBrawlerBattles.matchGrade')
       .addGroupBy('uBrawlerBattles.mode')
-      .getRawMany()
-      .then((result: SelectUserSeasonDto[]) => {
-        const data = plainToInstance(SelectUserSeasonDto, result);
-        const totalData = [];
-        data.forEach((item: SelectUserSeasonDto) => {
-          const {
-            matchType,
-            matchCount,
-            victoriesCount,
-            defeatsCount
-          }: SelectUserSeasonDto = item;
-          if (!totalData[matchType]) {
-            totalData[matchType] = {
-              matchType,
-              matchCount: 0,
-              victoriesCount: 0,
-              defeatsCount: 0
-            };
-          }
+      .getRawMany<SelectUserSeasonDto>();
 
-          totalData[matchType].matchCount += matchCount;
-          totalData[matchType].victoriesCount += victoriesCount;
-          totalData[matchType].defeatsCount += defeatsCount;
-        });
-
-        const keyData = data.reduce((result, current) => {
-          const matchType = current.matchType;
-          const mode = current.modeName;
-
-          // matchType에 따라 그룹화
-          if (!result[matchType]) {
-            result[matchType] = {};
-          }
-
-          // mode에 따라 그룹화
-          if (!result[matchType][mode]) {
-            result[matchType][mode] = {
-              mode,
-              items: [],
-              matchCount: 0,
-              victoriesCount: 0,
-              defeatsCount: 0
-            };
-          }
-          result[matchType][mode].matchCount += current.matchCount;
-          result[matchType][mode].victoriesCount += current.victoriesCount;
-          result[matchType][mode].defeatsCount += current.defeatsCount;
-
-          result[matchType][mode].items.push(current);
-
-          return result;
-        }, {});
-        const keys = Object.keys(keyData);
-
-        return keys.map((key) => {
-          return {
-            ...totalData[key],
-            victoryRate:
-              (totalData[key].victoriesCount * 100) /
-              (totalData[key].victoriesCount + totalData[key].defeatsCount),
-            matchList: keyData[key]
-          };
-        });
-      });
+    return this.groupMemberSeasons(plainToInstance(SelectUserSeasonDto, rows));
   }
 
-  async selectMemberFriends(id: string) {
-    const friends = await this.userFriends
+  async selectMemberFriends(id: string): Promise<{
+    friendList: {
+      friends: MemberFriendSummary[];
+      friendsUpdatedAt: Date | null;
+    };
+  }> {
+    const rows = await this.userFriends
       .createQueryBuilder('uFriend')
       .select('uFriend.friendID', 'friendID')
       .addSelect('uFriend.matchType', 'matchType')
@@ -162,55 +152,7 @@ export class CrewService {
       .addGroupBy('user.crewName')
       .addGroupBy('uProfile.name')
       .addGroupBy('uProfile.profileIcon')
-      .getRawMany()
-      .then((result: SelectUserFriendDto[]) => {
-        const data = plainToInstance(SelectUserFriendDto, result);
-        const totalData = [];
-        data.forEach((item) => {
-          const {
-            friendID,
-            profileIcon,
-            friendName,
-            matchCount,
-            victoriesCount,
-            defeatsCount,
-            createdAt
-            // friendPoints,
-          } = item;
-          if (!totalData[friendID]) {
-            totalData[friendID] = {
-              friendID,
-              friendName,
-              profileIcon,
-              matchCount: 0,
-              victoriesCount: 0,
-              defeatsCount: 0,
-              createdAt
-            };
-          }
-          totalData[friendID].matchCount += matchCount;
-          totalData[friendID].victoriesCount += victoriesCount;
-          totalData[friendID].defeatsCount += defeatsCount;
-          // totalData[friendID].friendPoints += friendPoints;
-        });
-
-        const keyData = data.reduce((result, current) => {
-          result[current.friendID] = result[current.friendID] || [];
-          result[current.friendID].push(current);
-          return result;
-        }, {});
-        const keys = Object.keys(keyData);
-
-        return keys.map((key) => {
-          return {
-            ...totalData[key],
-            victoryRate:
-              (totalData[key].victoriesCount * 100) /
-              (totalData[key].victoriesCount + totalData[key].defeatsCount),
-            matchList: keyData[key]
-          };
-        });
-      });
+      .getRawMany<SelectUserFriendDto>();
 
     const updatedRow = await this.userFriends
       .createQueryBuilder('uFriend')
@@ -222,9 +164,103 @@ export class CrewService {
 
     return {
       friendList: {
-        friends,
+        friends: this.groupMemberFriends(
+          plainToInstance(SelectUserFriendDto, rows)
+        ),
         friendsUpdatedAt: updatedRow?.friendsUpdatedAt ?? null
       }
     };
+  }
+
+  private groupMemberSeasons(
+    seasons: SelectUserSeasonDto[]
+  ): MemberSeasonSummary[] {
+    const totals: Record<number, SeasonTotal> = {};
+    const matchLists: Record<number, Record<string, SeasonModeGroup>> = {};
+
+    seasons.forEach((season) => {
+      const { matchType, modeName } = season;
+
+      totals[matchType] = totals[matchType] || {
+        matchType,
+        matchCount: 0,
+        victoriesCount: 0,
+        defeatsCount: 0
+      };
+      totals[matchType].matchCount += season.matchCount;
+      totals[matchType].victoriesCount += season.victoriesCount;
+      totals[matchType].defeatsCount += season.defeatsCount;
+
+      matchLists[matchType] = matchLists[matchType] || {};
+      matchLists[matchType][modeName] = matchLists[matchType][modeName] || {
+        mode: modeName,
+        items: [],
+        matchCount: 0,
+        victoriesCount: 0,
+        defeatsCount: 0
+      };
+
+      const modeGroup = matchLists[matchType][modeName];
+      modeGroup.matchCount += season.matchCount;
+      modeGroup.victoriesCount += season.victoriesCount;
+      modeGroup.defeatsCount += season.defeatsCount;
+      modeGroup.items.push(season);
+    });
+
+    return Object.keys(matchLists).map((matchType) => {
+      const total = totals[Number(matchType)];
+
+      return {
+        ...total,
+        victoryRate: this.calculateVictoryRate(
+          total.victoriesCount,
+          total.defeatsCount
+        ),
+        matchList: matchLists[Number(matchType)]
+      };
+    });
+  }
+
+  private groupMemberFriends(
+    friends: SelectUserFriendDto[]
+  ): MemberFriendSummary[] {
+    const totals: Record<string, FriendTotal> = {};
+    const matchLists: Record<string, SelectUserFriendDto[]> = {};
+
+    friends.forEach((friend) => {
+      totals[friend.friendID] = totals[friend.friendID] || {
+        friendID: friend.friendID,
+        friendName: friend.friendName,
+        profileIcon: friend.profileIcon,
+        matchCount: 0,
+        victoriesCount: 0,
+        defeatsCount: 0,
+        createdAt: friend.createdAt
+      };
+
+      totals[friend.friendID].matchCount += friend.matchCount;
+      totals[friend.friendID].victoriesCount += friend.victoriesCount;
+      totals[friend.friendID].defeatsCount += friend.defeatsCount;
+      matchLists[friend.friendID] = matchLists[friend.friendID] || [];
+      matchLists[friend.friendID].push(friend);
+    });
+
+    return Object.keys(matchLists).map((friendID) => {
+      const total = totals[friendID];
+
+      return {
+        ...total,
+        victoryRate: this.calculateVictoryRate(
+          total.victoriesCount,
+          total.defeatsCount
+        ),
+        matchList: matchLists[friendID]
+      };
+    });
+  }
+
+  private calculateVictoryRate(victoriesCount: number, defeatsCount: number) {
+    const total = victoriesCount + defeatsCount;
+    return total > 0 ? (victoriesCount * 100) / total : 0;
   }
 }

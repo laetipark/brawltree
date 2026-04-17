@@ -1,29 +1,25 @@
 import { Controller, Get, HttpCode, Param, Query } from '@nestjs/common';
+
 import { NewsService } from './news.service';
 
 @Controller('news')
 export class NewsController {
-  constructor(private readonly rankingsService: NewsService) {}
+  constructor(private readonly newsService: NewsService) {}
 
-  /** 뉴스 목록 조회
-   * @param regionCode
-   */
+  /** 뉴스 목록 조회 */
   @Get('/')
   @HttpCode(200)
   async getNews(@Query('region') regionCode: string = 'ko') {
-    return await this.rankingsService.getNews(regionCode);
+    return this.newsService.getNews(regionCode);
   }
 
-  /** 뉴스 목록 조회
-   * @param regionCode
-   * @param title
-   */
+  /** 뉴스 상세 조회 */
   @Get('/:title')
   @HttpCode(200)
   async getNewsItem(
     @Query('region') regionCode: string = 'ko',
     @Param('title') title: string
   ) {
-    return await this.rankingsService.getNewsItem(regionCode, title);
+    return this.newsService.getNewsItem(regionCode, title);
   }
 }

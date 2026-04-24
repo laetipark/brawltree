@@ -1,4 +1,4 @@
-![](/service/frontend/public/images/logo/logo_horizontal.png)
+![](/frontend/public/images/logo/logo_horizontal.png)
 
 # BrawlTree Service
 

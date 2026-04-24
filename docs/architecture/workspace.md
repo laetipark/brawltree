@@ -13,8 +13,8 @@
 3. `service/frontend/src/services` calls the same-origin API.
 4. The service runtime also proxies `/cdn/*`, `/youtube/*`, and `/inbox/*` for frontend use.
 
-## Development Rules
+## Contract Boundaries
 
-- Keep API and frontend contract changes in the same task.
-- Preserve existing environment variable names unless a migration path is explicit.
-- Prefer existing local patterns over new abstractions.
+- API/frontend contracts cross `src/` and `frontend/src/services`.
+- Schema assumptions cross `crawler/` writes and `service/src` reads.
+- Proxy-backed frontend paths cross the integrated Nest runtime and frontend consumers.

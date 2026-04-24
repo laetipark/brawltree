@@ -23,6 +23,6 @@
 
 ## Frontend Usage
 
-- Route frontend calls through `frontend/src/services` when a service exists.
-- Keep service-specific response types near the frontend service.
-- UI components should not construct API URLs directly unless no service layer exists yet.
+- Treat `frontend/src/services` as the primary in-repo API consumer.
+- Keep API response shape changes aligned with frontend service types and callers.
+- For frontend call placement and UI rules, use `rules/frontend.md`.

@@ -3,16 +3,13 @@
 ## API Runtime
 
 - Owns `/api/*` contracts, DTO validation, controllers, services, repositories, and query behavior.
-- Keep controllers thin and move business logic into services.
 - Do not duplicate crawler ingestion or worker logic in API services.
 - Coordinate schema assumptions with crawler migrations and entities.
 
 ## Frontend Runtime
 
 - Owns route composition, UI state, presentation, and same-origin API usage.
-- Call APIs through `frontend/src/services` when a service exists.
 - Do not embed crawler implementation details in UI components.
-- Use `frontend/src/common/config/config.ts` for API base URL and CDN constants.
 
 ## Integration Rules
 

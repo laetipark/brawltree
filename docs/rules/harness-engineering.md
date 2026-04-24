@@ -11,15 +11,14 @@ Use these rules when changing service agent docs or workflows.
 
 ## Work Loop
 
-1. Read the nearest entry file and relevant docs.
+1. Read the active feature entrypoint and relevant docs.
 2. Inspect code before choosing an implementation.
 3. Make scoped changes.
 4. Run the narrowest useful validation.
 5. Move repeated lessons into docs.
 
-## Repository Criteria
+## Harness Criteria
 
-- Module ownership and runtime roles should be explicit.
-- Env/config should hold dynamic operational values.
-- Query, cache, and API behavior should have clear names and contracts.
-- Logs should help debug without leaking secrets.
+- Task routes should name the smallest useful doc set.
+- Document maps should describe file roles, not repeat detailed rules.
+- Entry files should point into the harness, not compete with it.

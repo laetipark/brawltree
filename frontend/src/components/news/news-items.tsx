@@ -37,14 +37,14 @@ export const NewsItemsContent = ({ layout = 'compact' }: NewsItemsContentProps) 
   return (
     <div className={`${styles.newsItemsContent} ${layout === 'full' ? styles.newsItemsContentFull : ''}`}>
       {news.map((item) => {
-        let url: string;
+        let url: string | null = null;
+        let isExternal = false;
 
         if (item.type === 'newsEntry') {
-          url = `news/${transformString(item.title)}`;
+          url = `/news/${transformString(item.title)}`;
         } else if (item.type === 'externalNewsEntry') {
           url = item.url;
-        } else if (item.type === 'imageNewsEntry') {
-          url = null;
+          isExternal = true;
         }
         const isClickable = Boolean(url);
 
@@ -52,8 +52,8 @@ export const NewsItemsContent = ({ layout = 'compact' }: NewsItemsContentProps) 
           <a
             key={item.id}
             href={url || '#'}
-            target={isClickable ? '_blank' : undefined}
-            rel={isClickable ? 'noreferrer' : undefined}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noreferrer' : undefined}
             aria-disabled={!isClickable}
             className={!isClickable ? styles.disabledNewsLink : undefined}
           >

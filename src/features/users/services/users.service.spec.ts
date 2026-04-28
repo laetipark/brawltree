@@ -75,7 +75,7 @@ describe('UsersService', () => {
     );
   });
 
-  it('skips crawler refresh for verified on-demand users outside the recent battle window', async () => {
+  it('skips crawler refresh for on-demand users outside the recent battle window regardless of verification', async () => {
     const httpService = {
       post: jest.fn(),
       patch: jest.fn()
@@ -90,7 +90,7 @@ describe('UsersService', () => {
           crew: null,
           crewName: null,
           isCrew: false,
-          isVerified: true,
+          isVerified: false,
           updatedAt: new Date(Date.now() - 20 * 60 * 1000),
           userName: 'On Demand',
           profileIcon: '28000000'
@@ -106,7 +106,7 @@ describe('UsersService', () => {
     expect(httpService.patch).not.toHaveBeenCalled();
   });
 
-  it('refreshes unverified on-demand users through the crawler patch route', async () => {
+  it('refreshes recent on-demand users through the crawler patch route', async () => {
     const httpService = {
       post: jest.fn(),
       patch: jest.fn().mockReturnValue(of({ status: 200 }))
@@ -117,7 +117,7 @@ describe('UsersService', () => {
       service.updateUserFromCrawler(
         {
           userID: '#ONDEMAND',
-          lastBattledOn: new Date(Date.now() - 30 * 60 * 1000),
+          lastBattledOn: new Date(Date.now() - 30 * 1000),
           crew: null,
           crewName: null,
           isCrew: false,

@@ -247,7 +247,7 @@ export class UsersService {
   }
 
   /**
-   * 비크루 온디맨드 사용자가 검증 전이거나 최근 전투 동기화 창 안에 있는지 확인합니다.
+   * 비크루 온디맨드 사용자가 최근 전투 동기화 창 안에 있는지 확인합니다.
    */
   private shouldRefreshOnDemandUser(user: SelectUserDto | null): boolean {
     if (!user || user.isCrew) {
@@ -255,7 +255,6 @@ export class UsersService {
     }
 
     return (
-      !user.isVerified ||
       this.hasBootstrapBattleCursor(user.lastBattledOn) ||
       this.hasRecentBattleWindow(user.lastBattledOn)
     );

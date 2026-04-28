@@ -18,7 +18,6 @@
   --brawler-radius-lg: 18px;
   --brawler-radius-md: 12px;
 
-  background: var(--theme-brawlers-bg);
   border: none;
   border-radius: 0;
   display: flex;
@@ -27,7 +26,7 @@
   padding: 12px 10px;
   gap: 12px;
   color: var(--brawler-ink);
-  font-family: var(--brawler-font-body);
+  font-family: var(--brawler-font-body), sans-serif;
   line-height: 1.3;
 
   & > div:last-child {
@@ -44,7 +43,6 @@
   padding: 16px 18px;
   border: 2px solid var(--brawler-line-strong);
   border-radius: var(--brawler-radius-lg);
-  background: var(--theme-brawlers-bg);
   box-shadow: var(--brawler-shadow);
   color: var(--brawler-ink);
 }
@@ -52,7 +50,7 @@
 .statusCard {
   h2 {
     margin: 0 0 8px;
-    font-family: var(--brawler-font-title);
+    font-family: var(--brawler-font-title), sans-serif;
     font-size: 1.2rem;
   }
 

@@ -39,26 +39,11 @@ export const Header = ({ isCdnLoading = false }: HeaderProps) => {
   const shouldShowSkeleton = isCdnLoading && !hasHeaderLocale;
   const toggleVisible = useMediaQuery({ maxWidth: 768 });
   const [isToggled, setIsToggled] = useState(false);
+  const menuId = 'header-menu-content';
 
   // 768px 이하에서는 메뉴를 토글로 보여주기
   const menuList = (
-    <ul
-      className={styles.headerMenuContent}
-      style={
-        toggleVisible
-          ? isToggled
-            ? {
-                visibility: 'visible',
-                minHeight: 240,
-                paddingBottom: 8
-              }
-            : {
-                visibility: 'hidden',
-                minHeight: 0
-              }
-          : {}
-      }
-    >
+    <ul id={menuId} className={styles.headerMenuContent}>
       <li>
         <Link to={'/'} onClick={() => setIsToggled(false)}>
           <div>{headerLocale.main || headerFallback.main}</div>
@@ -101,19 +86,22 @@ export const Header = ({ isCdnLoading = false }: HeaderProps) => {
             <span className={styles.skeletonText} />
           </div>
         ) : toggleVisible ? (
-          <div
+          <button
+            type={'button'}
             className={styles.menuToggle}
+            aria-controls={menuId}
+            aria-expanded={isToggled}
             onClick={() => {
               setIsToggled(!isToggled);
             }}
           >
             <FontAwesomeIcon icon={!isToggled ? faBars : faTimes} fontSize={24} />
-          </div>
+          </button>
         ) : (
           menuList
         )}
       </header>
-      {toggleVisible && !shouldShowSkeleton && menuList}
+      {toggleVisible && !shouldShowSkeleton && isToggled && menuList}
     </React.Fragment>
   );
 };

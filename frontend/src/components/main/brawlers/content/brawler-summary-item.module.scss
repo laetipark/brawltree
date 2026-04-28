@@ -16,6 +16,7 @@
 
   &:hover {
     background: var(--theme-main-bg);
+
     border-color: var(--main-line-strong, #8eb3c0);
     transform: translateY(-1px);
   }
@@ -68,7 +69,7 @@
 
     & > span {
       color: var(--main-ink, #233348);
-      font-family: var(--main-font-number, "N Medium", sans-serif);
+      font-family: var(--main-font-number, "N Medium"), sans-serif;
       font-weight: 700;
     }
   }

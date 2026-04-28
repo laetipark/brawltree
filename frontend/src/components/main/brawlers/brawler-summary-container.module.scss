@@ -8,13 +8,14 @@
   border: 1px solid var(--main-line, #b9cfd9);
   border-radius: var(--main-radius-lg, 18px);
   background: var(--theme-main-bg);
+
   box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
 
   & > h2 {
     margin: 0;
     border-bottom: 1px solid var(--main-line-strong, #8eb3c0);
     padding-bottom: 8px;
-    font-family: var(--main-font-title, "Main Bold", sans-serif);
+    font-family: var(--main-font-title, "Main Bold"), sans-serif;
     font-size: clamp(20px, 2.4vw, 24px);
 
     & > a {
@@ -43,7 +44,7 @@
       justify-content: center;
       align-items: center;
       font-size: 18px;
-      font-family: var(--main-font-title, "Main Bold", sans-serif);
+      font-family: var(--main-font-title, "Main Bold"), sans-serif;
       color: var(--main-ink, #233348);
       border-bottom: 1px dashed rgba(127, 160, 178, 0.6);
       padding-bottom: 6px;

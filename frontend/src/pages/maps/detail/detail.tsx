@@ -24,6 +24,7 @@ export const MapDetail = () => {
   const [grade, setGrade] = useState(['4', '5', '6', '7']);
   const [mapInfo, setMapInfo] = useState<MapInfoType | null>(null);
   const [brawlerStats, setBrawlerStats] = useState<MapBrawlerStatsType[]>([]);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     if (!name) {
@@ -31,14 +32,21 @@ export const MapDetail = () => {
     }
 
     const mapName = name.replace(/-/g, ' ');
-    MapService.getMap({ name: mapName, type, grade }).then((data) => {
-      setMapInfo(data.map);
-      setBrawlerStats(data.stats);
+    setLoadFailed(false);
+    MapService.getMap({ name: mapName, type, grade })
+      .then((data) => {
+        setMapInfo(data.map);
+        setBrawlerStats(data.stats);
 
-      if (data.map && !data.map.isTrophyLeague && data.map.isPowerLeague) {
-        setType('2');
-      }
-    });
+        if (data.map && !data.map.isTrophyLeague && data.map.isPowerLeague) {
+          setType('2');
+        }
+      })
+      .catch(() => {
+        setMapInfo(null);
+        setBrawlerStats([]);
+        setLoadFailed(true);
+      });
   }, [name, type, grade]);
 
   useEffect(() => {
@@ -46,15 +54,16 @@ export const MapDetail = () => {
   }, []);
 
   const mapName = mapInfo?.mapName || name?.replace(/-/g, ' ') || 'Map';
+  const localizedMapName = mapInfo?.mapID ? locales.map?.map?.[mapInfo.mapID] || mapName : mapName;
+  const isKorean = locales.language === 'ko';
+  const seoTitle = isKorean ? `${localizedMapName} \uB9F5 \uD1B5\uACC4` : `${mapName} Map Stats`;
+  const seoDescription = isKorean
+    ? `${localizedMapName} \uB9F5 \uC0C1\uC138 \uC815\uBCF4, \uB85C\uD14C\uC774\uC158, \uCD94\uCC9C \uBE0C\uB864\uB7EC\uB97C \uD655\uC778\uD558\uC138\uC694.`
+    : `View ${mapName} map details, rotation info, and recommended brawlers.`;
 
   return (
     <React.Fragment>
-      <PageSeo
-        page="mapDetail"
-        language={locales.language}
-        title={`${mapName} Map Stats`}
-        description={`View ${mapName} map details, rotation info, and recommended brawlers.`}
-      />
+      <PageSeo page="mapDetail" language={locales.language} title={seoTitle} description={seoDescription} noIndex={loadFailed || !name} />
       {mapInfo ? (
         <div className={styles.app}>
           <MapInfo mapInfo={mapInfo} />

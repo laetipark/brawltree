@@ -21,15 +21,14 @@ export const Events = () => {
   const pageDescription = isKorean
     ? '\uD604\uC7AC/\uC608\uC815/\uB7AD\uD06C \uB85C\uD14C\uC774\uC158\uC744 \uD55C \uB208\uC5D0 \uBE44\uAD50\uD558\uACE0 \uBC14\uB85C \uB9F5 \uD398\uC774\uC9C0\uB85C \uC774\uB3D9\uD558\uC138\uC694.'
     : 'Compare current, upcoming, and ranked rotations quickly and jump to each map page.';
+  const seoTitle = isKorean ? `${modeLabelLocalized} \uC774\uBCA4\uD2B8 \uB85C\uD14C\uC774\uC158` : `${modeLabel} Event Rotation`;
+  const seoDescription = isKorean
+    ? `${modeLabelLocalized} \uBE0C\uB864\uC2A4\uD0C0\uC988 \uC774\uBCA4\uD2B8 \uB85C\uD14C\uC774\uC158\uACFC \uB9F5 \uD480\uC744 \uD655\uC778\uD558\uC138\uC694.`
+    : `Browse ${modeLabel.toLowerCase()} Brawl Stars event rotation and map pool.`;
 
   return (
     <React.Fragment>
-      <PageSeo
-        page="events"
-        language={locales.language}
-        title={`${modeLabel} Event Rotation`}
-        description={`Browse ${modeLabel.toLowerCase()} Brawl Stars event rotation and map pool.`}
-      />
+      <PageSeo page="events" language={locales.language} title={seoTitle} description={seoDescription} />
       <div className={styles.eventsPage}>
         <section className={styles.eventsHero}>
           <p className={styles.eventsKicker}>BRAWL STARS</p>

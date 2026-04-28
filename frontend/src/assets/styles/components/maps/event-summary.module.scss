@@ -8,6 +8,7 @@
   border: 1px solid var(--main-line, #b9cfd9);
   border-radius: var(--main-radius-lg, 18px);
   background: var(--theme-main-bg);
+
   box-shadow: var(--main-shadow, 0 10px 24px rgba(90, 117, 148, 0.16));
 }
 
@@ -47,7 +48,7 @@
   & > a {
     color: var(--main-ink, #233348);
     text-decoration: none;
-    font-family: var(--main-font-title, "Main Bold", sans-serif);
+    font-family: var(--main-font-title, "Main Bold"), sans-serif;
     font-size: clamp(20px, 2.4vw, 24px);
   }
 }

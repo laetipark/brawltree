@@ -31,10 +31,9 @@
   --user-radius-sm: 8px;
 
   color: var(--user-ink);
-  font-family: var(--user-font-body);
+  font-family: var(--user-font-body), sans-serif;
   line-height: 1.35;
   gap: 8px;
-  background: var(--theme-user-bg);
 }
 
 .userWrapper {

@@ -1,9 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 
-import { ResolveSeoOptions, resolveSeo } from '~/common/seo/seo.config';
+import { resolveSeo, ResolveSeoOptions } from '~/common/seo/seo.config';
+
 type PageSeoProps = ResolveSeoOptions;
+
+const PRERENDER_READY_EVENT = 'brawltree-prerender-ready';
 
 export const PageSeo = ({ language = 'ko', seoLanguage, path, ...options }: PageSeoProps) => {
   const location = useLocation();
@@ -15,8 +18,55 @@ export const PageSeo = ({ language = 'ko', seoLanguage, path, ...options }: Page
         seoLanguage,
         path: path || location.pathname
       }),
-    [options.page, options.title, options.description, options.keywords, options.image, options.noIndex, options.type, language, seoLanguage, path, location.pathname]
+    [
+      options.page,
+      options.title,
+      options.description,
+      options.keywords,
+      options.image,
+      options.noIndex,
+      options.type,
+      options.breadcrumbItems,
+      options.structuredData,
+      language,
+      seoLanguage,
+      path,
+      location.pathname
+    ]
   );
+
+  const jsonLdContent = useMemo(() => seo.jsonLd.map((structuredData) => JSON.stringify(structuredData)), [seo.jsonLd]);
+
+  useEffect(() => {
+    document.querySelectorAll('[data-brawltree-prerender-seo="true"]').forEach((element) => {
+      element.remove();
+    });
+
+    document.querySelectorAll('script[data-brawltree-jsonld="true"]').forEach((script) => {
+      script.remove();
+    });
+
+    const jsonLdScripts = jsonLdContent.map((content) => {
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.dataset.brawltreeJsonld = 'true';
+      script.text = content;
+      document.head.appendChild(script);
+
+      return script;
+    });
+
+    const timeoutID = window.setTimeout(() => {
+      document.dispatchEvent(new Event(PRERENDER_READY_EVENT));
+    }, 100);
+
+    return () => {
+      window.clearTimeout(timeoutID);
+      jsonLdScripts.forEach((script) => {
+        script.remove();
+      });
+    };
+  }, [jsonLdContent, seo.canonicalUrl, seo.description, seo.title]);
 
   const robotsContent = seo.noIndex ? 'noindex, nofollow' : 'index, follow';
 
@@ -24,7 +74,6 @@ export const PageSeo = ({ language = 'ko', seoLanguage, path, ...options }: Page
     <Helmet htmlAttributes={{ lang: seo.htmlLang }}>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
-      <meta name="keywords" content={seo.keywords} />
       <meta name="language" content={seo.language === 'ko' ? 'Korean' : 'English'} />
       <meta name="robots" content={robotsContent} />
       <link rel="canonical" href={seo.canonicalUrl} />

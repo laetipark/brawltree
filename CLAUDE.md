@@ -1,6 +1,6 @@
-# Service Claude Entry
+# Service Agent Entry
 
-Use this file for Claude work inside `service/`. Keep it short: this is a routing map, not the full service rulebook.
+Use this file for agent work inside `service/`. Keep it short: this is a routing map, not the full service rulebook.
 
 ## Read Order
 
@@ -11,8 +11,15 @@ Use this file for Claude work inside `service/`. Keep it short: this is a routin
 
 ## Entrypoint Boundary
 
-- Do not read parent workspace entrypoints for normal service-scoped Claude work.
-- Do not route Claude work through `AGENTS.md`; use this file and the service harness.
+- This file is the local entrypoint for `service/`.
+- Do not route generic agent work through `CLAUDE.md`; use this file and the service harness.
+
+## Harness Contract
+
+- Do not use this file as the only rule source for implementation, API, database, frontend, validation, or docs work.
+- For `CLAUDE.md`, `AGENTS.md`, or harness routing changes, follow the entrypoint route in `docs/README.md`.
+- When adding, removing, or renaming service docs, update `docs/README.md` in the same change.
+- Keep durable detailed rules in `docs/` rather than expanding this entry file.
 
 ## Scope
 
@@ -30,8 +37,3 @@ Use this file for Claude work inside `service/`. Keep it short: this is a routin
 - Never expose env values, tokens, secrets, private hosts, or private IPs in docs, logs, responses, or code.
 - Keep deployment-only values in env/config.
 - Coordinate cross-feature contracts through the detailed docs selected by `docs/README.md`.
-
-## Validation
-
-- Use `docs/README.md` and `docs/rules/validation.md` to choose the narrowest useful validation.
-- For docs-only changes, file presence and readable Markdown checks are enough.

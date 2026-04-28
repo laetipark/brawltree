@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BrawlerSelection } from '~/components/brawler/selection/brawler-selection';
 import { BrawlerInfo } from '~/components/brawler/info/brawler-info';
@@ -8,6 +8,7 @@ import { PageSeo } from '~/components/seo/page-seo';
 
 import { BrawlerType } from '~/common/types/brawlers.type';
 import { BrawlerService } from '~/services/brawler.service';
+import { CdnContext } from '~/context/cdn.context';
 import { toBrawlerDisplayName, toBrawlerRouteName } from '~/utils/brawler-route';
 
 import styles from './brawlers-page.module.scss';
@@ -31,6 +32,7 @@ const DEFAULT_BRAWLER: BrawlerType = {
  */
 export const Brawlers = () => {
   const { name } = useParams();
+  const locales = useContext(CdnContext);
   const [brawlers, setBrawlers] = useState<BrawlerType[]>([]);
   const [brawler, setBrawler] = useState<BrawlerType>(DEFAULT_BRAWLER);
 
@@ -111,10 +113,16 @@ export const Brawlers = () => {
   }, [name, brawlers]);
 
   const brawlerName = toBrawlerDisplayName(brawler.name || name);
+  const localizedBrawlerName = locales.brawler?.brawler?.[brawler.name] || brawlerName;
+  const isKorean = locales.language === 'ko';
+  const seoTitle = isKorean ? `${localizedBrawlerName} \uBE0C\uB864\uB7EC \uD1B5\uACC4\uC640 \uBE4C\uB4DC` : `${brawlerName} Stats and Build`;
+  const seoDescription = isKorean
+    ? `${localizedBrawlerName} \uC131\uB2A5, \uCD94\uCC9C \uB9F5, \uAC00\uC82F\uACFC \uC2A4\uD0C0\uD30C\uC6CC \uC870\uD569\uC744 \uD655\uC778\uD558\uC138\uC694.`
+    : `Check ${brawlerName} performance, best maps, and item combinations.`;
 
   return (
     <React.Fragment>
-      <PageSeo page="brawler" title={`${brawlerName} Stats and Build`} description={`Check ${brawlerName} performance, best maps, and item combinations.`} />
+      <PageSeo page="brawler" language={locales.language} title={seoTitle} description={seoDescription} noIndex={overviewLoadFailed && brawlers.length === 0} />
       {overviewLoadFailed && brawlers.length === 0 ? (
         <div className={styles.statusCard}>
           <h2>Failed to load brawler data.</h2>

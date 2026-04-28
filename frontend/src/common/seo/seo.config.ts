@@ -5,6 +5,12 @@ export type OpenGraphType = 'website' | 'article';
 
 type LocalizedText = Record<SupportedLanguage, string>;
 type LocalizedKeywords = Record<SupportedLanguage, string[]>;
+export type StructuredData = Record<string, unknown>;
+
+export type SeoBreadcrumbItem = {
+  name: string;
+  path?: string;
+};
 
 export interface SeoPageConfig {
   title: LocalizedText;
@@ -24,6 +30,8 @@ export interface ResolveSeoOptions {
   path?: string;
   noIndex?: boolean;
   type?: OpenGraphType;
+  breadcrumbItems?: SeoBreadcrumbItem[];
+  structuredData?: StructuredData | StructuredData[];
 }
 
 const SITE_NAME: LocalizedText = {
@@ -150,8 +158,7 @@ export const PAGE_SEO_CONFIG: Record<SeoPageKey, SeoPageConfig> = {
     keywords: {
       ko: ['브롤스타즈 뉴스', '패치 노트', '업데이트'],
       en: ['brawl stars news', 'patch notes', 'game updates']
-    },
-    type: 'article'
+    }
   },
   newsDetail: {
     title: {
@@ -188,6 +195,10 @@ const withLanguageQuery = (path: string, language: SupportedLanguage) => {
   return `${path}${separator}lang=${language}`;
 };
 
+const toCanonicalUrl = (path: string, language: SupportedLanguage) => {
+  return `${SITE_URL}${withLanguageQuery(normalizePath(path), language)}`;
+};
+
 const toAbsoluteUrl = (value: string) => {
   if (!value) {
     return `${SITE_URL}${DEFAULT_IMAGE}`;
@@ -200,11 +211,77 @@ const toAbsoluteUrl = (value: string) => {
   return `${SITE_URL}${value.startsWith('/') ? value : `/${value}`}`;
 };
 
+const stripSiteName = (title: string, language: SupportedLanguage) => {
+  return title.replace(new RegExp(`\\s*\\|\\s*${SITE_NAME[language]}$`), '');
+};
+
 const withSiteName = (title: string, language: SupportedLanguage) => {
   const siteName = SITE_NAME[language];
 
   return title.includes(siteName) ? title : `${title} | ${siteName}`;
 };
+
+const toStructuredDataArray = (structuredData?: StructuredData | StructuredData[]) => {
+  if (!structuredData) {
+    return [];
+  }
+
+  return Array.isArray(structuredData) ? structuredData : [structuredData];
+};
+
+const createWebsiteStructuredData = (language: SupportedLanguage): StructuredData => ({
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME[language],
+  url: SITE_URL,
+  inLanguage: language
+});
+
+const createBreadcrumbStructuredData = ({ items, language }: { items: SeoBreadcrumbItem[]; language: SupportedLanguage }): StructuredData | null => {
+  if (items.length < 2) {
+    return null;
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => {
+      const listItem: Record<string, unknown> = {
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name
+      };
+
+      if (item.path) {
+        listItem.item = toCanonicalUrl(item.path, language);
+      }
+
+      return listItem;
+    })
+  };
+};
+
+const createArticleStructuredData = ({
+  title,
+  description,
+  canonicalUrl,
+  imageUrl,
+  language
+}: {
+  title: string;
+  description: string;
+  canonicalUrl: string;
+  imageUrl: string;
+  language: SupportedLanguage;
+}): StructuredData => ({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  image: imageUrl,
+  inLanguage: language,
+  mainEntityOfPage: canonicalUrl
+});
 
 export const resolveSeo = (options: ResolveSeoOptions) => {
   const language = options.seoLanguage || normalizeLanguage(options.language);
@@ -222,6 +299,37 @@ export const resolveSeo = (options: ResolveSeoOptions) => {
   const imageUrl = toAbsoluteUrl(options.image || DEFAULT_IMAGE);
   const type = options.type || base.type || DEFAULT_TYPE;
   const noIndex = Boolean(options.noIndex);
+  const pageLabel = stripSiteName(title, language);
+  const breadcrumbItems = options.breadcrumbItems || [
+    {
+      name: SITE_NAME[language],
+      path: '/'
+    },
+    {
+      name: pageLabel,
+      path: normalizedPath
+    }
+  ];
+  const breadcrumbStructuredData = createBreadcrumbStructuredData({
+    items: breadcrumbItems,
+    language
+  });
+  const jsonLd = [
+    createWebsiteStructuredData(language),
+    ...(breadcrumbStructuredData ? [breadcrumbStructuredData] : []),
+    ...(type === 'article'
+      ? [
+          createArticleStructuredData({
+            title: pageLabel,
+            description,
+            canonicalUrl,
+            imageUrl,
+            language
+          })
+        ]
+      : []),
+    ...toStructuredDataArray(options.structuredData)
+  ];
 
   return {
     language,
@@ -237,6 +345,7 @@ export const resolveSeo = (options: ResolveSeoOptions) => {
     alternateUrlEn,
     imageUrl,
     type,
-    noIndex
+    noIndex,
+    jsonLd
   };
 };

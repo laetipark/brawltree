@@ -57,6 +57,9 @@
 .menuToggle {
   display: flex;
   padding: 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
 
   & > svg {
     cursor: pointer;
@@ -109,9 +112,9 @@
   font-family: "Main Bold", "N Medium", -apple-system, BlinkMacSystemFont, "Roboto", "Oxygen",
   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   column-gap: 2vw;
+  margin: 0;
   padding: 0 24px 0 0;
   overflow: hidden;
-  transition: min-height 0.3s ease;
 
   & > li {
     padding-left: 0;

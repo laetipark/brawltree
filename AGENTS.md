@@ -11,7 +11,7 @@ Use this file for agent work inside `service/`. Keep it short: this is a routing
 
 ## Entrypoint Boundary
 
-- Do not read parent workspace entrypoints for normal service-scoped work.
+- This file is the local entrypoint for `service/`.
 - Do not route generic agent work through `CLAUDE.md`; use this file and the service harness.
 
 ## Harness Contract

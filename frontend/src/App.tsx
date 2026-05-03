@@ -27,6 +27,7 @@ const loadingFallback = (
 const App = () => {
   const location = useLocation();
   const { contextValue, isLoaded } = useCdnShell(location.pathname);
+  const routePageKey = location.pathname;
 
   return (
     <CdnContext.Provider value={contextValue}>
@@ -36,22 +37,22 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainWrapper />} />
               <Route path="/en" element={<MainWrapper />} />
-              <Route path="/brawlian/:id" element={<UserWrapper />} />
-              <Route path="/en/brawlian/:id" element={<UserWrapper />} />
-              <Route path="/brawler/:name" element={<Brawlers />} />
-              <Route path="/en/brawler/:name" element={<Brawlers />} />
-              <Route path="/events/:mode" element={<Events />} />
-              <Route path="/en/events/:mode" element={<Events />} />
+              <Route path="/brawlian/:id" element={<UserWrapper key={routePageKey} />} />
+              <Route path="/en/brawlian/:id" element={<UserWrapper key={routePageKey} />} />
+              <Route path="/brawler/:name" element={<Brawlers key={routePageKey} />} />
+              <Route path="/en/brawler/:name" element={<Brawlers key={routePageKey} />} />
+              <Route path="/events/:mode" element={<Events key={routePageKey} />} />
+              <Route path="/en/events/:mode" element={<Events key={routePageKey} />} />
               <Route path="/maps" element={<MapSummary />} />
               <Route path="/en/maps" element={<MapSummary />} />
-              <Route path="/maps/:name" element={<MapDetail />} />
-              <Route path="/en/maps/:name" element={<MapDetail />} />
+              <Route path="/maps/:name" element={<MapDetail key={routePageKey} />} />
+              <Route path="/en/maps/:name" element={<MapDetail key={routePageKey} />} />
               <Route path="/crew" element={<CrewMembers />} />
               <Route path="/en/crew" element={<CrewMembers />} />
               <Route path="/news" element={<NewsWrapper />} />
               <Route path="/en/news" element={<NewsWrapper />} />
-              <Route path="/news/:title" element={<NewsListItem />} />
-              <Route path="/en/news/:title" element={<NewsListItem />} />
+              <Route path="/news/:title" element={<NewsListItem key={routePageKey} />} />
+              <Route path="/en/news/:title" element={<NewsListItem key={routePageKey} />} />
             </Routes>
           </Suspense>
         ) : (

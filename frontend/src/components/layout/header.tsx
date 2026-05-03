@@ -42,7 +42,7 @@ export const Header = ({ isCdnLoading = false }: HeaderProps) => {
   const [isToggled, setIsToggled] = useState(false);
   const menuId = 'header-menu-content';
   const logoLabel = 'Brawl Tree';
-  const logoAlt = locales.language === 'ko' ? '브롤트리 로고' : 'BrawlTree logo';
+  const logoAlt = locales.language === 'ko' ? '브롤트리 로고' : 'Brawl Tree logo';
 
   // 768px 이하에서는 메뉴를 토글로 보여주기
   const menuList = (

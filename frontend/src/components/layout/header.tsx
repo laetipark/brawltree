@@ -41,7 +41,7 @@ export const Header = ({ isCdnLoading = false }: HeaderProps) => {
   const toggleVisible = useMediaQuery({ maxWidth: 768 });
   const [isToggled, setIsToggled] = useState(false);
   const menuId = 'header-menu-content';
-  const logoLabel = locales.language === 'ko' ? '브롤트리' : 'BrawlTree';
+  const logoLabel = 'Brawl Tree';
   const logoAlt = locales.language === 'ko' ? '브롤트리 로고' : 'BrawlTree logo';
 
   // 768px 이하에서는 메뉴를 토글로 보여주기

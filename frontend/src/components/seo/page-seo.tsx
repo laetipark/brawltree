@@ -8,6 +8,26 @@ type PageSeoProps = ResolveSeoOptions;
 
 const PRERENDER_READY_EVENT = 'brawltree-prerender-ready';
 
+const ensureSingleDocumentTitle = (title: string) => {
+  const titleElements = Array.from(document.head.querySelectorAll('title'));
+
+  if (titleElements.length === 0) {
+    const titleElement = document.createElement('title');
+    titleElement.textContent = title;
+    document.head.appendChild(titleElement);
+    return;
+  }
+
+  const titleToKeep = [...titleElements].reverse().find((titleElement) => titleElement.textContent === title) || titleElements[titleElements.length - 1];
+  titleToKeep.textContent = title;
+
+  titleElements.forEach((titleElement) => {
+    if (titleElement !== titleToKeep) {
+      titleElement.remove();
+    }
+  });
+};
+
 export const PageSeo = ({ language = 'ko', seoLanguage, path, ...options }: PageSeoProps) => {
   const location = useLocation();
   const seo = useMemo(
@@ -45,6 +65,8 @@ export const PageSeo = ({ language = 'ko', seoLanguage, path, ...options }: Page
     document.querySelectorAll('script[data-brawltree-jsonld="true"]').forEach((script) => {
       script.remove();
     });
+
+    ensureSingleDocumentTitle(seo.title);
 
     const jsonLdScripts = jsonLdContent.map((content) => {
       const script = document.createElement('script');

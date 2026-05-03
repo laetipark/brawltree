@@ -88,15 +88,32 @@ describe('SeoService', () => {
 
   it('injects profile SEO into an existing SPA shell', async () => {
     const service = new SeoService({} as never);
-    const html = '<html lang="ko"><head><title>Old</title><meta name="description" content="Old"></head><body></body></html>';
+    const html = `
+      <html lang="ko">
+        <head>
+          <title>Old</title>
+          <meta name="description" content="Old">
+          <style type="text/css">:root, :host { --fa-font-solid: normal 900 1em/1 'Font Awesome 7 Free'; }.svg-inline--fa { height: 1em; }</style>
+          <script type="text/javascript" id="www-widgetapi-script" src="https://www.youtube.com/s/player/0980151a/www-widgetapi.vflset/www-widgetapi.js" async=""></script>
+          <script type="text/javascript" charset="utf8" async="" src="https://www.youtube.com/iframe_api"></script>
+        </head>
+        <body></body>
+      </html>
+    `;
     const seo = await service.buildBrawlianSeo('BAD!', 'en');
     const result = service.injectSeoIntoHtml(html, seo);
+    const titleTags = result.match(/<title\b[^>]*>[\s\S]*?<\/title>/gi) || [];
 
     expect(result).toContain('<html lang="en">');
-    expect(result).toContain('<title>Brawl Stars Player Stats | BrawlTree</title>');
+    expect(titleTags).toHaveLength(1);
+    expect(titleTags[0]).toBe('<title data-brawltree-prerender-seo="true" data-rh="true">Brawl Stars Player Stats | BrawlTree</title>');
     expect(result).toContain('name="robots" content="noindex, follow"');
     expect(result).toContain('rel="canonical" href="https://brawltree.me/en/brawlian/BAD!"');
     expect(result).not.toContain('<title>Old</title>');
+    expect(result).not.toContain('--fa-font-solid');
+    expect(result).not.toContain('.svg-inline--fa');
+    expect(result).not.toContain('www-widgetapi-script');
+    expect(result).not.toContain('youtube.com/iframe_api');
   });
 
   it('renders sitemap index, static URLs, and brawlian lastmod entries', async () => {

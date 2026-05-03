@@ -180,7 +180,11 @@ const stripSeoHead = (html: string) =>
     .replace(/<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '')
     .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, '')
     .replace(/<link\s+rel=["']alternate["'][^>]*>/gi, '')
-    .replace(/<script\s+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+    .replace(/<script\s+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<script\b[^>]*(?:www-widgetapi-script|youtube\.com\/iframe_api|\/iframe_api)[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, (styleTag) =>
+      /(?:--fa-font-solid|\.svg-inline--fa|Font Awesome [567])/i.test(styleTag) ? '' : styleTag
+    );
 
 const injectPrerenderSeo = (html: string, route: string) => {
   const { language, baseRoute } = getPrerenderRouteInfo(route);
@@ -217,7 +221,7 @@ const injectPrerenderSeo = (html: string, route: string) => {
     }
   ];
   const tags = [
-    `<title>${escapeHtml(seoTitle)}</title>`,
+    `<title data-brawltree-prerender-seo="true" data-rh="true">${escapeHtml(seoTitle)}</title>`,
     `<meta data-brawltree-prerender-seo="true" data-rh="true" name="description" content="${escapeHtml(seoDescription)}">`,
     `<meta data-brawltree-prerender-seo="true" data-rh="true" name="language" content="${language === 'ko' ? 'Korean' : 'English'}">`,
     '<meta data-brawltree-prerender-seo="true" data-rh="true" name="robots" content="index, follow">',

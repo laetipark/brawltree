@@ -115,7 +115,7 @@ export class SeoService {
 
   injectSeoIntoHtml(html: string, seo: BrawlianSeo) {
     const tags = [
-      `<title>${this.escapeHtml(seo.title)}</title>`,
+      `<title data-brawltree-prerender-seo="true" data-rh="true">${this.escapeHtml(seo.title)}</title>`,
       `<meta data-brawltree-prerender-seo="true" data-rh="true" name="description" content="${this.escapeHtml(seo.description)}">`,
       `<meta data-brawltree-prerender-seo="true" data-rh="true" name="language" content="${seo.htmlLang === 'ko' ? 'Korean' : 'English'}">`,
       `<meta data-brawltree-prerender-seo="true" data-rh="true" name="robots" content="${seo.robots}">`,
@@ -402,7 +402,11 @@ export class SeoService {
       .replace(/<meta\s+name=["']twitter:[^"']+["'][^>]*>/gi, '')
       .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, '')
       .replace(/<link\s+rel=["']alternate["'][^>]*>/gi, '')
-      .replace(/<script\s+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+      .replace(/<script\s+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<script\b[^>]*(?:www-widgetapi-script|youtube\.com\/iframe_api|\/iframe_api)[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, (styleTag) =>
+        /(?:--fa-font-solid|\.svg-inline--fa|Font Awesome [567])/i.test(styleTag) ? '' : styleTag
+      );
   }
 
   private escapeHtml(value: string) {

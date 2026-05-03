@@ -79,10 +79,10 @@ export const NewsSummaryContainer = () => {
           <div className={styles.youtubeColumn}>
             <div className={styles.youtubeStack} ref={youtubeStackRef}>
               <div className={styles.youtubeCard}>
-                <YouTube videoId={brawlTalk} opts={opts} />
+                {brawlTalk && <YouTube videoId={brawlTalk} opts={opts} />}
               </div>
               <div className={styles.youtubeCard}>
-                <YouTube videoId={communityEvent} opts={opts} />
+                {communityEvent && <YouTube videoId={communityEvent} opts={opts} />}
               </div>
             </div>
           </div>

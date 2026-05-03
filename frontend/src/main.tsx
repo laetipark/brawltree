@@ -9,6 +9,7 @@ import App from './App';
 import reportWebVitals from './report-web-vitals';
 import { i18n } from '~/common/i18n/i18n';
 
+import '~/common/styles/fonts.css';
 import '~/common/styles/index.css';
 
 const queryClient = new QueryClient({

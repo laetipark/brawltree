@@ -34,6 +34,13 @@
     color: var(--user-soft-ink, #4f657b);
   }
 
+  & .profileSummary {
+    margin: 4px 0 0;
+    color: var(--user-soft-ink, #4f657b);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
   & .statusBadge {
     display: inline-flex;
     align-items: center;

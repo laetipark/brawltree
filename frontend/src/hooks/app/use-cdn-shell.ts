@@ -4,6 +4,7 @@ import { CdnService } from '~/services/cdn.service';
 import { syncCdnBundleToI18n } from '~/common/i18n/cdn-resource-sync';
 import { SupportedLanguage } from '~/common/i18n/language';
 import { getInitialLanguage, persistLanguage } from '~/common/i18n/language-storage';
+import { getLanguageFromPath, toLanguagePath } from '~/common/i18n/language-route';
 import { i18n } from '~/common/i18n/i18n';
 
 type UseCdnShellResult = {
@@ -33,6 +34,14 @@ export const useCdnShell = (pathname: string): UseCdnShellResult => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
   const [cdnBundle, setCdnBundle] = useState<CdnBundle>(EMPTY_CDN_BUNDLE);
+
+  useEffect(() => {
+    const pathLanguage = getLanguageFromPath(pathname);
+
+    if (pathLanguage && pathLanguage !== language) {
+      setLanguage(pathLanguage);
+    }
+  }, [language, pathname]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -71,15 +80,12 @@ export const useCdnShell = (pathname: string): UseCdnShellResult => {
       return;
     }
 
-    const nextUrl = new URL(window.location.href);
-
-    if (language === 'ko') {
-      nextUrl.searchParams.delete('lang');
-    } else {
-      nextUrl.searchParams.set('lang', language);
-    }
-
-    const nextPath = `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+    const nextPath = toLanguagePath({
+      pathname: window.location.pathname,
+      search: window.location.search,
+      hash: window.location.hash,
+      language
+    });
     const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
     if (nextPath !== currentPath) {

@@ -7,6 +7,7 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { UserContext } from '~/context/user.context';
 import { UserBattlePlayersType } from '~/common/types/users.type';
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import config from '~/common/config/config';
 
@@ -125,7 +126,7 @@ export const UserBattleLogsItemBox = ({ battleInfo, battlePlayers }) => {
                   return (
                     <a
                       key={`${battleInfo.battleTime}_${index}_${playerID}`}
-                      href={`./${playerID.replace('#', '')}`}
+                      href={withLanguagePath(`/brawlian/${playerID.replace('#', '')}`, locales.language)}
                       onClick={() => {
                         setUser({
                           userID: '',

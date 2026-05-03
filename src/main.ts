@@ -4,6 +4,12 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { createHttpLoggingMiddleware } from '~/utils/logging';
 import { createPassThroughProxyMiddleware } from '~/utils/proxy.middleware';
+import { SeoService } from './features/seo/seo.service';
+import {
+  createBrawlianSeoMiddleware,
+  createCanonicalRedirectMiddleware,
+  createSitemapMiddleware
+} from './features/seo/seo.middleware';
 
 const proxyTargets = [
   {
@@ -22,8 +28,12 @@ const proxyTargets = [
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const seoService = app.get(SeoService);
 
   app.use(createHttpLoggingMiddleware());
+  app.use(createCanonicalRedirectMiddleware());
+  app.use(createSitemapMiddleware(seoService));
+  app.use(createBrawlianSeoMiddleware(seoService));
 
   proxyTargets.forEach(({ path, target }) => {
     app.use(

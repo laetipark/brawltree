@@ -40,14 +40,14 @@ export const UserProfileContainer = () => {
         <React.Fragment>
           <UserFriendsContent friendList={friendList} />
           <UserSeasonsContent seasonList={seasonList} />
+          <UserBattlesContent
+            setBattleStack={setBattleStack}
+            setBattlesLoaded={setBattlesLoaded}
+            battlesStackEnded={battlesStackEnded}
+            setBattlesStackEnded={setBattlesStackEnded}
+          />
         </React.Fragment>
       )}
-      <UserBattlesContent
-        setBattleStack={setBattleStack}
-        setBattlesLoaded={setBattlesLoaded}
-        battlesStackEnded={battlesStackEnded}
-        setBattlesStackEnded={setBattlesStackEnded}
-      />
     </div>
   ) : (
     <Spinner />

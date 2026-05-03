@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { BrawlerStatsType, BrawlerType } from '~/common/types/brawlers.type';
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 import { useWindowClick } from '~/hooks/use-window-click.hook';
 
 import styles from './brawler-stats.module.scss';
@@ -603,7 +604,7 @@ export const BrawlerStats = ({ brawler, stats, maps }: BrawlerStatsProps) => {
           const mapNameText = locales.map['map'][`${mapID}`] || mapName;
 
           return (
-            <a key={mapKey} className={`${styles.statsSummaryMapButton} ${isMapToolTipVisible ? styles.statsSummaryMapButtonActive : ''}`} href={`../maps/${mapID}`}>
+            <a key={mapKey} className={`${styles.statsSummaryMapButton} ${isMapToolTipVisible ? styles.statsSummaryMapButtonActive : ''}`} href={withLanguagePath(`/maps/${mapID}`, locales.language)}>
               <img src={`${config.assets}/modes/icon/${mode}.webp`} alt={mode} />
               <span className={styles.statsMapName}>{mapNameText}</span>
               <div

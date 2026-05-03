@@ -1,4 +1,5 @@
 import { DEFAULT_LANGUAGE, detectPreferredLanguage, normalizeLanguage, SupportedLanguage } from '~/common/i18n/language';
+import { getLanguageFromPath } from '~/common/i18n/language-route';
 
 const LANGUAGE_STORAGE_KEY = 'language';
 const LANGUAGE_COOKIE_KEY = 'brawltree_lang';
@@ -48,6 +49,11 @@ export const getStoredLanguage = (): SupportedLanguage | null => {
 export const getInitialLanguage = (): SupportedLanguage => {
   if (typeof window === 'undefined') {
     return DEFAULT_LANGUAGE;
+  }
+
+  const pathLanguage = getLanguageFromPath(window.location.pathname);
+  if (pathLanguage === 'en') {
+    return pathLanguage;
   }
 
   const storedLanguage = getStoredLanguage();

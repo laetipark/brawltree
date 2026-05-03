@@ -6,6 +6,7 @@ import { TrophyTomorrowEvents } from '~/components/events/list/trophy-next';
 import { RankedEvents } from '~/components/events/list/ranked';
 
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import styles from './event-menu.module.scss';
 
@@ -37,7 +38,7 @@ export const EventMenu = () => {
               onChange={(e) => {
                 const { target } = e;
                 setMenu(target.id);
-                navigate(`/events/${target.id}`);
+                navigate(withLanguagePath(`/events/${target.id}`, locales.language));
               }}
             />
             <label htmlFor={'curr'}>
@@ -54,7 +55,7 @@ export const EventMenu = () => {
               onChange={(e) => {
                 const { target } = e;
                 setMenu(target.id);
-                navigate(`/events/${target.id}`);
+                navigate(withLanguagePath(`/events/${target.id}`, locales.language));
               }}
             />
             <label htmlFor={'next'}>
@@ -71,7 +72,7 @@ export const EventMenu = () => {
               onChange={(e) => {
                 const { target } = e;
                 setMenu(target.id);
-                navigate(`/events/${target.id}`);
+                navigate(withLanguagePath(`/events/${target.id}`, locales.language));
               }}
             />
             <label htmlFor={'ranked'}>

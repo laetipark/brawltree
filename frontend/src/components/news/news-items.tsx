@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { NewsService } from '~/services/news.service';
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import styles from '~/assets/styles/components/news/news-items.module.scss';
 
@@ -41,7 +42,7 @@ export const NewsItemsContent = ({ layout = 'compact' }: NewsItemsContentProps) 
         let isExternal = false;
 
         if (item.type === 'newsEntry') {
-          url = `/news/${transformString(item.title)}`;
+          url = withLanguagePath(`/news/${transformString(item.title)}`, locales.language);
         } else if (item.type === 'externalNewsEntry') {
           url = item.url;
           isExternal = true;

@@ -6,6 +6,7 @@ import { useInterval } from '~/hooks/use-interval.hook';
 import { RotationType } from '~/common/types/maps.type';
 
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import config from '~/common/config/config';
 import styles from '~/assets/styles/components/maps/event-summary/event-summary0item.module.scss';
@@ -255,7 +256,7 @@ export const EventItemContent = ({
 
   return (
     <React.Fragment>
-      <a key={event.mapID} className={styles.mapItemBox} href={`../maps/${event.mapName}${isRanked ? '?type=ranked' : ''}`}>
+      <a key={event.mapID} className={styles.mapItemBox} href={`${withLanguagePath(`/maps/${event.mapName}`, locales.language)}${isRanked ? '?type=ranked' : ''}`}>
         <img src={`${config.assets}/modes/icon/${event.mode}.webp`} alt={event.mode} />
         <div>
           <div className={styles.eventInfoBox}>

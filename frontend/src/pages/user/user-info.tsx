@@ -18,6 +18,9 @@ export const UserInfoContainer = () => {
   const shouldDisplayStatusBadge = isCrew || isVerified;
   const statusLabel = isCrew ? locales.user?.title?.crewBadge || 'Crew' : isVerified ? locales.user?.title?.officialApiBadge || 'Official API' : null;
   const statusClassName = isCrew ? styles.crewBadge : styles.officialBadge;
+  const profileSummary = locales.language === 'ko'
+    ? '브롤스타즈 전적, 트로피, 랭크, 브롤러 통계와 최근 배틀 로그'
+    : 'Brawl Stars stats, trophies, ranked stats, brawler stats, and recent battle logs';
 
   return (
     <div className={styles.userInfoContainer}>
@@ -26,6 +29,7 @@ export const UserInfoContainer = () => {
         <h1 className={styles.realName}>
           {`${user.userName}`} <span className={styles.userTag}>{user.userID}</span>
         </h1>
+        <p className={styles.profileSummary}>{profileSummary}</p>
         {shouldDisplayStatusBadge && statusLabel && <div className={`${styles.statusBadge} ${statusClassName}`}>{statusLabel}</div>}
         <div className={styles.crewName}>
           <span>{`${user.crew || ''}`}</span>

@@ -9,6 +9,7 @@ import { SearchHistoryBox } from '~/components/search/search-history-box/search-
 import { CdnContext } from '~/context/cdn.context';
 import { SearchContext } from '~/context/search.context';
 import { debounce } from '~/utils/debounce';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import styles from '~/assets/styles/pages/main/search-user.module.scss';
 
@@ -28,6 +29,7 @@ export const SearchUserContainer = () => {
   });
 
   const { searchHistory, setSearchHistory } = searchContext;
+  const searchTitle = locales.language === 'ko' ? '브롤스타즈 플레이어 검색' : 'Brawl Stars Player Search';
 
   /** Function related to searching by nickname OR user tag */
   const handleChangeInputValue = useMemo(
@@ -86,14 +88,14 @@ export const SearchUserContainer = () => {
 
   return (
     <div className={styles.searchUserContainer}>
-      <h2>{locales.main['searchProfile'] || 'searchProfile'}</h2>
+      <h2>{searchTitle}</h2>
       <form
         className={styles.searchForm}
         onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
           const userTag = String(formData.get('search') || '').toUpperCase();
-          navigate(`/brawlian/${userTag}`);
+          navigate(withLanguagePath(`/brawlian/${userTag}`, locales.language));
         }}
         >
         <SearchUserInputBox onChangeInput={handleChangeInput} onToggleHelp={() => setToggle((prev) => !prev)} helpOpen={toggle} />

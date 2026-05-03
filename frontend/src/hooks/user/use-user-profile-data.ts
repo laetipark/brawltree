@@ -13,13 +13,14 @@ const PROFILE_RETRY_LIMIT = 3;
 const PROFILE_RETRY_DELAY_MS = 1000;
 
 /**
- * 사용자 상세 페이지의 프로필, 크루 정보, 배틀 통계를 로드합니다.
+ * 사용자 상세 페이지의 프로필과 크루 전용 부가 정보를 로드합니다.
  *
- * 프로필은 제한된 재시도로 안정화하고, 배틀 통계는 타입/모드/스택 변경에 맞춰
- * 다시 조회해 컨텍스트 상태를 한 곳에서 갱신합니다.
+ * 프로필은 제한된 재시도로 안정화하고, 크루 전용 정보와 배틀 통계는
+ * 크루 사용자에게만 조회해 컨텍스트 상태를 한 곳에서 갱신합니다.
  */
 export const useUserProfileData = (userContext: UserContextType, userProfileContext: UserProfileContextType, setBattlesStackEnded: Dispatch<SetStateAction<boolean>>) => {
   const { id, user, retryProfileCount, setRetryProfileCount, profileLoaded, setProfileLoaded, battlesLoaded, setBattlesLoaded } = userContext;
+  const isCrewMember = Boolean(user.isCrew);
   const {
     type,
     mode,
@@ -62,18 +63,24 @@ export const useUserProfileData = (userContext: UserContextType, userProfileCont
 
         setProfile(data.profile);
 
-        const isCrewMember = Boolean(user.isCrew);
         setIsCrew(isCrewMember);
-        if (isCrewMember) {
-          const crewData = await UserService.getCrewMemberDetail({ id });
-          if (!isActive) {
-            return;
-          }
-
-          setFriendList(crewData.friendList);
-          setSeasonList(crewData.seasonList);
+        if (!isCrewMember) {
+          setFriendList({
+            friends: [],
+            friendsUpdatedAt: undefined
+          });
+          setSeasonList([]);
+          setProfileLoaded(true);
+          return;
         }
 
+        const crewData = await UserService.getCrewMemberDetail({ id });
+        if (!isActive) {
+          return;
+        }
+
+        setFriendList(crewData.friendList);
+        setSeasonList(crewData.seasonList);
         setProfileLoaded(true);
       } catch (error) {
         if (isActive) {
@@ -97,17 +104,21 @@ export const useUserProfileData = (userContext: UserContextType, userProfileCont
         window.clearTimeout(timeoutID);
       }
     };
-  }, [id, profileLoaded, retryProfileCount, setFriendList, setIsCrew, setProfile, setProfileLoaded, setRetryProfileCount, setSeasonList, user.isCrew]);
+  }, [id, isCrewMember, profileLoaded, retryProfileCount, setFriendList, setIsCrew, setProfile, setProfileLoaded, setRetryProfileCount, setSeasonList]);
 
   useEffect(() => {
+    if (!isCrewMember) {
+      return;
+    }
+
     // 타입/모드가 바뀌면 무한 스크롤 커서와 로딩 완료 상태를 초기화한다.
     setBattlesLoaded(false);
     setBattleStack(1);
     setBattlesStackEnded(false);
-  }, [mode, setBattleStack, setBattlesLoaded, setBattlesStackEnded, type]);
+  }, [isCrewMember, mode, setBattleStack, setBattlesLoaded, setBattlesStackEnded, type]);
 
   useEffect(() => {
-    if (battlesLoaded) {
+    if (!isCrewMember || battlesLoaded) {
       return;
     }
 
@@ -143,5 +154,5 @@ export const useUserProfileData = (userContext: UserContextType, userProfileCont
     return () => {
       isActive = false;
     };
-  }, [battleStack, battlesLoaded, id, mode, setBattles, setBattlesLoaded, setCurrentSeason, setDailyBrawlers, setModePL, setModeTL, setRecentBattles, setRecentBrawlers, setSummaryBattles, type]);
+  }, [battleStack, battlesLoaded, id, isCrewMember, mode, setBattles, setBattlesLoaded, setCurrentSeason, setDailyBrawlers, setModePL, setModeTL, setRecentBattles, setRecentBrawlers, setSummaryBattles, type]);
 };

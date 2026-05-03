@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import config from '~/common/config/config';
+import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import styles from './search-item.module.scss';
 
 const roman = ['I', 'II', 'III'];
 
 export const SearchItem = ({ user, onAddSearchHistory, onRemoveSearchItem }) => {
+  const locales = useContext(CdnContext);
+  const userTag = user.userID.replace('#', '');
+  const linkLabel = locales.language === 'ko'
+    ? `${user.userName} ${user.userID} 브롤스타즈 전적`
+    : `${user.userName} ${user.userID} Brawl Stars stats`;
+
   return (
     <li key={user.userID} value={user.userName}>
       <a
         className={styles.searchItemWrapper}
-        href={`/brawlian/${user.userID.replace('#', '')}`}
+        href={withLanguagePath(`/brawlian/${userTag}`, locales.language)}
+        aria-label={linkLabel}
         onClick={() => {
-          onAddSearchHistory(user.userID);
+          onAddSearchHistory?.(user.userID);
         }}
       >
         <img className={styles.image} src={`${config.assets}/brawlian/profile/${user.profileIcon}.webp`} alt={user.profileIcon} />

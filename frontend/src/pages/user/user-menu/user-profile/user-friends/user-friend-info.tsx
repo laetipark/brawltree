@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { UserFriendInfoItemBox } from '~/pages/user/user-menu/user-profile/user-friends/user-friend-info-item';
 import { UserFriendType } from '~/common/types/users.type';
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import config from '~/common/config/config';
 import styles from '~/assets/styles/pages/user/user-menu/user-profile/user-friends/user-friend-info.module.scss';
@@ -15,7 +16,7 @@ export const UserFriendInfoBox = ({ friend }: { friend: UserFriendType }) => {
   };
 
   return (
-    <a key={friend.friendID} href={`../brawlian/${friend.friendID.replace('#', '')}`} className={styles.friendInfoBox}>
+    <a key={friend.friendID} href={withLanguagePath(`/brawlian/${friend.friendID.replace('#', '')}`, locales.language)} className={styles.friendInfoBox}>
       <div className={styles.friendSummaryBox} onMouseLeave={() => setIsDetailVisible(false)}>
         <img src={`${config.assets}/brawlian/profile/${friend.profileIcon}.webp`} alt={friend.profileIcon} />
         <div>

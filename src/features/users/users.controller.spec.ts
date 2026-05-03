@@ -10,7 +10,8 @@ describe('UsersController', () => {
     selectUser: jest.fn(),
     updateUserFromCrawler: jest.fn(),
     selectUsersByKeyword: jest.fn(),
-    selectUsersByUserIDs: jest.fn()
+    selectUsersByUserIDs: jest.fn(),
+    selectFeaturedUsers: jest.fn()
   };
   const userProfileService = {
     selectUserProfile: jest.fn()
@@ -65,6 +66,14 @@ describe('UsersController', () => {
       'all',
       2
     );
+  });
+
+  it('delegates featured user limit before the dynamic user route can match it', async () => {
+    usersService.selectFeaturedUsers.mockResolvedValue([]);
+
+    await expect(controller.selectFeaturedUsers('8')).resolves.toEqual([]);
+    expect(usersService.selectFeaturedUsers).toHaveBeenCalledWith(8);
+    expect(usersService.selectUser).not.toHaveBeenCalledWith('featured');
   });
 
   it('throws a stable not found exception when crawler refresh cannot recover the user', async () => {

@@ -35,14 +35,23 @@ const App = () => {
           <Suspense fallback={loadingFallback}>
             <Routes>
               <Route path="/" element={<MainWrapper />} />
+              <Route path="/en" element={<MainWrapper />} />
               <Route path="/brawlian/:id" element={<UserWrapper />} />
+              <Route path="/en/brawlian/:id" element={<UserWrapper />} />
               <Route path="/brawler/:name" element={<Brawlers />} />
+              <Route path="/en/brawler/:name" element={<Brawlers />} />
               <Route path="/events/:mode" element={<Events />} />
+              <Route path="/en/events/:mode" element={<Events />} />
               <Route path="/maps" element={<MapSummary />} />
+              <Route path="/en/maps" element={<MapSummary />} />
               <Route path="/maps/:name" element={<MapDetail />} />
+              <Route path="/en/maps/:name" element={<MapDetail />} />
               <Route path="/crew" element={<CrewMembers />} />
+              <Route path="/en/crew" element={<CrewMembers />} />
               <Route path="/news" element={<NewsWrapper />} />
+              <Route path="/en/news" element={<NewsWrapper />} />
               <Route path="/news/:title" element={<NewsListItem />} />
+              <Route path="/en/news/:title" element={<NewsListItem />} />
             </Routes>
           </Suspense>
         ) : (

@@ -2,9 +2,11 @@
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComputer, faGamepad, faTasks } from '@fortawesome/free-solid-svg-icons';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useWindowClick } from '~/hooks/use-window-click.hook';
 import { CdnContext } from '~/context/cdn.context';
 import { SupportedLanguage } from '~/common/i18n/language';
+import { toLanguagePath } from '~/common/i18n/language-route';
 import { useCdnTranslation } from '~/common/i18n/use-cdn-translation';
 
 import styles from '~/assets/styles/components/layout/footer.module.scss';
@@ -27,6 +29,8 @@ const FOOTER_FALLBACK: Record<SupportedLanguage, { openSource: string; devNote: 
 export const Footer = () => {
   const locales = useContext(CdnContext);
   const { t } = useCdnTranslation('application');
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const dropDownRef = useRef<HTMLDivElement | null>(null);
   const [isLanguageMenuOpen, setLanguageMenuOpen] = useWindowClick(dropDownRef, false);
@@ -34,6 +38,15 @@ export const Footer = () => {
   const footerFallback = FOOTER_FALLBACK[locales.language || 'ko'];
 
   const changeLanguage = (lang: SupportedLanguage) => {
+    navigate(
+      toLanguagePath({
+        pathname: location.pathname,
+        search: location.search,
+        hash: location.hash,
+        language: lang
+      }),
+      { replace: true }
+    );
     locales.setLanguage(lang);
     setLanguageMenuOpen(false);
   };

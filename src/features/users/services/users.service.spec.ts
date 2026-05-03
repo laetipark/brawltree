@@ -18,6 +18,60 @@ describe('UsersService', () => {
     expect(repository.createQueryBuilder).not.toHaveBeenCalled();
   });
 
+  it('clamps featured user limits before querying recent profiles', async () => {
+    const builder = {
+      select: jest.fn(),
+      addSelect: jest.fn(),
+      innerJoin: jest.fn(),
+      orderBy: jest.fn(),
+      addOrderBy: jest.fn(),
+      limit: jest.fn(),
+      getRawMany: jest.fn()
+    };
+
+    Object.values(builder).forEach((method) => {
+      if (method !== builder.getRawMany) {
+        method.mockReturnValue(builder);
+      }
+    });
+    builder.getRawMany.mockResolvedValue([]);
+
+    const repository = {
+      createQueryBuilder: jest.fn().mockReturnValue(builder)
+    };
+    const service = new UsersService(repository as never, {} as never);
+
+    await expect(service.selectFeaturedUsers(999)).resolves.toEqual([]);
+    expect(builder.limit).toHaveBeenCalledWith(24);
+  });
+
+  it('uses the default featured user limit when the requested limit is not finite', async () => {
+    const builder = {
+      select: jest.fn(),
+      addSelect: jest.fn(),
+      innerJoin: jest.fn(),
+      orderBy: jest.fn(),
+      addOrderBy: jest.fn(),
+      limit: jest.fn(),
+      getRawMany: jest.fn()
+    };
+
+    Object.values(builder).forEach((method) => {
+      if (method !== builder.getRawMany) {
+        method.mockReturnValue(builder);
+      }
+    });
+    builder.getRawMany.mockResolvedValue([]);
+
+    const repository = {
+      createQueryBuilder: jest.fn().mockReturnValue(builder)
+    };
+    const service = new UsersService(repository as never, {} as never);
+
+    await expect(service.selectFeaturedUsers(Number.NaN)).resolves.toEqual([]);
+    expect(builder.limit).toHaveBeenCalledWith(12);
+  });
+
   it('marks crawler refresh as unavailable for connection refused errors and logs a sanitized message', async () => {
     const builder = {
       select: jest.fn(),

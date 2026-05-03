@@ -13,6 +13,7 @@ import AppConfig from './configs/app.config';
 import DatabaseConfig from './configs/database.config';
 import { RankingsModule } from './features/rankings/rankings.module';
 import { NewsModule } from './features/news/news.module';
+import { SeoModule } from './features/seo/seo.module';
 import { SystemErrorLogsModule } from './features/system-error-logs';
 import { HttpErrorLoggingInterceptor } from '~/utils/logging';
 
@@ -25,7 +26,7 @@ import { HttpErrorLoggingInterceptor } from '~/utils/logging';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'frontend', 'dist'),
-      exclude: ['/api{/*path}', '/cdn{/*path}', '/youtube{/*path}', '/inbox{/*path}']
+      exclude: ['/api{/*path}', '/cdn{/*path}', '/youtube{/*path}', '/inbox{/*path}', '/brawlian{/*path}', '/en/brawlian{/*path}', '/sitemap.xml', '/sitemaps{/*path}']
     }),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfig
@@ -36,6 +37,7 @@ import { HttpErrorLoggingInterceptor } from '~/utils/logging';
     CrewModule,
     RankingsModule,
     NewsModule,
+    SeoModule,
     SystemErrorLogsModule,
     UtilsModule
   ],

@@ -1,4 +1,5 @@
 import { normalizeLanguage, SupportedLanguage, toOgLocale } from '~/common/i18n/language';
+import { stripLanguagePrefix, withLanguagePath } from '~/common/i18n/language-route';
 
 export type SeoPageKey = 'home' | 'user' | 'brawler' | 'events' | 'maps' | 'mapDetail' | 'crew' | 'news' | 'newsDetail';
 export type OpenGraphType = 'website' | 'article';
@@ -35,7 +36,11 @@ export interface ResolveSeoOptions {
 }
 
 const SITE_NAME: LocalizedText = {
-  ko: '브롤 트리',
+  ko: '브롤트리',
+  en: 'BrawlTree'
+};
+const BREADCRUMB_SITE_NAME: LocalizedText = {
+  ko: '브롤트리',
   en: 'Brawl Tree'
 };
 const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://brawltree.me').replace(/\/+$/, '');
@@ -43,22 +48,22 @@ const DEFAULT_IMAGE = '/thumbnail.png';
 const DEFAULT_TYPE: OpenGraphType = 'website';
 
 const DEFAULT_KEYWORDS: LocalizedKeywords = {
-  ko: ['브롤스타즈', '브롤 트리', '브롤스타즈 전적', '브롤러 통계', '맵 통계', '배틀 로그'],
-  en: ['brawl stars', 'brawl tree', 'brawl stars stats', 'brawler stats', 'map stats', 'battle log']
+  ko: ['브롤스타즈', '브롤트리', '브롤스타즈 전적', '브롤러 통계', '맵 통계', '배틀 로그'],
+  en: ['brawl stars', 'BrawlTree', 'brawl stars stats', 'brawler stats', 'map stats', 'battle log']
 };
 
 export const PAGE_SEO_CONFIG: Record<SeoPageKey, SeoPageConfig> = {
   home: {
     title: {
-      ko: '브롤스타즈 전적 검색과 맵 분석',
+      ko: '브롤스타즈 전적 검색·닉네임 검색·통계',
       en: 'Brawl Stars Stats and Map Insights'
     },
     description: {
-      ko: '브롤스타즈 프로필, 브롤러 성능, 맵 승률, 이벤트 로테이션을 한 곳에서 확인하세요.',
+      ko: '브롤트리에서 플레이어 태그와 닉네임으로 브롤스타즈 전적, 최근 배틀 로그, 트로피 변화, 브롤러 통계를 확인하세요.',
       en: 'Track Brawl Stars profiles, brawler performance, map win rates, and event rotation in one place.'
     },
     keywords: {
-      ko: ['브롤스타즈 프로필', '브롤스타즈 맵', '브롤스타즈 이벤트', '브롤러 통계'],
+      ko: ['브롤스타즈 전적 검색', '브롤스타즈 닉네임 검색', '브롤스타즈 통계', '브롤 전적'],
       en: ['brawl stars profile', 'brawl stars map', 'brawl stars event', 'brawler stats']
     }
   },
@@ -185,18 +190,8 @@ const normalizePath = (path: string) => {
   return path.startsWith('/') ? path : `/${path}`;
 };
 
-const withLanguageQuery = (path: string, language: SupportedLanguage) => {
-  const separator = path.includes('?') ? '&' : '?';
-
-  if (language === 'ko') {
-    return path;
-  }
-
-  return `${path}${separator}lang=${language}`;
-};
-
 const toCanonicalUrl = (path: string, language: SupportedLanguage) => {
-  return `${SITE_URL}${withLanguageQuery(normalizePath(path), language)}`;
+  return `${SITE_URL}${withLanguagePath(normalizePath(path), language)}`;
 };
 
 const toAbsoluteUrl = (value: string) => {
@@ -291,18 +286,18 @@ export const resolveSeo = (options: ResolveSeoOptions) => {
   const description = options.description || base.description[language];
   const keywords = (options.keywords && options.keywords.length > 0 ? options.keywords : base.keywords[language].concat(DEFAULT_KEYWORDS[language])).join(', ');
 
-  const normalizedPath = normalizePath(options.path || '/');
-  const canonicalPath = withLanguageQuery(normalizedPath, language);
+  const normalizedPath = stripLanguagePrefix(normalizePath(options.path || '/'));
+  const canonicalPath = withLanguagePath(normalizedPath, language);
   const canonicalUrl = `${SITE_URL}${canonicalPath}`;
-  const alternateUrlKo = `${SITE_URL}${withLanguageQuery(normalizedPath, 'ko')}`;
-  const alternateUrlEn = `${SITE_URL}${withLanguageQuery(normalizedPath, 'en')}`;
+  const alternateUrlKo = `${SITE_URL}${withLanguagePath(normalizedPath, 'ko')}`;
+  const alternateUrlEn = `${SITE_URL}${withLanguagePath(normalizedPath, 'en')}`;
   const imageUrl = toAbsoluteUrl(options.image || DEFAULT_IMAGE);
   const type = options.type || base.type || DEFAULT_TYPE;
   const noIndex = Boolean(options.noIndex);
   const pageLabel = stripSiteName(title, language);
   const breadcrumbItems = options.breadcrumbItems || [
     {
-      name: SITE_NAME[language],
+      name: BREADCRUMB_SITE_NAME[language],
       path: '/'
     },
     {

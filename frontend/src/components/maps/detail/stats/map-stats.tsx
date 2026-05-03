@@ -4,6 +4,7 @@ import { MapBrawlerStatsType } from '~/services/map.service';
 import { CdnContext } from '~/context/cdn.context';
 
 import config from '~/common/config/config';
+import { withLanguagePath } from '~/common/i18n/language-route';
 import { toBrawlerRouteName } from '~/utils/brawler-route';
 
 import styles from './map-stats.module.scss';
@@ -15,7 +16,7 @@ const MapStats = ({ brawlers }: { brawlers: MapBrawlerStatsType[] }) => {
     <div className={styles.brawlerStatsWrapper}>
       {brawlers?.map(({ brawlerID, brawlerName, pickRate, victoryRate }) => {
         return (
-          <a key={`${brawlerID}`} className={styles.brawlerStatsItem} href={`../brawler/${toBrawlerRouteName(brawlerName)}`}>
+          <a key={`${brawlerID}`} className={styles.brawlerStatsItem} href={withLanguagePath(`/brawler/${toBrawlerRouteName(brawlerName)}`, locales.language)}>
             <div className={styles.brawlerTitle}>
               <img src={`${config.assets}/brawlers/pins/${brawlerID}.webp`} alt={'brawler_pin'} />
               <div>{locales.brawler['brawler'][`${brawlerName}`]}</div>

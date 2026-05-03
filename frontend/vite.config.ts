@@ -5,47 +5,128 @@ import prerender from '@prerenderer/rollup-plugin';
 import { resolve } from 'path';
 
 const siteUrl = 'https://brawltree.me';
+const siteName = {
+  ko: '브롤트리',
+  en: 'BrawlTree'
+} as const;
+const breadcrumbSiteName = {
+  ko: '브롤트리',
+  en: 'Brawl Tree'
+} as const;
+type SupportedLanguage = keyof typeof siteName;
 
 const prerenderSeoByRoute = {
   '/': {
-    title: '브롤스타즈 전적 검색과 맵 분석 | 브롤 트리',
-    label: '브롤스타즈 전적 검색과 맵 분석',
-    description: '브롤스타즈 프로필, 브롤러 성능, 맵 승률, 이벤트 로테이션을 한 곳에서 확인하세요.'
+    title: {
+      ko: '브롤스타즈 전적 검색·닉네임 검색·통계 | 브롤트리',
+      en: 'Brawl Stars Stats and Player Search | BrawlTree'
+    },
+    label: {
+      ko: '브롤스타즈 전적 검색·닉네임 검색·통계',
+      en: 'Brawl Stars Stats and Player Search'
+    },
+    description: {
+      ko: '브롤트리에서 플레이어 태그와 닉네임으로 브롤스타즈 전적, 최근 배틀 로그, 트로피 변화, 브롤러 통계를 확인하세요.',
+      en: 'Search Brawl Stars players by tag or nickname and check trophies, battle logs, brawler stats, and map recommendations.'
+    }
   },
   '/events/curr': {
-    title: '현재 이벤트 로테이션 | 브롤 트리',
-    label: '현재 이벤트 로테이션',
-    description: '현재 브롤스타즈 이벤트 로테이션과 맵 풀을 확인하세요.'
+    title: {
+      ko: '현재 이벤트 로테이션 | 브롤트리',
+      en: 'Current Event Rotation | BrawlTree'
+    },
+    label: {
+      ko: '현재 이벤트 로테이션',
+      en: 'Current Event Rotation'
+    },
+    description: {
+      ko: '현재 브롤스타즈 이벤트 로테이션과 맵 풀을 확인하세요.',
+      en: 'Check the current Brawl Stars event rotation and map pool.'
+    }
   },
   '/events/next': {
-    title: '예정 이벤트 로테이션 | 브롤 트리',
-    label: '예정 이벤트 로테이션',
-    description: '예정 브롤스타즈 이벤트 로테이션과 맵 풀을 확인하세요.'
+    title: {
+      ko: '예정 이벤트 로테이션 | 브롤트리',
+      en: 'Upcoming Event Rotation | BrawlTree'
+    },
+    label: {
+      ko: '예정 이벤트 로테이션',
+      en: 'Upcoming Event Rotation'
+    },
+    description: {
+      ko: '예정 브롤스타즈 이벤트 로테이션과 맵 풀을 확인하세요.',
+      en: 'Check upcoming Brawl Stars event rotations and map pools.'
+    }
   },
   '/events/ranked': {
-    title: '랭크 이벤트 로테이션 | 브롤 트리',
-    label: '랭크 이벤트 로테이션',
-    description: '랭크 브롤스타즈 이벤트 로테이션과 맵 풀을 확인하세요.'
+    title: {
+      ko: '랭크 이벤트 로테이션 | 브롤트리',
+      en: 'Ranked Event Rotation | BrawlTree'
+    },
+    label: {
+      ko: '랭크 이벤트 로테이션',
+      en: 'Ranked Event Rotation'
+    },
+    description: {
+      ko: '랭크 브롤스타즈 이벤트 로테이션과 맵 풀을 확인하세요.',
+      en: 'Check ranked Brawl Stars event rotations and map pools.'
+    }
   },
   '/maps': {
-    title: '맵 로테이션과 필터 | 브롤 트리',
-    label: '맵 로테이션과 필터',
-    description: '모드별 맵을 검색하고 맵별 브롤러 성능을 분석하세요.'
+    title: {
+      ko: '맵 로테이션과 필터 | 브롤트리',
+      en: 'Map Rotation and Filters | BrawlTree'
+    },
+    label: {
+      ko: '맵 로테이션과 필터',
+      en: 'Map Rotation and Filters'
+    },
+    description: {
+      ko: '모드별 맵을 검색하고 맵별 브롤러 성능을 분석하세요.',
+      en: 'Search maps by mode and analyze brawler performance by map.'
+    }
   },
   '/crew': {
-    title: '크루 멤버 현황 | 브롤 트리',
-    label: '크루 멤버 현황',
-    description: '크루 멤버 프로필과 성장 현황을 한 번에 확인하세요.'
+    title: {
+      ko: '크루 멤버 현황 | 브롤트리',
+      en: 'Crew Member Overview | BrawlTree'
+    },
+    label: {
+      ko: '크루 멤버 현황',
+      en: 'Crew Member Overview'
+    },
+    description: {
+      ko: '크루 멤버 프로필과 성장 현황을 한 번에 확인하세요.',
+      en: 'Browse crew member profiles and compare player progression.'
+    }
   },
   '/news': {
-    title: '브롤스타즈 뉴스 | 브롤 트리',
-    label: '브롤스타즈 뉴스',
-    description: '최신 브롤스타즈 업데이트, 패치 노트, 공식 공지를 확인하세요.'
+    title: {
+      ko: '브롤스타즈 뉴스 | 브롤트리',
+      en: 'Brawl Stars News | BrawlTree'
+    },
+    label: {
+      ko: '브롤스타즈 뉴스',
+      en: 'Brawl Stars News'
+    },
+    description: {
+      ko: '최신 브롤스타즈 업데이트, 패치 노트, 공식 공지를 확인하세요.',
+      en: 'Read the latest Brawl Stars updates, patch notes, and official announcements.'
+    }
   },
   '/brawler/shelly': {
-    title: '쉘리 브롤러 통계와 빌드 | 브롤 트리',
-    label: '쉘리 브롤러 통계와 빌드',
-    description: '쉘리 성능, 추천 맵, 가젯과 스타파워 조합을 확인하세요.'
+    title: {
+      ko: '쉘리 브롤러 통계와 빌드 | 브롤트리',
+      en: 'Shelly Brawler Stats and Build | BrawlTree'
+    },
+    label: {
+      ko: '쉘리 브롤러 통계와 빌드',
+      en: 'Shelly Brawler Stats and Build'
+    },
+    description: {
+      ko: '쉘리 성능, 추천 맵, 가젯과 스타파워 조합을 확인하세요.',
+      en: 'Check Shelly performance, recommended maps, gadgets, and Star Power builds.'
+    }
   }
 } as const;
 
@@ -56,16 +137,37 @@ const escapeHtml = (value: string) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-const withLanguageQuery = (path: string, language: 'ko' | 'en') => {
-  if (language === 'ko') {
-    return path;
+const stripLanguagePrefix = (path: string) => {
+  if (path === '/en') {
+    return '/';
   }
 
-  return `${path}${path.includes('?') ? '&' : '?'}lang=${language}`;
+  if (path.startsWith('/en/')) {
+    return path.slice('/en'.length) || '/';
+  }
+
+  return path;
 };
 
-const toAbsoluteUrl = (path: string, language: 'ko' | 'en' = 'ko') => {
-  return `${siteUrl}${withLanguageQuery(path, language)}`;
+const withLanguagePath = (path: string, language: SupportedLanguage) => {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  const basePath = stripLanguagePrefix(normalizedPath);
+
+  return language === 'en' ? (basePath === '/' ? '/en' : `/en${basePath}`) : basePath;
+};
+
+const toAbsoluteUrl = (path: string, language: SupportedLanguage = 'ko') => {
+  return `${siteUrl}${withLanguagePath(path, language)}`;
+};
+
+const getPrerenderRouteInfo = (route: string) => {
+  const language: SupportedLanguage = route === '/en' || route.startsWith('/en/') ? 'en' : 'ko';
+  const baseRoute = stripLanguagePrefix(route) as keyof typeof prerenderSeoByRoute;
+
+  return {
+    language,
+    baseRoute
+  };
 };
 
 const stripSeoHead = (html: string) =>
@@ -80,16 +182,20 @@ const stripSeoHead = (html: string) =>
     .replace(/<link\s+rel=["']alternate["'][^>]*>/gi, '')
     .replace(/<script\s+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
 
-const injectPrerenderSeo = (html: string, route: keyof typeof prerenderSeoByRoute) => {
-  const seo = prerenderSeoByRoute[route];
-  const canonicalUrl = toAbsoluteUrl(route);
+const injectPrerenderSeo = (html: string, route: string) => {
+  const { language, baseRoute } = getPrerenderRouteInfo(route);
+  const seo = prerenderSeoByRoute[baseRoute];
+  const canonicalUrl = toAbsoluteUrl(baseRoute, language);
+  const seoTitle = seo.title[language];
+  const seoLabel = seo.label[language];
+  const seoDescription = seo.description[language];
   const jsonLd = [
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: '브롤 트리',
+      name: siteName[language],
       url: siteUrl,
-      inLanguage: 'ko'
+      inLanguage: language
     },
     {
       '@context': 'https://schema.org',
@@ -98,44 +204,44 @@ const injectPrerenderSeo = (html: string, route: keyof typeof prerenderSeoByRout
         {
           '@type': 'ListItem',
           position: 1,
-          name: '브롤 트리',
-          item: `${siteUrl}/`
+          name: breadcrumbSiteName[language],
+          item: toAbsoluteUrl('/', language)
         },
         {
           '@type': 'ListItem',
           position: 2,
-          name: seo.label,
+          name: seoLabel,
           item: canonicalUrl
         }
       ]
     }
   ];
   const tags = [
-    `<title>${escapeHtml(seo.title)}</title>`,
-    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="description" content="${escapeHtml(seo.description)}">`,
-    '<meta data-brawltree-prerender-seo="true" data-rh="true" name="language" content="Korean">',
+    `<title>${escapeHtml(seoTitle)}</title>`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="description" content="${escapeHtml(seoDescription)}">`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="language" content="${language === 'ko' ? 'Korean' : 'English'}">`,
     '<meta data-brawltree-prerender-seo="true" data-rh="true" name="robots" content="index, follow">',
-    '<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:site_name" content="브롤 트리">',
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:site_name" content="${escapeHtml(siteName[language])}">`,
     '<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:type" content="website">',
-    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:title" content="${escapeHtml(seo.title)}">`,
-    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:description" content="${escapeHtml(seo.description)}">`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:title" content="${escapeHtml(seoTitle)}">`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:description" content="${escapeHtml(seoDescription)}">`,
     `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:url" content="${canonicalUrl}">`,
     '<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:image" content="https://brawltree.me/thumbnail.png">',
-    '<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:locale" content="ko_KR">',
-    '<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:locale:alternate" content="en_US">',
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:locale" content="${language === 'ko' ? 'ko_KR' : 'en_US'}">`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" property="og:locale:alternate" content="${language === 'ko' ? 'en_US' : 'ko_KR'}">`,
     '<meta data-brawltree-prerender-seo="true" data-rh="true" name="twitter:card" content="summary_large_image">',
-    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="twitter:title" content="${escapeHtml(seo.title)}">`,
-    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="twitter:description" content="${escapeHtml(seo.description)}">`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="twitter:title" content="${escapeHtml(seoTitle)}">`,
+    `<meta data-brawltree-prerender-seo="true" data-rh="true" name="twitter:description" content="${escapeHtml(seoDescription)}">`,
     '<meta data-brawltree-prerender-seo="true" data-rh="true" name="twitter:image" content="https://brawltree.me/thumbnail.png">',
     `<link data-brawltree-prerender-seo="true" data-rh="true" rel="canonical" href="${canonicalUrl}">`,
-    `<link data-brawltree-prerender-seo="true" data-rh="true" rel="alternate" hreflang="ko" href="${toAbsoluteUrl(route, 'ko')}">`,
-    `<link data-brawltree-prerender-seo="true" data-rh="true" rel="alternate" hreflang="en" href="${toAbsoluteUrl(route, 'en')}">`,
-    `<link data-brawltree-prerender-seo="true" data-rh="true" rel="alternate" hreflang="x-default" href="${toAbsoluteUrl(route, 'ko')}">`,
+    `<link data-brawltree-prerender-seo="true" data-rh="true" rel="alternate" hreflang="ko" href="${toAbsoluteUrl(baseRoute, 'ko')}">`,
+    `<link data-brawltree-prerender-seo="true" data-rh="true" rel="alternate" hreflang="en" href="${toAbsoluteUrl(baseRoute, 'en')}">`,
+    `<link data-brawltree-prerender-seo="true" data-rh="true" rel="alternate" hreflang="x-default" href="${toAbsoluteUrl(baseRoute, 'ko')}">`,
     ...jsonLd.map((structuredData) => `<script data-brawltree-prerender-seo="true" type="application/ld+json" data-brawltree-jsonld="true">${JSON.stringify(structuredData)}</script>`)
   ].join('');
 
   const htmlWithLang = /<html(?![^>]*\slang=)/i.test(html)
-    ? html.replace(/<html([^>]*)>/i, (_htmlTag, attributes: string) => `<html lang="ko"${attributes}>`)
+    ? html.replace(/<html([^>]*)>/i, (_htmlTag, attributes: string) => `<html lang="${language}"${attributes}>`)
     : html;
 
   return stripSeoHead(htmlWithLang).replace('</head>', `${tags}</head>`);
@@ -168,6 +274,9 @@ const copyPrerenderedHomeToRoot = () => ({
     }
   }
 });
+
+const prerenderBaseRoutes = Object.keys(prerenderSeoByRoute) as Array<keyof typeof prerenderSeoByRoute>;
+const prerenderRoutes = prerenderBaseRoutes.flatMap((route) => [route, withLanguagePath(route, 'en')]);
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -206,7 +315,7 @@ export default defineConfig(({ mode }) => {
       react(),
       svgrPlugin(),
       prerender({
-        routes: ['/', '/events/curr', '/events/next', '/events/ranked', '/maps', '/crew', '/news', '/brawler/shelly'],
+        routes: prerenderRoutes,
         renderer: '@prerenderer/renderer-puppeteer',
         server: {
           host: 'localhost',
@@ -218,9 +327,10 @@ export default defineConfig(({ mode }) => {
           renderAfterTime: 2000
         },
         postProcess(renderedRoute) {
-          const route = (renderedRoute.route || '/') as keyof typeof prerenderSeoByRoute;
+          const route = renderedRoute.route || '/';
+          const { baseRoute } = getPrerenderRouteInfo(route);
 
-          if (route in prerenderSeoByRoute) {
+          if (baseRoute in prerenderSeoByRoute) {
             renderedRoute.html = injectPrerenderSeo(renderedRoute.html, route);
           }
 

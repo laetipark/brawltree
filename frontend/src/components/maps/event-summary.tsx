@@ -6,6 +6,7 @@ import { EventItemContent } from '~/components/maps/event-summary/event-summary-
 import { RotationType } from '~/common/types/maps.type';
 
 import { CdnContext } from '~/context/cdn.context';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import styles from '~/assets/styles/components/maps/event-summary.module.scss';
 
@@ -21,7 +22,7 @@ export const EventSummaryContainer = ({
   return (
     <div className={styles.eventsSummaryContainer}>
       <h2>
-        <Link to={`/events/${['ranked', 'curr', 'next'].includes(type) ? type : 'curr'}`}>
+        <Link to={withLanguagePath(`/events/${['ranked', 'curr', 'next'].includes(type) ? type : 'curr'}`, locales.language)}>
           {type === 'ranked' ? locales.map['event'].ranked : type === 'curr' ? locales.map['event'].current : type === 'next' ? locales.map['event'].tomorrow : locales.battle['mode'][`${type}`]}
         </Link>
       </h2>

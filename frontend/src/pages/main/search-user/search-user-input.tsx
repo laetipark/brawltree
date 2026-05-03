@@ -8,6 +8,9 @@ export const SearchUserInputBox = ({ onChangeInput, onToggleHelp, helpOpen }) =>
   const locales = useContext(CdnContext);
   const context = useContext(SearchContext);
   const { onAddSearchHistory } = context;
+  const isKorean = locales.language === 'ko';
+  const placeholder = isKorean ? '플레이어 태그 또는 닉네임 입력' : 'Enter player tag or nickname';
+  const cta = isKorean ? '전적 검색' : 'Search Stats';
 
   const handleEnterKey = useCallback(
     ({ key, currentTarget }: React.KeyboardEvent<HTMLInputElement>) => {
@@ -27,7 +30,7 @@ export const SearchUserInputBox = ({ onChangeInput, onToggleHelp, helpOpen }) =>
           type={'text'}
           name={'search'}
           required={true}
-          placeholder={locales.main['input']}
+          placeholder={placeholder}
           maxLength={12}
           pattern="#?[O0289PYLQGRJCUVopylqgrjcuv]{3,12}"
           style={{ textTransform: 'uppercase' }}
@@ -46,7 +49,7 @@ export const SearchUserInputBox = ({ onChangeInput, onToggleHelp, helpOpen }) =>
         </button>
       </div>
       <button className={styles.searchButton} type={'submit'}>
-        TREE
+        {cta}
       </button>
     </React.Fragment>
   );

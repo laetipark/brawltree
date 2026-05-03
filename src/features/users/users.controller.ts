@@ -57,6 +57,15 @@ export class UsersController {
   }
 
   /**
+   * 홈 내부 링크에 사용할 최근 업데이트 사용자 요약 정보를 반환합니다.
+   */
+  @Get('/featured')
+  @HttpCode(200)
+  selectFeaturedUsers(@Query('limit') limit?: string) {
+    return this.usersService.selectFeaturedUsers(Number(limit));
+  }
+
+  /**
    * 사용자를 조회하고 필요하면 crawler 온디맨드 갱신을 요청합니다.
    */
   @Get('/:id')

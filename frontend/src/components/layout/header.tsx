@@ -7,6 +7,7 @@ import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import { CdnContext } from '~/context/cdn.context';
 import { SupportedLanguage } from '~/common/i18n/language';
+import { withLanguagePath } from '~/common/i18n/language-route';
 
 import styles from '~/assets/styles/components/layout/header.module.scss';
 
@@ -40,32 +41,34 @@ export const Header = ({ isCdnLoading = false }: HeaderProps) => {
   const toggleVisible = useMediaQuery({ maxWidth: 768 });
   const [isToggled, setIsToggled] = useState(false);
   const menuId = 'header-menu-content';
+  const logoLabel = locales.language === 'ko' ? '브롤트리' : 'BrawlTree';
+  const logoAlt = locales.language === 'ko' ? '브롤트리 로고' : 'BrawlTree logo';
 
   // 768px 이하에서는 메뉴를 토글로 보여주기
   const menuList = (
     <ul id={menuId} className={styles.headerMenuContent}>
       <li>
-        <Link to={'/'} onClick={() => setIsToggled(false)}>
+        <Link to={withLanguagePath('/', locales.language)} onClick={() => setIsToggled(false)}>
           <div>{headerLocale.main || headerFallback.main}</div>
         </Link>
       </li>
       <li>
-        <Link to={'/brawler/shelly'} onClick={() => setIsToggled(false)}>
+        <Link to={withLanguagePath('/brawler/shelly', locales.language)} onClick={() => setIsToggled(false)}>
           <div>{headerLocale.brawler || headerFallback.brawler}</div>
         </Link>
       </li>
       <li>
-        <Link to={'/events/curr'} onClick={() => setIsToggled(false)}>
+        <Link to={withLanguagePath('/events/curr', locales.language)} onClick={() => setIsToggled(false)}>
           <div>{headerLocale.events || headerFallback.events}</div>
         </Link>
       </li>
       <li>
-        <Link to={'/maps'} onClick={() => setIsToggled(false)}>
+        <Link to={withLanguagePath('/maps', locales.language)} onClick={() => setIsToggled(false)}>
           <div>{headerLocale.maps || headerFallback.maps}</div>
         </Link>
       </li>
       <li>
-        <Link to={'/news'} onClick={() => setIsToggled(false)}>
+        <Link to={withLanguagePath('/news', locales.language)} onClick={() => setIsToggled(false)}>
           <div>{headerLocale.news || headerFallback.news}</div>
         </Link>
       </li>
@@ -75,10 +78,10 @@ export const Header = ({ isCdnLoading = false }: HeaderProps) => {
   return (
     <React.Fragment>
       <header className={styles.headerMenuContainer}>
-        <a href={'/'}>
-          <img className={styles.menuLogo} src={`/images/logo/brawltree/logo192.png`} alt={'Logo'} />
-          <div>Brawl Tree</div>
-        </a>
+        <Link to={withLanguagePath('/', locales.language)}>
+          <img className={styles.menuLogo} src={`/images/logo/brawltree/logo192.png`} alt={logoAlt} />
+          <div>{logoLabel}</div>
+        </Link>
         {shouldShowSkeleton ? (
           <div className={styles.headerSkeleton} aria-hidden={'true'}>
             <span className={styles.skeletonText} />

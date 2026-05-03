@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '~/common/config/config';
-import { SearchItemType } from '~/common/types/main.type';
+import { SearchItemType, SearchUserItemType } from '~/common/types/main.type';
 
 export class MainService {
   static getYoutubePlayListItem = (playlistID: string) =>
@@ -31,4 +31,13 @@ export class MainService {
       return userIDs.indexOf(a.userID) - userIDs.indexOf(b.userID);
     });
   };
+
+  static getFeaturedUsers = (limit = 12) =>
+    axios
+      .get<SearchUserItemType[]>(`${config.url}/brawlian/featured`, {
+        params: {
+          limit
+        }
+      })
+      .then((result) => result.data);
 }

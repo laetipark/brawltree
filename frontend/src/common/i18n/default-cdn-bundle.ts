@@ -85,10 +85,10 @@ const fallbackBundle: CdnBundle = {
   main: {
     brawlers: 'Brawlers',
     findTag: 'Find tag',
-    input: 'Player tag',
-    introduce: 'Brawl Tree',
+    input: 'Enter player tag or nickname',
+    introduce: 'BrawlTree',
     news: 'News',
-    searchProfile: 'Search profile',
+    searchProfile: 'Brawl Stars Player Search',
     searchUserContainer: {
       checkClearSearch: 'Clear recent searches?',
       clearSearch: 'Clear',
@@ -221,10 +221,10 @@ const koFallbackBundle: CdnBundle = {
     ...fallbackBundle.main,
     brawlers: '브롤러',
     findTag: '태그 찾기',
-    input: '플레이어 태그',
+    input: '플레이어 태그 또는 닉네임 입력',
     introduce: '브롤트리',
     news: '뉴스',
-    searchProfile: '프로필 검색',
+    searchProfile: '브롤스타즈 플레이어 검색',
     searchUserContainer: {
       checkClearSearch: '최근 검색 기록을 지울까요?',
       clearSearch: '지우기',

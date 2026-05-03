@@ -17,6 +17,9 @@ type UserCrawlerRefreshResult = {
   unavailable: boolean;
 };
 
+const DEFAULT_FEATURED_USER_LIMIT = 12;
+const MAX_FEATURED_USER_LIMIT = 24;
+
 /**
  * 사용자 검색/조회와 crawler 온디맨드 갱신 요청을 담당합니다.
  *
@@ -107,6 +110,28 @@ export class UsersService {
       .where('user.id IN (:...ids)', {
         ids
       })
+      .getRawMany();
+  }
+
+  /**
+   * 홈 내부 링크와 sitemap 발견성을 보조할 최근 업데이트 사용자 목록을 조회합니다.
+   */
+  async selectFeaturedUsers(limit = DEFAULT_FEATURED_USER_LIMIT): Promise<SelectUsersDto[]> {
+    const normalizedLimit = this.normalizeFeaturedUserLimit(limit);
+
+    return this.users
+      .createQueryBuilder('user')
+      .select('user.id', 'userID')
+      .addSelect('uProfile.name', 'userName')
+      .addSelect('uProfile.profileIcon', 'profileIcon')
+      .addSelect('uProfile.clubName', 'clubName')
+      .addSelect('uProfile.currentTrophies', 'currentTrophies')
+      .addSelect('uProfile.currentSoloRanked', 'currentSoloRanked')
+      .addSelect('GREATEST(user.updatedAt, uProfile.updatedAt)', 'lastUpdatedAt')
+      .innerJoin('user.userProfile', 'uProfile')
+      .orderBy('lastUpdatedAt', 'DESC')
+      .addOrderBy('uProfile.currentTrophies', 'DESC')
+      .limit(normalizedLimit)
       .getRawMany();
   }
 
@@ -278,5 +303,21 @@ export class UsersService {
     }
 
     return Date.now() - battleTime <= this.onDemandRefreshWindowMs;
+  }
+
+  /**
+   * 공개 홈 노출용 사용자 수를 작은 범위로 제한합니다.
+   */
+  private normalizeFeaturedUserLimit(limit: number): number {
+    const parsedLimit = Number(limit);
+
+    if (!Number.isFinite(parsedLimit)) {
+      return DEFAULT_FEATURED_USER_LIMIT;
+    }
+
+    return Math.min(
+      Math.max(Math.trunc(parsedLimit), 1),
+      MAX_FEATURED_USER_LIMIT
+    );
   }
 }

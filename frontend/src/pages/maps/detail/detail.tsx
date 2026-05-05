@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { MapInfo } from '~/components/maps/detail/map-info';
 import MapMenu from '~/components/combo/grade-combo';
@@ -13,18 +13,29 @@ import { MapInfoType } from '~/common/types/maps.type';
 import { PageSeo } from '~/components/seo/page-seo';
 import { CdnContext } from '~/context/cdn.context';
 
-const useQueryParams = () => new URLSearchParams(useLocation().search);
+const DEFAULT_GRADES = ['4', '5', '6', '7'];
 
 export const MapDetail = () => {
   const { name } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const locales = useContext(CdnContext);
-  const queryParams = useQueryParams();
-  const isRanked = queryParams.get('type');
-  const [type, setType] = useState(isRanked ? '2' : '0');
-  const [grade, setGrade] = useState(['4', '5', '6', '7']);
+  const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const routeType = queryParams.get('type') ? '2' : '0';
+  const [type, setType] = useState(routeType);
+  const [grade, setGrade] = useState(DEFAULT_GRADES);
   const [mapInfo, setMapInfo] = useState<MapInfoType | null>(null);
   const [brawlerStats, setBrawlerStats] = useState<MapBrawlerStatsType[]>([]);
   const [loadFailed, setLoadFailed] = useState(false);
+
+  useEffect(() => {
+    setType((currentType) => (currentType === routeType ? currentType : routeType));
+    setGrade((currentGrade) => {
+      const isDefaultGrade = currentGrade.length === DEFAULT_GRADES.length && currentGrade.every((value, index) => value === DEFAULT_GRADES[index]);
+
+      return isDefaultGrade ? currentGrade : DEFAULT_GRADES;
+    });
+  }, [name, routeType]);
 
   useEffect(() => {
     if (!name) {
@@ -50,8 +61,14 @@ export const MapDetail = () => {
   }, [name, type, grade]);
 
   useEffect(() => {
-    history.replaceState({}, '', window.location.pathname.replace(/ /g, '-'));
-  }, []);
+    const nextPathname = location.pathname.replace(/ /g, '-');
+    const currentPath = `${location.pathname}${location.search}${location.hash}`;
+    const nextPath = `${nextPathname}${location.search}${location.hash}`;
+
+    if (nextPath !== currentPath) {
+      navigate(nextPath, { replace: true });
+    }
+  }, [location.hash, location.pathname, location.search, navigate]);
 
   const mapName = mapInfo?.mapName || name?.replace(/-/g, ' ') || 'Map';
   const localizedMapName = mapInfo?.mapID ? locales.map?.map?.[mapInfo.mapID] || mapName : mapName;

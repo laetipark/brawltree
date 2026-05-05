@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CdnBundle, EMPTY_CDN_BUNDLE } from '~/context/cdn.context';
 import { CdnService } from '~/services/cdn.service';
 import { syncCdnBundleToI18n } from '~/common/i18n/cdn-resource-sync';
@@ -13,6 +14,12 @@ type UseCdnShellResult = {
     setLanguage: Dispatch<SetStateAction<SupportedLanguage>>;
   };
   isLoaded: boolean;
+};
+
+type RouterLocation = {
+  pathname: string;
+  search: string;
+  hash: string;
 };
 
 const fetchCdnBundle = async (language: SupportedLanguage): Promise<CdnBundle> => {
@@ -30,9 +37,11 @@ const fetchCdnBundle = async (language: SupportedLanguage): Promise<CdnBundle> =
   return { application, battle, brawler, main, map, news, user };
 };
 
-export const useCdnShell = (pathname: string): UseCdnShellResult => {
+export const useCdnShell = (location: RouterLocation): UseCdnShellResult => {
+  const navigate = useNavigate();
+  const { pathname, search, hash } = location;
   const [isLoaded, setIsLoaded] = useState(false);
-  const [language, setLanguage] = useState<SupportedLanguage>(getInitialLanguage);
+  const [language, setLanguage] = useState<SupportedLanguage>(() => getLanguageFromPath(pathname) || getInitialLanguage());
   const [cdnBundle, setCdnBundle] = useState<CdnBundle>(EMPTY_CDN_BUNDLE);
 
   useEffect(() => {
@@ -76,22 +85,24 @@ export const useCdnShell = (pathname: string): UseCdnShellResult => {
   }, [language]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    const pathLanguage = getLanguageFromPath(pathname);
+
+    if (pathLanguage && pathLanguage !== language) {
       return;
     }
 
     const nextPath = toLanguagePath({
-      pathname: window.location.pathname,
-      search: window.location.search,
-      hash: window.location.hash,
+      pathname,
+      search,
+      hash,
       language
     });
-    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    const currentPath = `${pathname}${search}${hash}`;
 
     if (nextPath !== currentPath) {
-      window.history.replaceState({}, '', nextPath);
+      navigate(nextPath, { replace: true });
     }
-  }, [language, pathname]);
+  }, [hash, language, navigate, pathname, search]);
 
   const contextValue = useMemo(
     () => ({

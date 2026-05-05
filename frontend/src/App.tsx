@@ -26,8 +26,8 @@ const loadingFallback = (
 
 const App = () => {
   const location = useLocation();
-  const { contextValue, isLoaded } = useCdnShell(location.pathname);
-  const routePageKey = location.pathname;
+  const { contextValue, isLoaded } = useCdnShell(location);
+  const routePageKey = `${location.pathname}${location.search}`;
 
   return (
     <CdnContext.Provider value={contextValue}>
